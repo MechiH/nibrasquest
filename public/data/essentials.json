@@ -1,0 +1,868 @@
+{
+  "id": "essentials",
+  "icon": "📖",
+  "color": "#10b981",
+  "name": { "ar": "ما يجب على كل مسلم معرفته", "en": "What Every Muslim Must Know" },
+  "desc": {
+    "ar": "الفرض العيني من العلم — ما لا يسع المسلم جهله في عقيدته وعبادته وأخلاقه.",
+    "en": "The individual obligation of knowledge — what no Muslim can afford to be ignorant of in creed, worship, and character."
+  },
+  "source": {
+    "ar": "الفقه الأكبر، متن الأجرومية، مختصر خليل، وكتب الفقه الأساسية",
+    "en": "Al-Fiqh al-Akbar, classic fiqh primers, and foundations of Islamic jurisprudence"
+  },
+  "refs": [
+    ["الفقه الأكبر — الإمام أبو حنيفة", "أساس العقيدة الإسلامية"],
+    ["متن أبي شجاع", "مختصر جامع في أحكام العبادات"],
+    ["رياض الصالحين — النووي", "الأخلاق والسلوك الإسلامي"]
+  ],
+  "endorsers": ["حلقات العلم", "تعليم المسلمين الجدد", "البرامج التأسيسية"],
+  "stages": [
+    {
+      "id": 1,
+      "icon": "🕋",
+      "x": 100,
+      "y": 520,
+      "era": "tawheed",
+      "eraIcon": "🕋",
+      "eraColor": "#10b981",
+      "eraGradient": ["#001a0f", "#002d1a", "#001208"],
+      "eraLabel": { "ar": "العقيدة", "en": "Creed" },
+      "eraTheme": { "ar": "معرفة الله", "en": "Knowing Allah" },
+      "title": { "ar": "التوحيد: أساس كل شيء", "en": "Tawheed: The Foundation of Everything" },
+      "focus": { "ar": "معنى التوحيد وأقسامه وشروط الشهادة", "en": "The meaning of Tawheed, its types, and the conditions of the Shahada" },
+      "goal": { "ar": "أن تفهم ما الذي جاء الإسلام ليثبته أولًا", "en": "Understand what Islam came to establish first" },
+      "reading": [
+        ["الفقه الأكبر — أبو حنيفة", "أقدم متن في العقيدة الإسلامية"],
+        ["العقيدة الطحاوية", "متن موثوق في أصول الاعتقاد"],
+        ["كتاب التوحيد — ابن خزيمة", "أدلة التوحيد من القرآن والسنة"]
+      ],
+      "steps": [
+        {
+          "title": { "ar": "ما معنى التوحيد؟", "en": "What Does Tawheed Mean?" },
+          "narrative": {
+            "ar": "التوحيد هو إفراد الله بما يختص به من الربوبية والألوهية والأسماء والصفات. وهو الركيزة الأولى التي بُعث بها كل نبي من آدم إلى محمد ﷺ. قال تعالى: «وَمَا أَرْسَلْنَا مِنْ قَبْلِكَ مِنْ رَسُولٍ إِلَّا نُوحِي إِلَيْهِ أَنَّهُ لَا إِلَٰهَ إِلَّا أَنَا فَاعْبُدُونِ». ينقسم التوحيد إلى ثلاثة أنواع: توحيد الربوبية (الإقرار بأن الله خلق وأحيا وأمات ورزق)، وتوحيد الألوهية (إفراده بالعبادة وحده لا شريك له)، وتوحيد الأسماء والصفات (إثبات ما أثبته الله لنفسه ونفي ما نفاه عن غير تحريف ولا تعطيل).",
+            "en": "Tawheed means singling out Allah in what is uniquely His of Lordship, Divinity, and Names and Attributes. It is the foundational truth for which every prophet from Adam to Muhammad ﷺ was sent. Allah says: 'We did not send any messenger before you except that We revealed to him that there is no god but Me, so worship Me.' Tawheed has three aspects: Rububiyyah (affirming Allah alone creates, sustains, gives life and death), Uluhiyyah (directing all worship exclusively to Allah), and Names and Attributes (affirming what Allah affirmed for Himself and negating what He negated, without distortion or denial)."
+          },
+          "keyPoints": {
+            "ar": [
+              "التوحيد هو إفراد الله بالربوبية والألوهية والأسماء والصفات",
+              "كل نبي من آدم إلى محمد ﷺ جاء بالدعوة إلى التوحيد",
+              "توحيد الألوهية يعني إفراد الله بالعبادة — وهذا هو مقتضى شهادة أن لا إله إلا الله",
+              "التوحيد ليس مجرد اعتقاد قلبي بل يشمل القول والعمل والترك"
+            ],
+            "en": [
+              "Tawheed means singling out Allah in Lordship, Divinity, and Names and Attributes",
+              "Every prophet from Adam to Muhammad ﷺ came calling to Tawheed",
+              "Tawheed al-Uluhiyyah means directing all worship to Allah alone — this is the meaning of 'La ilaha illa Allah'",
+              "Tawheed is not merely an internal belief; it encompasses speech, action, and abstaining from shirk"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "شهادة أن لا إله إلا الله", "en": "The Testimony: La ilaha illa Allah" },
+          "narrative": {
+            "ar": "شهادة أن لا إله إلا الله هي أعظم كلمة وأولى الفرائض. ولا تنفع مجرد النطق بها إلا إذا استوفت شروطها. ذكر العلماء سبعة شروط للشهادة: العلم (بمعناها نفيًا وإثباتًا)، واليقين (أن لا يداخلها شك)، والقبول (قبول ما اقتضته بالقلب واللسان)، والانقياد (الاستسلام لمدلولها)، والصدق (التلفظ بها صدقًا من القلب)، والإخلاص (تخليص العمل من شوائب الشرك)، والمحبة (محبة هذه الكلمة وما دلّت عليه). كذلك شهادة أن محمدًا رسول الله تقتضي تصديقه في كل ما أخبر به وطاعته في أوامره وترك ما نهى عنه.",
+            "en": "The testimony 'La ilaha illa Allah' is the greatest word and the first of all obligations. Mere pronunciation is not enough; scholars enumerate seven conditions: Knowledge (of its meaning — negation and affirmation), Certainty (with no doubt), Acceptance (of all it entails, in heart and tongue), Submission (to its implications), Truthfulness (spoken genuinely from the heart), Sincerity (purifying one's deeds from any taint of shirk), and Love (for this word and what it points to). Likewise, the testimony that Muhammad is Allah's Messenger requires affirming all he reported, obeying his commands, and abstaining from what he prohibited."
+          },
+          "keyPoints": {
+            "ar": [
+              "شروط الشهادة سبعة: العلم، اليقين، القبول، الانقياد، الصدق، الإخلاص، المحبة",
+              "«لا إله» نفي للألوهية عن كل ما سوى الله، «إلا الله» إثبات لها لله وحده",
+              "شهادة أن محمدًا رسول الله تعني التصديق والطاعة والترك",
+              "الشهادة بالقلب واللسان معًا — النطق بلا اعتقاد نفاق، والاعتقاد بلا نطق لا يكفي في الإسلام"
+            ],
+            "en": [
+              "Seven conditions of the testimony: Knowledge, Certainty, Acceptance, Submission, Truthfulness, Sincerity, Love",
+              "'La ilaha' negates divinity from everything other than Allah; 'illa Allah' affirms it for Allah alone",
+              "Testifying Muhammad is Allah's Messenger means affirming, obeying, and abstaining",
+              "The testimony must be both in the heart and on the tongue — pronunciation without belief is hypocrisy"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "أركان الإيمان الستة", "en": "The Six Pillars of Faith" },
+          "narrative": {
+            "ar": "الإيمان ليس مجرد إسلام ظاهري بل هو تصديق بست حقائق عظيمة أخبر عنها النبي ﷺ في حديث جبريل: الإيمان بالله، وملائكته، وكتبه، ورسله، واليوم الآخر، والقدر خيره وشره. الإيمان بالله يستلزم التوحيد الكامل. والإيمان بالملائكة يعني الإيمان بأنهم عباد الله المكرمون يؤدون ما أُمروا. والإيمان بالكتب يشمل القرآن الكريم الذي هو المرجع المحفوظ. والإيمان بالرسل يشمل التصديق بجميعهم من نوح إلى محمد ﷺ. والإيمان باليوم الآخر يستلزم الاستعداد له. أما الإيمان بالقدر فمعناه الإيمان بأن كل شيء بعلم الله وتقديره مع إثبات إرادة العبد ومسؤوليته.",
+            "en": "Faith is not mere outward Islam but sincere affirmation of six great truths reported by the Prophet ﷺ in the Hadith of Jibril: belief in Allah, His Angels, His Books, His Messengers, the Last Day, and divine decree — both its good and its harm. Belief in Allah entails complete Tawheed. Belief in Angels means affirming they are Allah's honored servants who carry out His commands. Belief in the Books includes the Quran as the preserved, unchanged reference. Belief in the Messengers means affirming all of them from Nuh to Muhammad ﷺ. Belief in the Last Day requires preparing for it. Belief in divine decree means affirming that all things are within Allah's knowledge and plan, while affirming human will and responsibility."
+          },
+          "keyPoints": {
+            "ar": [
+              "أركان الإيمان ستة: الله، الملائكة، الكتب، الرسل، اليوم الآخر، القدر خيره وشره",
+              "الإيمان بالقدر لا يلغي مسؤولية العبد — الله خلق الفعل والإنسان يكتسبه باختياره",
+              "الإيمان باليوم الآخر يشمل: البعث والحساب والميزان والصراط والجنة والنار",
+              "إنكار أي ركن من أركان الإيمان يُخرج من الإسلام"
+            ],
+            "en": [
+              "Six pillars of faith: Allah, Angels, Books, Messengers, the Last Day, divine decree (good and harm)",
+              "Belief in divine decree does not negate human responsibility — Allah creates the action, the human chooses and earns it",
+              "Belief in the Last Day includes: resurrection, judgment, the Scale, the Bridge, Paradise, and Hell",
+              "Denying any single pillar of faith removes one from Islam"
+            ]
+          }
+        }
+      ],
+      "quiz": [
+        {
+          "q": { "ar": "كم عدد أنواع التوحيد التي ذكرها العلماء؟", "en": "How many types of Tawheed do scholars enumerate?" },
+          "o": {
+            "ar": ["ثلاثة: الربوبية والألوهية والأسماء والصفات", "اثنان: القلب واللسان", "خمسة بعدد أركان الإسلام", "واحد فقط"],
+            "en": ["Three: Rububiyyah, Uluhiyyah, Names & Attributes", "Two: of the heart and tongue", "Five, like the pillars of Islam", "Only one"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "ما الشرط الذي يعني أن المسلم يحب شهادة التوحيد وما دلّت عليه؟", "en": "Which condition of the Shahada means the Muslim loves it and what it points to?" },
+          "o": {
+            "ar": ["المحبة", "اليقين", "الانقياد", "الإخلاص"],
+            "en": ["Love", "Certainty", "Submission", "Sincerity"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "كم عدد أركان الإيمان؟", "en": "How many pillars of faith are there?" },
+          "o": {
+            "ar": ["ستة", "خمسة", "أربعة", "سبعة"],
+            "en": ["Six", "Five", "Four", "Seven"]
+          },
+          "a": 0
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "icon": "🌙",
+      "x": 300,
+      "y": 380,
+      "era": "pillars",
+      "eraIcon": "🌙",
+      "eraColor": "#d4a843",
+      "eraGradient": ["#1a1200", "#2d2000", "#0f0c00"],
+      "eraLabel": { "ar": "العبادات الكبرى", "en": "The Five Pillars" },
+      "eraTheme": { "ar": "أركان الإسلام", "en": "Pillars of Islam" },
+      "title": { "ar": "أركان الإسلام الخمسة", "en": "The Five Pillars of Islam" },
+      "focus": { "ar": "فهم أركان الإسلام ومكانتها في حياة المسلم", "en": "Understanding the five pillars and their place in a Muslim's life" },
+      "goal": { "ar": "أن تعرف العمود الذي يقوم عليه الإسلام", "en": "Know the structure upon which Islam stands" },
+      "reading": [
+        ["صحيح البخاري — باب الإيمان", "حديث جبريل الجامع للأركان"],
+        ["الإسلام لغير المسلمين — تيموثي وينتر", "شرح الأركان بالسياق العصري"],
+        ["متن أبي شجاع", "تفصيل أحكام كل ركن"]
+      ],
+      "steps": [
+        {
+          "title": { "ar": "الأركان الخمسة: الهيكل الكامل", "en": "The Five Pillars: The Complete Structure" },
+          "narrative": {
+            "ar": "قال النبي ﷺ: «بُني الإسلام على خمس: شهادة أن لا إله إلا الله وأن محمدًا رسول الله، وإقام الصلاة، وإيتاء الزكاة، وحج البيت، وصوم رمضان». هذه الأركان الخمسة هي العمود الفقري للحياة الإسلامية: الشهادتان هي الإعلان والانتساب، والصلاة هي الصلة اليومية بالله، والزكاة هي تطهير المال وتضامن الأمة، والصوم هو تجديد التقوى ومحاربة الهوى، والحج هو التجمع الكوني والتذكير بالمشهد الأخير. الجميل في هذه الأركان أنها تشمل كل أبعاد الإنسان: القلب (الشهادة)، والجسد (الصلاة)، والمال (الزكاة)، والزمن (الصوم)، والمكان (الحج).",
+            "en": "The Prophet ﷺ said: 'Islam is built upon five: testifying there is no god but Allah and that Muhammad is His Messenger, establishing prayer, giving zakat, pilgrimage to the House, and fasting Ramadan.' These five pillars are the backbone of Islamic life: the Shahadatayn is the declaration of belonging; prayer is the daily connection with Allah; zakat is the purification of wealth and solidarity of the community; fasting is the renewal of taqwa and struggle against desire; and Hajj is the universal gathering and reminder of the Final Assembly. Beautifully, these pillars encompass every human dimension: the heart (Shahada), the body (prayer), wealth (zakat), time (fasting), and place (Hajj)."
+          },
+          "keyPoints": {
+            "ar": [
+              "أركان الإسلام الخمسة: الشهادتان، الصلاة، الزكاة، الصوم، الحج",
+              "الصلاة تشمل البعد الجسدي والروحي — الصلة اليومية المباشرة مع الله",
+              "الزكاة فريضة مالية وواجب اجتماعي — تطهير للمال وتضامن مع الفقراء",
+              "الحج فريضة على المستطيع مرة واحدة في العمر — تجمع كوني فريد"
+            ],
+            "en": [
+              "Five pillars: the two testimonies, prayer, zakat, fasting, Hajj",
+              "Prayer encompasses body and soul — the daily direct connection with Allah",
+              "Zakat is a financial obligation and social duty — purification of wealth and solidarity with the poor",
+              "Hajj is obligatory once in a lifetime for those who are able — a unique universal gathering"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "الشهادتان: باب الإسلام", "en": "The Two Testimonies: The Gate of Islam" },
+          "narrative": {
+            "ar": "الشهادتان هما باب الدخول إلى الإسلام. من نطق بهما مؤمنًا بقلبه دخل في دين الإسلام وثبتت له حقوق المسلمين وواجباتهم. الشهادة الأولى — لا إله إلا الله — تُرسي معنى التوحيد وتنقي القلب من كل معبود سوى الله. الشهادة الثانية — محمد رسول الله — تُرسي منهج التلقي: ندين لله فقط لكن عبر ما جاء به نبيه ﷺ. لذلك فإن الشريعة كلها مبنية على هاتين الشهادتين: كل ما وافق السنة فهو عبادة مقبولة، وكل ما خالفها فهو مردود وإن حَسُنت النية.",
+            "en": "The two testimonies are the gate of entry into Islam. Whoever pronounces them with sincere belief enters the religion and is entitled to the rights and duties of Muslims. The first testimony — La ilaha illa Allah — establishes Tawheed and purifies the heart from every object of worship other than Allah. The second — Muhammad is the Messenger of Allah — establishes the channel of reception: we submit to Allah alone, but through what His prophet ﷺ brought. Hence all of Sharia is built on these two testimonies: whatever conforms to the Sunnah is accepted worship; whatever contradicts it is rejected even if the intention was good."
+          },
+          "keyPoints": {
+            "ar": [
+              "النطق بالشهادتين مع الاعتقاد هو باب الدخول في الإسلام",
+              "الشهادة الأولى: التوحيد — لا معبود بحق إلا الله",
+              "الشهادة الثانية: الاتباع — العبادة لا تُقبل إلا بما جاء به النبي ﷺ",
+              "كل عمل ديني يُختبر بمعيارين: الإخلاص لله والموافقة للسنة"
+            ],
+            "en": [
+              "Pronouncing the two testimonies with belief is the entry into Islam",
+              "First testimony: Tawheed — no deity truly worthy of worship except Allah",
+              "Second testimony: Following — worship is not accepted except through what the Prophet ﷺ brought",
+              "Every religious act is tested by two standards: sincerity for Allah and conformity with the Sunnah"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "الصلاة: عمود الدين", "en": "Prayer: The Pillar of Religion" },
+          "narrative": {
+            "ar": "قال النبي ﷺ: «الصلاة عمود الدين، فمن أقامها فقد أقام الدين، ومن هدمها فقد هدم الدين». الصلاة خمس مرات في اليوم والليلة فريضة عين على كل مسلم بالغ عاقل. وهي أول ما يُسأل عنه العبد يوم القيامة. مكانة الصلاة في الإسلام مميزة: فُرضت مباشرة بلا واسطة ليلة المعراج، وهي الصلة الحقيقية بين العبد وربه خمس مرات في اليوم. ترك الصلاة عمدًا من أعظم الكبائر — والذي لا يصلي أصلًا مع إنكار وجوبها يكفر، ومن تركها تكاسلًا فأمره عظيم.",
+            "en": "The Prophet ﷺ said: 'Prayer is the pillar of religion. Whoever establishes it has established religion; whoever destroys it has destroyed religion.' The five daily prayers are an individual obligation upon every sane adult Muslim. Prayer is the first thing a person will be asked about on the Day of Judgment. Prayer holds a unique status in Islam: it was obligated directly — without an intermediary — on the Night of the Ascension (Isra' and Mi'raj). It is the genuine connection between the servant and his Lord five times each day. Deliberately abandoning prayer is among the gravest major sins."
+          },
+          "keyPoints": {
+            "ar": [
+              "الصلوات الخمس فريضة عين على كل مسلم بالغ عاقل",
+              "الصلاة عمود الدين وأول ما يُحاسب عليه العبد يوم القيامة",
+              "فُرضت ليلة الإسراء والمعراج مباشرة — دون واسطة — دليل على عظمتها",
+              "ترك الصلاة تهاونًا من أعظم الكبائر — وإنكار وجوبها كفر"
+            ],
+            "en": [
+              "The five daily prayers are an individual obligation on every sane adult Muslim",
+              "Prayer is the pillar of religion and the first thing one is accountable for on Judgment Day",
+              "It was obligated on the Night of Ascension directly — without an intermediary — a sign of its greatness",
+              "Neglecting prayer out of laziness is among the greatest sins; denying its obligation is disbelief"
+            ]
+          }
+        }
+      ],
+      "quiz": [
+        {
+          "q": { "ar": "ما الحديث الذي يذكر فيه النبي ﷺ أركان الإسلام الخمسة؟", "en": "In which hadith does the Prophet ﷺ mention the five pillars?" },
+          "o": {
+            "ar": ["حديث ابن عمر في الصحيحين: بُني الإسلام على خمس", "حديث جبريل في صحيح مسلم", "حديث أبي هريرة في سنن الترمذي", "حديث عائشة في الموطأ"],
+            "en": ["Hadith of Ibn 'Umar in both Sahihs: 'Islam is built on five'", "Hadith of Jibril in Sahih Muslim", "Hadith of Abu Hurayra in Tirmidhi", "Hadith of 'A'isha in the Muwatta'"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "ما أول ما يُحاسب عليه العبد يوم القيامة؟", "en": "What is the first thing a person will be held accountable for on Judgment Day?" },
+          "o": {
+            "ar": ["الصلاة", "الزكاة", "الصوم", "الحج"],
+            "en": ["Prayer", "Zakat", "Fasting", "Hajj"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "ما الليلة التي فُرضت فيها الصلاة؟", "en": "On which night was prayer made obligatory?" },
+          "o": {
+            "ar": ["ليلة الإسراء والمعراج", "ليلة القدر", "ليلة الهجرة", "ليلة بدر"],
+            "en": ["The Night of Isra' and Mi'raj", "Laylat al-Qadr", "The Night of the Hijra", "The Night of Badr"]
+          },
+          "a": 0
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "icon": "💧",
+      "x": 500,
+      "y": 500,
+      "era": "taharah",
+      "eraIcon": "💧",
+      "eraColor": "#38bdf8",
+      "eraGradient": ["#00101a", "#001a2d", "#000d15"],
+      "eraLabel": { "ar": "الطهارة", "en": "Purification" },
+      "eraTheme": { "ar": "شرط الصلاة الأول", "en": "First Condition of Prayer" },
+      "title": { "ar": "الطهارة: مفتاح الصلاة", "en": "Purification: The Key to Prayer" },
+      "focus": { "ar": "أنواع الطهارة وكيفية الوضوء والغسل والتيمم", "en": "Types of purification, how to perform wudu, ghusl, and tayammum" },
+      "goal": { "ar": "أن تعرف كيف تتطهر بشكل صحيح قبل الصلاة", "en": "Know how to purify yourself correctly before prayer" },
+      "reading": [
+        ["متن أبي شجاع — باب الطهارة", "أبواب الطهارة المختصرة"],
+        ["الفقه على المذاهب الأربعة", "مقارنة أحكام الطهارة"],
+        ["المجموع — النووي", "الشرح التفصيلي لأحكام الطهارة"]
+      ],
+      "steps": [
+        {
+          "title": { "ar": "أنواع النجاسة والحدث", "en": "Types of Impurity and Ritual Impurity" },
+          "narrative": {
+            "ar": "الطهارة في الإسلام نوعان: طهارة من النجاسة (وهي الأعيان النجسة التي يجب إزالتها عن البدن والثوب والمكان)، وطهارة من الحدث (وهي الحالة التي تمنع الصلاة حتى يُرفعها بوضوء أو غسل أو تيمم). والحدث نوعان: الأصغر (الذي يوجب الوضوء كالبول والغائط والنوم والريح)، والأكبر (الذي يوجب الغسل كالجنابة والحيض والنفاس). الماء الطهور هو الأصل في رفع الحدث — أي الماء المطلق الباقي على خلقته سواء كان ماء سماء أو نهرًا أو بئرًا. وعند العجز عن الماء يُتيمم بالتراب الطاهر.",
+            "en": "Purity in Islam has two types: purification from physical impurity (najasa) — the impure substances that must be removed from the body, clothing, and place of prayer — and purification from ritual impurity (hadath) — the state that prevents prayer until removed by wudu, ghusl, or tayammum. Ritual impurity is of two types: minor (requiring wudu, such as urination, defecation, sleep, and passing wind) and major (requiring ghusl, such as sexual impurity, menstruation, and post-natal bleeding). Pure water is the foundation for removing ritual impurity — meaning water in its natural state, whether from rain, river, or well. When water is unavailable, tayammum (dry ablution with clean earth) is performed."
+          },
+          "keyPoints": {
+            "ar": [
+              "الطهارة نوعان: من النجاسة (الأعيان النجسة) ومن الحدث (الأصغر والأكبر)",
+              "الحدث الأصغر يوجب الوضوء — نواقضه: البول، الغائط، النوم، الريح",
+              "الحدث الأكبر يوجب الغسل — موجباته: الجنابة، الحيض، النفاس",
+              "التيمم بديل شرعي عند العجز عن الماء بسبب مرض أو فقدانه"
+            ],
+            "en": [
+              "Two types of purity: from physical impurity (najasa) and from ritual impurity (minor and major hadath)",
+              "Minor impurity requires wudu — its nullifiers: urination, defecation, sleep, passing wind",
+              "Major impurity requires ghusl — its causes: sexual impurity, menstruation, post-natal bleeding",
+              "Tayammum is a valid alternative when water is unavailable due to illness or its absence"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "الوضوء: كيفيته وشروطه", "en": "Wudu: How to Perform It and Its Conditions" },
+          "narrative": {
+            "ar": "الوضوء فرائضه أربع: غسل الوجه كاملًا (من منابت الشعر إلى الذقن وبين الأذنين)، وغسل اليدين مع المرفقين، ومسح الرأس، وغسل الرجلين مع الكعبين. ومن السنن المؤكدة في الوضوء: النية، والبسملة، وغسل الكفين ثلاثًا، والمضمضة والاستنشاق، والترتيب والموالاة، والتثليث. ومما ينقض الوضوء: كل خارج من السبيلين، وزوال العقل (النوم والإغماء)، ومس الفرج بلا حائل عند الجمهور، وأكل لحم الإبل عند الحنابلة. الوضوء شرط لصحة الصلاة، وكذلك للطواف، ولمس المصحف.",
+            "en": "The obligatory acts of wudu are four: washing the entire face (from the hairline to the chin and between the ears), washing both hands including the elbows, wiping the head, and washing both feet including the ankles. Recommended acts include: intention, saying Bismillah, washing the palms three times, rinsing the mouth and nose, maintaining order and continuity, and repeating each act three times. Wudu is nullified by: anything exiting from the two passages, loss of consciousness (sleep or fainting), touching the private parts without a barrier (in the majority's view), and eating camel meat (in the Hanbali school). Wudu is a condition for the validity of prayer, tawaf, and touching the Quran."
+          },
+          "keyPoints": {
+            "ar": [
+              "فرائض الوضوء الأربع: الوجه، اليدان مع المرفقين، مسح الرأس، الرجلان مع الكعبين",
+              "نواقض الوضوء: الخروج من السبيلين، زوال العقل، مس الفرج (عند الجمهور)",
+              "الوضوء شرط لصحة: الصلاة والطواف ومس المصحف",
+              "يُستحب الترتيب والموالاة والتثليث في الوضوء"
+            ],
+            "en": [
+              "Four obligatory acts of wudu: face, hands to elbows, wiping head, feet to ankles",
+              "Wudu nullifiers: exit from two passages, loss of consciousness, touching private parts (majority view)",
+              "Wudu is required for: prayer, tawaf, and touching the Quran",
+              "Order, continuity, and repeating three times are recommended in wudu"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "الغسل والتيمم", "en": "Ghusl and Tayammum" },
+          "narrative": {
+            "ar": "الغسل الواجب له ركنان في أصح الأقوال: النية، وتعميم البدن بالماء مع البشرة والشعر. ومن السنة: الغسل ثلاثًا بعد المضمضة والاستنشاق والوضوء. موجبات الغسل: الجنابة (بإنزال أو إيلاج)، وانقطاع الحيض، وانقطاع النفاس، والإسلام. أما التيمم فيكون عند فقدان الماء أو العجز عن استعماله بسبب مرض. وكيفيته: النية ثم ضرب التراب الطاهر مرة واحدة ومسح الوجه واليدين إلى الرسغين. التيمم يرفع الحدث كما يرفعه الماء ويُصلي به حتى يجد الماء أو يبرأ من مرضه.",
+            "en": "Ghusl (full washing) has two pillars in the most reliable opinion: intention and running water over the entire body including skin and hair. Sunna includes: washing three times after rinsing mouth and nose and performing wudu. Ghusl is obligated by: sexual impurity (through ejaculation or penetration), end of menstruation, end of post-natal bleeding, and entering Islam. Tayammum is performed when water is unavailable or its use is harmful due to illness. Its method: intention, then one strike on clean earth, wiping the face and hands to the wrists. Tayammum removes ritual impurity just as water does, and one may pray with it until water is found or recovery comes."
+          },
+          "keyPoints": {
+            "ar": [
+              "فرضا الغسل: النية وتعميم الماء على البدن كله (البشرة والشعر)",
+              "موجبات الغسل: الجنابة، انقطاع الحيض، انقطاع النفاس، الإسلام",
+              "التيمم: ضربة واحدة على التراب الطاهر لمسح الوجه واليدين إلى الرسغين",
+              "التيمم يرفع الحدث ويُبيح الصلاة حتى يُجد الماء أو يصح المريض"
+            ],
+            "en": [
+              "Two pillars of ghusl: intention and covering the entire body with water (skin and hair)",
+              "Ghusl is obligated by: sexual impurity, end of menstruation, end of post-natal bleeding, entering Islam",
+              "Tayammum: one strike on clean earth to wipe face and hands to wrists",
+              "Tayammum removes ritual impurity and permits prayer until water is found or illness heals"
+            ]
+          }
+        }
+      ],
+      "quiz": [
+        {
+          "q": { "ar": "كم عدد فرائض الوضوء؟", "en": "How many obligatory acts does wudu have?" },
+          "o": {
+            "ar": ["أربعة", "ستة", "ثلاثة", "خمسة"],
+            "en": ["Four", "Six", "Three", "Five"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "ما الذي يوجب الغسل؟", "en": "What makes ghusl obligatory?" },
+          "o": {
+            "ar": ["الجنابة وانقطاع الحيض والنفاس والإسلام", "النوم فقط", "البول والغائط", "مس الكلب"],
+            "en": ["Sexual impurity, end of menses, post-natal bleeding, and entering Islam", "Sleep only", "Urination and defecation", "Touching a dog"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "ما حكم التيمم عند فقدان الماء؟", "en": "What is the ruling of tayammum when water is unavailable?" },
+          "o": {
+            "ar": ["جائز ويرفع الحدث ويُبيح الصلاة", "مكروه ويُفضل الانتظار", "حرام لأن الطهارة تكون بالماء فقط", "يجوز للمريض فقط"],
+            "en": ["Permissible — it removes ritual impurity and permits prayer", "Disliked — better to wait", "Forbidden because purity is only through water", "Only allowed for the sick"]
+          },
+          "a": 0
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "icon": "🙏",
+      "x": 700,
+      "y": 340,
+      "era": "salah",
+      "eraIcon": "🙏",
+      "eraColor": "#f59e0b",
+      "eraGradient": ["#1a1000", "#2d1c00", "#0f0a00"],
+      "eraLabel": { "ar": "الصلاة", "en": "Prayer" },
+      "eraTheme": { "ar": "عمود الدين", "en": "Pillar of Religion" },
+      "title": { "ar": "كيف تُصلي صلاة صحيحة", "en": "How to Pray a Correct Prayer" },
+      "focus": { "ar": "شروط الصلاة وأركانها وواجباتها ومبطلاتها", "en": "Conditions, pillars, obligations, and nullifiers of prayer" },
+      "goal": { "ar": "أن تؤدي صلاتك على وجه صحيح مقبول", "en": "Perform your prayer correctly and validly" },
+      "reading": [
+        ["صفة صلاة النبي ﷺ — الألباني", "وصف دقيق لكيفية الصلاة بالأدلة"],
+        ["متن أبي شجاع — باب الصلاة", "شروط الصلاة وأركانها"],
+        ["زاد المستقنع — الحجاوي", "أحكام الصلاة في الفقه الحنبلي"]
+      ],
+      "steps": [
+        {
+          "title": { "ar": "شروط الصلاة", "en": "Conditions of Prayer" },
+          "narrative": {
+            "ar": "شروط صحة الصلاة هي الأمور التي يجب توافرها قبل الدخول في الصلاة وأثناءها. وهي: الإسلام (بداهةً)، والعقل، والتمييز، ودخول الوقت (لكل صلاة وقت محدد)، واستقبال القبلة (اتجاه الكعبة)، والطهارة من الحدثين (الأصغر والأكبر)، وطهارة البدن والثوب والمكان من النجاسة، وستر العورة (المرأة جسمها كله ما عدا الوجه والكفين، والرجل ما بين السرة والركبة). وقت الصلوات الخمس: الفجر (من الفجر إلى الشروق)، الظهر (من زوال الشمس إلى مساوات الظل للشيء)، العصر (من بعد الظهر إلى الغروب)، المغرب (من الغروب إلى غياب الشفق)، العشاء (من بعد المغرب إلى نصف الليل أو الفجر).",
+            "en": "The conditions for a valid prayer are what must be in place before and during prayer: Islam (by necessity), sanity, discernment, the entry of the prayer time (each prayer has a specific time), facing the qibla (direction of the Ka'bah), purity from both types of ritual impurity, freedom of body, clothing, and place from physical impurity, and covering the 'awra (a woman covers her entire body except face and hands; a man covers between navel and knee). Times of the five prayers: Fajr (dawn to sunrise), Dhuhr (just after midday until shadow equals object), 'Asr (after Dhuhr until sunset), Maghrib (sunset to disappearance of twilight), 'Isha' (after Maghrib until midnight or dawn)."
+          },
+          "keyPoints": {
+            "ar": [
+              "شروط الصلاة تسبق الدخول فيها: الوقت، القبلة، الطهارة، ستر العورة، طهارة البقعة",
+              "لكل صلاة وقت شرعي محدد — الصلاة قبل وقتها أو بعد وقتها بغير عذر لا تُقبل",
+              "استقبال القبلة: الكعبة المشرفة في مكة — للبعيد يكفي التوجه نحوها تقريبًا",
+              "ستر العورة شرط لصحة الصلاة — عورة الرجل بين السرة والركبة، وعورة المرأة جسمها كله ما عدا الوجه والكفين"
+            ],
+            "en": [
+              "Prayer conditions precede entering it: time, qibla, purity, covering 'awra, and clean place",
+              "Each prayer has a specific legal time — praying before or after its time without excuse is invalid",
+              "Facing the qibla: the Ka'bah in Makkah — for the distant person, approximate direction suffices",
+              "Covering the 'awra is a condition for valid prayer — man: navel to knee; woman: entire body except face and hands"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "أركان الصلاة", "en": "The Pillars of Prayer" },
+          "narrative": {
+            "ar": "أركان الصلاة هي الأجزاء التي لا تقوم الصلاة بدونها، ومن تركها عمدًا أو نسيانًا بطلت صلاته: القيام مع القدرة، وتكبيرة الإحرام (الله أكبر عند الدخول)، وقراءة الفاتحة في كل ركعة، والركوع، والاعتدال من الركوع، والسجود على الأعضاء السبعة (الجبهة والأنف واليدان والركبتان وأطراف القدمين)، والجلوس بين السجدتين، والاعتدال منه، والطمأنينة في كل ركن، والتشهد الأخير، والجلوس له، والصلاة على النبي ﷺ، والتسليم. الفاتحة ركن في كل ركعة لقوله ﷺ: «لا صلاة لمن لم يقرأ بفاتحة الكتاب».",
+            "en": "The pillars of prayer are the components without which prayer cannot stand; omitting any — whether intentionally or out of forgetfulness — invalidates it: standing when able, the opening takbir ('Allahu Akbar'), reciting al-Fatiha in every unit, bowing (ruku'), rising from bowing, prostrating on seven limbs (forehead and nose, both hands, both knees, and both feet), sitting between the two prostrations, rising from it, tranquility in each pillar, the final tashahhud, sitting for it, the prayer upon the Prophet ﷺ, and the closing salam. Al-Fatiha is a pillar in every rak'a because the Prophet ﷺ said: 'There is no prayer for one who does not recite the Opening of the Book.'"
+          },
+          "keyPoints": {
+            "ar": [
+              "أركان الصلاة واجبة — تركها عمدًا أو نسيانًا يُبطل الصلاة",
+              "الفاتحة ركن في كل ركعة — لا تصح الصلاة بدون قراءتها",
+              "السجود على الأعضاء السبعة: الجبهة والأنف واليدان والركبتان وأطراف القدمين",
+              "الطمأنينة ركن في كل ركعة — التسريع الشديد الذي يُفقد الطمأنينة يُبطل الصلاة"
+            ],
+            "en": [
+              "Pillars of prayer are mandatory — omitting any intentionally or out of forgetfulness invalidates prayer",
+              "Al-Fatiha is a pillar in every rak'a — prayer is not valid without it",
+              "Prostrating on seven limbs: forehead and nose, both hands, both knees, both feet",
+              "Tranquility is a pillar in every position — excessive rushing that eliminates tranquility invalidates prayer"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "مبطلات الصلاة", "en": "What Nullifies Prayer" },
+          "narrative": {
+            "ar": "تبطل الصلاة بأمور عدة: الحدث (الأصغر أو الأكبر) أثناء الصلاة، والكلام العمد بغير ذكر الله والقرآن، والضحك الكثير، والأكل والشرب، والانحراف عن القبلة كثيرًا، والعمل الكثير المتوالي من غير جنس الصلاة، وترك ركن أو شرط عمدًا. أما السهو عن ركن أو واجب فيُجبر بسجود السهو (سجدتان قبل السلام أو بعده). ومما يُكره في الصلاة لا يُبطلها: الالتفات دون حاجة، ووضع اليد على الفم، وتشبيك الأصابع. فقه هذه المسائل ضروري لكل مسلم حتى لا تضيع صلاته من حيث لا يشعر.",
+            "en": "Prayer is nullified by: ritual impurity (minor or major) during prayer, intentional speech other than Allah's remembrance and Quran, excessive laughing, eating or drinking, turning far away from the qibla, many consecutive movements unrelated to prayer, or deliberately omitting a pillar or condition. Forgetting a pillar or obligation is remedied by the prostration of forgetfulness (two sajdas before or after the salam). Disliked but not invalidating: unnecessary turning, placing the hand over the mouth, and interlacing fingers. Understanding these rulings is essential for every Muslim so that prayer is not unknowingly invalidated."
+          },
+          "keyPoints": {
+            "ar": [
+              "مبطلات الصلاة: الحدث، الكلام العمد، الأكل والشرب، الانحراف عن القبلة كثيرًا",
+              "السهو عن ركن أو واجب يُجبر بسجدتي السهو قبل السلام أو بعده",
+              "الحركة الكثيرة المتوالية من غير جنس الصلاة تُبطلها",
+              "الضحك بصوت يُبطل الصلاة، أما التبسم فلا يُبطلها"
+            ],
+            "en": [
+              "Prayer nullifiers: ritual impurity, intentional speech, eating/drinking, major deviation from qibla",
+              "Forgetting a pillar or obligation is remedied by the prostration of forgetfulness",
+              "Many consecutive movements unrelated to prayer nullify it",
+              "Laughing aloud nullifies prayer; a smile does not"
+            ]
+          }
+        }
+      ],
+      "quiz": [
+        {
+          "q": { "ar": "ما عدد الأعضاء التي يجب السجود عليها؟", "en": "On how many limbs must one prostrate?" },
+          "o": {
+            "ar": ["سبعة أعضاء", "خمسة أعضاء", "أربعة أعضاء", "ثلاثة أعضاء"],
+            "en": ["Seven limbs", "Five limbs", "Four limbs", "Three limbs"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "ماذا يحدث إذا نسي المصلي ركنًا من أركان الصلاة؟", "en": "What happens if a person forgets a pillar of prayer?" },
+          "o": {
+            "ar": ["يسجد سجدتي السهو قبل السلام أو بعده", "تبطل الصلاة مطلقًا", "يُعيد الصلاة من البداية", "لا شيء عليه"],
+            "en": ["Performs two sajdas of forgetfulness before or after salam", "Prayer is completely invalidated", "Restarts prayer from the beginning", "Nothing is required"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "لماذا تُعدّ الفاتحة ركنًا في كل ركعة؟", "en": "Why is al-Fatiha a pillar in every rak'a?" },
+          "o": {
+            "ar": ["لقوله ﷺ: لا صلاة لمن لم يقرأ بفاتحة الكتاب", "لأنها أطول سورة", "لأنها مكتوبة في أول المصحف", "لأن الصحابة اتفقوا على ذلك بالإجماع"],
+            "en": ["Because the Prophet ﷺ said: 'No prayer for one who does not recite al-Fatiha'", "Because it is the longest surah", "Because it appears first in the Quran", "Because the companions agreed by consensus"]
+          },
+          "a": 0
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "icon": "🌙",
+      "x": 900,
+      "y": 470,
+      "era": "sawm",
+      "eraIcon": "🌙",
+      "eraColor": "#8b5cf6",
+      "eraGradient": ["#0d0014", "#180023", "#07000f"],
+      "eraLabel": { "ar": "الصيام", "en": "Fasting" },
+      "eraTheme": { "ar": "شهر التقوى", "en": "Month of Taqwa" },
+      "title": { "ar": "صوم رمضان: شروطه وأحكامه", "en": "Fasting Ramadan: Rules and Conditions" },
+      "focus": { "ar": "من يجب عليه الصوم وما يُفطر وما لا يُفطر", "en": "Who must fast, what breaks the fast, what does not" },
+      "goal": { "ar": "أن تصوم رمضان على وجه صحيح وتعرف أحكامه الأساسية", "en": "Fast Ramadan correctly and know its essential rulings" },
+      "reading": [
+        ["صحيح البخاري — كتاب الصوم", "أحاديث الصيام من المصدر الأول"],
+        ["متن أبي شجاع — باب الصوم", "أحكام الصيام المختصرة"],
+        ["فقه الصيام — القرضاوي", "شرح معاصر لأحكام رمضان"]
+      ],
+      "steps": [
+        {
+          "title": { "ar": "من يجب عليه الصوم؟", "en": "Who Is Obligated to Fast?" },
+          "narrative": {
+            "ar": "صوم رمضان فريضة على كل مسلم بالغ عاقل مقيم قادر. قال تعالى: «يَا أَيُّهَا الَّذِينَ آمَنُوا كُتِبَ عَلَيْكُمُ الصِّيَامُ». يُعفى من الصوم أو يُرخص له في الإفطار: المسافر (يُفطر ويقضي)، والمريض الذي يتضرر بالصوم (يُفطر ويقضي)، والحامل والمرضع إذا خافتا على نفسيهما أو ولديهما (يُفطران ويقضيان وقد يُطعمان)، والشيخ الكبير العاجز عن الصوم (يُفطر ويُطعم عن كل يوم مسكينًا). أما الحائض والنفساء فيحرم عليهما الصوم ويجب القضاء. فضل رمضان عظيم: «من صام رمضان إيمانًا واحتسابًا غُفر له ما تقدم من ذنبه».",
+            "en": "Fasting Ramadan is obligatory on every Muslim who is mature, sane, resident, and physically able. Allah says: 'O believers, fasting has been prescribed for you.' Concessions are given to: the traveler (may break fast and make it up), the sick person harmed by fasting (breaks fast and makes it up), the pregnant and nursing woman if they fear for themselves or their child (break fast and make it up, and may also feed a poor person), and the elderly person unable to fast (breaks fast and feeds a poor person per day). The menstruating and post-natal bleeding woman must not fast and must make up the days. The virtue of Ramadan is immense: 'Whoever fasts Ramadan with faith and seeking reward, his past sins are forgiven.'"
+          },
+          "keyPoints": {
+            "ar": [
+              "الصوم واجب على كل مسلم بالغ عاقل مقيم قادر",
+              "المسافر والمريض يُفطران ويقضيان بعد رمضان",
+              "الحائض والنفساء يحرم عليهما الصوم ويجب القضاء",
+              "الشيخ العاجز عن الصوم يُطعم عن كل يوم مسكينًا بدلًا من القضاء"
+            ],
+            "en": [
+              "Fasting is obligatory on every mature, sane, resident, able Muslim",
+              "Traveler and sick person may break fast and make up the days later",
+              "Menstruating and post-natal bleeding women must not fast and must make up the days",
+              "The elderly unable to fast feeds a poor person per day instead of making up"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "ما يُفطر وما لا يُفطر", "en": "What Breaks the Fast and What Does Not" },
+          "narrative": {
+            "ar": "المفطرات التي تُبطل الصوم وتوجب القضاء هي: الأكل والشرب عمدًا، والجماع (ويوجب مع القضاء الكفارة المغلظة)، والاستمناء، والحيض والنفاس، والقيء العمد، وما في حكم الأكل والشرب كالإبر المُغذية. أما ما لا يُفطر: النسيان (من أكل أو شرب ناسيًا فليُتمّ صومه)، والاكتحال والتقطير في الأذن (على خلاف)، وحقن الدواء في العضلة، والتبرع بالدم، والسواك، وابتلاع الريق. ويُندب في رمضان: الإكثار من القراءة والذكر والصدقة وقيام الليل. وفي العشر الأواخر: الاجتهاد وطلب ليلة القدر.",
+            "en": "The fast-breakers that nullify fasting and require makeup are: eating and drinking intentionally, sexual intercourse (also requiring expiation — the severe kafara), masturbation, menstruation and post-natal bleeding, deliberate vomiting, and anything analogous to eating/drinking such as IV nutrition. What does NOT break the fast: forgetting (whoever eats or drinks out of forgetfulness should complete the fast), eye drops and ear drops (with scholarly disagreement), intramuscular injections, blood donation, using a siwak, and swallowing one's own saliva. Recommended in Ramadan: abundant Quran recitation, remembrance, charity, and night prayer. In the last ten nights: striving hard and seeking Laylat al-Qadr."
+          },
+          "keyPoints": {
+            "ar": [
+              "المفطرات العمدية: الأكل والشرب والجماع والاستمناء والقيء العمد",
+              "الجماع عمدًا في نهار رمضان يوجب القضاء والكفارة المغلظة (عتق رقبة أو صيام شهرين أو إطعام ستين مسكينًا)",
+              "الأكل ناسيًا لا يُفطر — يُتمّ صومه والله أطعمه وسقاه",
+              "ليلة القدر في العشر الأواخر — خير من ألف شهر"
+            ],
+            "en": [
+              "Intentional fast-breakers: eating, drinking, intercourse, masturbation, deliberate vomiting",
+              "Intentional intercourse in Ramadan daytime requires makeup and severe expiation (free a slave, or fast 2 months, or feed 60 poor)",
+              "Eating out of forgetfulness does not break the fast — Allah fed and watered him",
+              "Laylat al-Qadr is in the last ten nights — better than one thousand months"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "حكمة الصيام وفضائله", "en": "The Wisdom and Virtues of Fasting" },
+          "narrative": {
+            "ar": "قال الله تعالى في الحديث القدسي: «كل عمل ابن آدم له إلا الصوم، فإنه لي وأنا أجزي به». الصيام عبادة فريدة لأنها خالصة من الرياء — لا يراها أحد إلا الله. والحكمة من الصيام: تربية الإرادة وكسر الهوى، وتجديد التقوى التي هي الغاية الأصلية «لعلكم تتقون»، والشعور بجوع الفقراء وتعميق التكافل الاجتماعي، والتذكير بأن الإنسان أكبر من شهواته. والصيام جنة من النار وشفاعة للعبد يوم القيامة. والصائم له فرحتان: فرحة عند فطره، وفرحة عند لقاء ربه.",
+            "en": "Allah says in the Sacred Hadith: 'Every deed of the son of Adam belongs to him except fasting — it is Mine, and I reward for it.' Fasting is a uniquely sincere act because no one witnesses it but Allah, making it immune to showing off. Its wisdom: training the will and breaking desires, renewing taqwa which is the ultimate purpose — 'so that you may become God-fearing' — feeling the hunger of the poor and deepening social solidarity, and reminding the human being that he is greater than his desires. Fasting is a shield from the Fire and will intercede for the servant on Judgment Day. The fasting person has two joys: the joy at breaking fast, and the joy when meeting his Lord."
+          },
+          "keyPoints": {
+            "ar": [
+              "الصوم عبادة خالصة — الله تعالى يتولى جزاءها مباشرة (حديث قدسي)",
+              "الغاية من الصيام: التقوى — «لعلكم تتقون»",
+              "الصيام جنة من النار وشفاعة يوم القيامة",
+              "للصائم فرحتان: عند الفطر وعند لقاء ربه"
+            ],
+            "en": [
+              "Fasting is a purely sincere act — Allah Himself takes charge of its reward (sacred hadith)",
+              "The goal of fasting: taqwa — 'so that you may become God-fearing'",
+              "Fasting is a shield from Hellfire and an intercessor on Judgment Day",
+              "The fasting person has two joys: at breaking fast and when meeting his Lord"
+            ]
+          }
+        }
+      ],
+      "quiz": [
+        {
+          "q": { "ar": "من يجب عليه الصوم من المسلمين؟", "en": "Who among Muslims is obligated to fast?" },
+          "o": {
+            "ar": ["البالغ العاقل المقيم القادر", "كل مسلم بلا استثناء", "من بلغ العشرين فما فوق", "الرجال دون النساء"],
+            "en": ["The mature, sane, resident, and able person", "Every Muslim without exception", "Those twenty years and older", "Men but not women"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "ما حكم من أكل أو شرب ناسيًا في رمضان؟", "en": "What is the ruling for one who eats or drinks forgetfully in Ramadan?" },
+          "o": {
+            "ar": ["يُتمّ صومه ولا قضاء عليه — الله أطعمه وسقاه", "يقضي ذلك اليوم وجوبًا", "يقضي ويُكفّر", "ينتهي صومه ويُفطر بقية اليوم"],
+            "en": ["Completes the fast and needs no makeup — Allah fed and watered him", "Must make up that day", "Must make up and expiate", "His fast ends and he may eat the rest of the day"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "ما الغاية الأصلية التي ذكرها الله من فريضة الصوم؟", "en": "What primary purpose did Allah mention for obligating fasting?" },
+          "o": {
+            "ar": ["التقوى — لعلكم تتقون", "الشعور بالجوع", "التكافل الاجتماعي", "الصحة الجسدية"],
+            "en": ["Taqwa — 'so that you may become God-fearing'", "Experiencing hunger", "Social solidarity", "Physical health"]
+          },
+          "a": 0
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "icon": "💰",
+      "x": 1000,
+      "y": 260,
+      "era": "zakat",
+      "eraIcon": "💰",
+      "eraColor": "#f59e0b",
+      "eraGradient": ["#1a0f00", "#2d1c00", "#0f0900"],
+      "eraLabel": { "ar": "الزكاة والحج", "en": "Zakat and Hajj" },
+      "eraTheme": { "ar": "حق المال وفريضة العمر", "en": "Right of Wealth and Lifetime Duty" },
+      "title": { "ar": "الزكاة والحج: الفريضتان الماليتان والجسديتان", "en": "Zakat and Hajj: The Financial and Bodily Obligations" },
+      "focus": { "ar": "أساسيات الزكاة والحج لكل مسلم", "en": "Zakat and Hajj fundamentals every Muslim must know" },
+      "goal": { "ar": "أن تعرف متى تجب الزكاة وكيف ومتى يجب الحج", "en": "Know when zakat is due, how to give it, and when Hajj becomes obligatory" },
+      "reading": [
+        ["متن أبي شجاع — باب الزكاة والحج", "أحكام مختصرة في الفريضتين"],
+        ["فقه الزكاة — القرضاوي", "الدراسة الشاملة لأحكام الزكاة المعاصرة"],
+        ["مناسك الحج — ابن عثيمين", "شرح أركان الحج وواجباته"]
+      ],
+      "steps": [
+        {
+          "title": { "ar": "الزكاة: أحكامها الأساسية", "en": "Zakat: Essential Rulings" },
+          "narrative": {
+            "ar": "الزكاة ركن من أركان الإسلام الخمسة، وهي حق واجب في المال لمستحقيه. شروط وجوب الزكاة: الإسلام، والنصاب (الحد الأدنى من المال)، وحولان الحول (مرور سنة قمرية كاملة على المال ما عدا الزروع والمعادن). نصاب الذهب: 85 غرامًا، ونصاب الفضة: 595 غرامًا. زكاة الذهب والفضة والنقود: ربع العشر (2.5%). مصارف الزكاة ثمانية ذكرها الله: الفقراء، المساكين، العاملون عليها، المؤلفة قلوبهم، في الرقاب، الغارمون، في سبيل الله، ابن السبيل. الزكاة تطهّر المال وتُنميه وتردّ البلاء وتسد حاجة المعوزين.",
+            "en": "Zakat is one of the five pillars of Islam — a due right in wealth for those entitled to it. Conditions for zakat being obligatory: Islam, reaching the nisab (minimum threshold), and completion of a lunar year on the wealth (except crops and minerals). Gold nisab: 85 grams; silver nisab: 595 grams. Zakat on gold, silver, and cash: one-quarter of a tenth (2.5%). The eight recipients of zakat specified by Allah: the poor, the destitute, those who collect it, those whose hearts are being reconciled, those in bondage, the indebted, those striving in Allah's path, and the stranded traveler. Zakat purifies wealth, causes it to grow, wards off calamity, and meets the needs of the needy."
+          },
+          "keyPoints": {
+            "ar": [
+              "شروط وجوب الزكاة: الإسلام، بلوغ النصاب، حولان الحول",
+              "نصاب الذهب 85 غرامًا ونصاب الفضة 595 غرامًا — والنقد يُقاس عليهما",
+              "نسبة زكاة الذهب والفضة والنقود: 2.5% (ربع العشر)",
+              "مصارف الزكاة ثمانية محددة في القرآن الكريم — لا يجوز صرفها في غيرها"
+            ],
+            "en": [
+              "Conditions for zakat: Islam, reaching nisab, completion of a full lunar year",
+              "Gold nisab: 85g; silver nisab: 595g — cash is measured against them",
+              "Zakat rate on gold, silver, and cash: 2.5% (one quarter of one tenth)",
+              "Eight Quran-specified recipients — zakat cannot be given to others"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "الحج: أركانه وواجباته", "en": "Hajj: Its Pillars and Obligations" },
+          "narrative": {
+            "ar": "الحج فريضة على المسلم المستطيع مرة واحدة في العمر. قال تعالى: «وَلِلَّهِ عَلَى النَّاسِ حِجُّ الْبَيْتِ مَنِ اسْتَطَاعَ إِلَيْهِ سَبِيلًا». شروط الاستطاعة: القدرة المالية، وسلامة الجسد، وأمان الطريق، وللمرأة المحرم. أركان الحج: الإحرام (النية للدخول في الحج)، والوقوف بعرفة (في التاسع من ذي الحجة — وهو ركن الحج الأعظم)، وطواف الإفاضة (بعد العودة من عرفة)، والسعي بين الصفا والمروة. واجبات الحج: الإحرام من الميقات، والمبيت بمزدلفة، ورمي الجمرات، والحلق أو التقصير، والمبيت بمنى. الحج المبرور ليس له جزاء إلا الجنة.",
+            "en": "Hajj is obligatory on the able Muslim once in a lifetime. Allah says: 'And pilgrimage to the House is a duty people owe to Allah — for those who can find a way.' Conditions of ability: financial capacity, physical health, safety of the road, and for women a mahram. Pillars of Hajj: ihram (intention to enter Hajj), standing at 'Arafah (ninth of Dhu al-Hijja — the greatest pillar of Hajj), the tawaf of ifada (after returning from 'Arafah), and sa'y between Safa and Marwa. Obligations of Hajj: entering ihram from the miqat, spending the night at Muzdalifa, stoning the jamarat, shaving or trimming the hair, and spending the night at Mina. The accepted Hajj has no reward except Paradise."
+          },
+          "keyPoints": {
+            "ar": [
+              "الحج فريضة مرة واحدة في العمر على المستطيع — الاستطاعة المالية والجسدية وأمان الطريق",
+              "أركان الحج الأربعة: الإحرام، الوقوف بعرفة، طواف الإفاضة، السعي",
+              "الوقوف بعرفة ركن لا يصح الحج بدونه — «الحج عرفة»",
+              "الحج المبرور ليس له جزاء إلا الجنة — حديث متفق عليه"
+            ],
+            "en": [
+              "Hajj is obligatory once in a lifetime for the able — financial, physical, and safety conditions",
+              "Four pillars of Hajj: ihram, standing at 'Arafah, tawaf of ifada, sa'y",
+              "Standing at 'Arafah is the pillar without which Hajj is invalid — 'Hajj is 'Arafah'",
+              "The accepted Hajj has no reward except Paradise — agreed-upon hadith"
+            ]
+          }
+        }
+      ],
+      "quiz": [
+        {
+          "q": { "ar": "ما نسبة زكاة الذهب والفضة والنقود؟", "en": "What is the zakat rate on gold, silver, and cash?" },
+          "o": {
+            "ar": ["2.5% (ربع العشر)", "5% (نصف العشر)", "10% (العشر)", "1%"],
+            "en": ["2.5% (one quarter of one tenth)", "5% (half of one tenth)", "10% (one tenth)", "1%"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "ما ركن الحج الأعظم الذي لا يصح الحج بدونه؟", "en": "What is the greatest pillar of Hajj without which it is invalid?" },
+          "o": {
+            "ar": ["الوقوف بعرفة", "رمي الجمرات", "طواف الوداع", "الإحرام من مكة"],
+            "en": ["Standing at 'Arafah", "Stoning the jamarat", "The farewell tawaf", "Entering ihram in Makkah"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "كم مرة يجب الحج في العمر على المستطيع؟", "en": "How many times is Hajj obligatory in a lifetime for the able?" },
+          "o": {
+            "ar": ["مرة واحدة", "مرتان", "ثلاث مرات", "كل عام"],
+            "en": ["Once", "Twice", "Three times", "Every year"]
+          },
+          "a": 0
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "icon": "⚖️",
+      "x": 840,
+      "y": 120,
+      "era": "halal",
+      "eraIcon": "⚖️",
+      "eraColor": "#ef4444",
+      "eraGradient": ["#1a0000", "#2d0000", "#0f0000"],
+      "eraLabel": { "ar": "الحلال والحرام", "en": "Halal and Haram" },
+      "eraTheme": { "ar": "حدود الله", "en": "Allah's Boundaries" },
+      "title": { "ar": "الحلال والحرام: ما يجب أن تعرفه", "en": "Halal and Haram: What You Must Know" },
+      "focus": { "ar": "أساسيات المحرمات والمباحات في الطعام والسلوك", "en": "Essentials of prohibitions and permissibles in food and conduct" },
+      "goal": { "ar": "أن تعيش حياتك ضمن حدود الله مع فهم الحكمة منها", "en": "Live within Allah's boundaries with understanding of their wisdom" },
+      "reading": [
+        ["الحلال والحرام في الإسلام — القرضاوي", "المرجع الجامع في هذا الموضوع"],
+        ["إحياء علوم الدين — الغزالي", "باب آداب الأكل والمعيشة"],
+        ["تيسير الكريم الرحمن — السعدي", "تفسير آيات الحلال والحرام"]
+      ],
+      "steps": [
+        {
+          "title": { "ar": "قاعدة الأصل في الأشياء", "en": "The Foundational Principle: Default Permissibility" },
+          "narrative": {
+            "ar": "من أعظم قواعد الفقه الإسلامي: «الأصل في الأشياء الإباحة حتى يدل الدليل على التحريم». هذا يعني أن كل ما لم يرد دليل على تحريمه فهو مباح — وليس على المسلم أن يبحث عن دليل إباحة كل شيء يريد فعله. والمحرمات في الإسلام محددة ومحصورة، أما المباحات فواسعة. قال تعالى: «هُوَ الَّذِي خَلَقَ لَكُمْ مَا فِي الْأَرْضِ جَمِيعًا». والمحرمات قُيّدت لأسباب: الضرر على النفس أو الغير أو المجتمع، أو لتعظيم شعائر الله، أو لحفظ الضرورات الخمس: الدين والنفس والعقل والنسل والمال.",
+            "en": "One of the greatest principles in Islamic jurisprudence is: 'The default in all things is permissibility, until evidence of prohibition is established.' This means that everything for which there is no evidence of prohibition is permitted — a Muslim does not need to search for evidence of permission for everything he wants to do. Prohibited things in Islam are specific and limited, while permissibles are vast. Allah says: 'He is the One who created for you everything on earth.' Prohibitions are restricted for reasons: harm to oneself, others, or society; or to uphold the rituals of Allah; or to protect the five necessities: religion, life, intellect, lineage, and wealth."
+          },
+          "keyPoints": {
+            "ar": [
+              "الأصل في الأشياء الإباحة — المحرمات استثناء محدود، والمباحات واسعة",
+              "المحرمات في الإسلام تُحمى بها الضرورات الخمس: الدين والنفس والعقل والنسل والمال",
+              "التحريم يحتاج دليلًا صريحًا — لا يجوز تحريم ما أحل الله بالرأي",
+              "«قل من حرّم زينة الله التي أخرج لعباده والطيبات من الرزق» — التوسع في التحريم مذموم"
+            ],
+            "en": [
+              "Default in all things is permissibility — prohibitions are limited exceptions; permissibles are vast",
+              "Prohibitions in Islam protect the five necessities: religion, life, intellect, lineage, wealth",
+              "Prohibition requires explicit evidence — declaring haram what Allah made halal by opinion is forbidden",
+              "'Say: Who has forbidden the adornments of Allah and the good things of provision?' — excessive prohibition is blameworthy"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "المحرمات الكبرى: الطعام والسلوك", "en": "Major Prohibitions: Food and Conduct" },
+          "narrative": {
+            "ar": "المحرمات في الطعام: الخنزير ومشتقاته، والميتة (الحيوان الذي مات دون ذبح شرعي)، والدم المسفوح، وما ذُبح لغير الله، والخمر وكل مسكر بأي نوع. ذبيحة أهل الكتاب (اليهود والنصارى) حلال وفق القول الراجح. المحرمات في السلوك: الشرك بالله (أعظم الكبائر)، والقتل بغير حق، والزنا، وقذف المحصنات، والسرقة، وشرب الخمر، والكذب والغش والربا. الحدود الشرعية مرتبطة بالكبائر لردع الناس وحفظ المجتمع. ومن المحرمات في المعاملات: الربا بجميع صوره، والغرر (بيع المجهول)، والقمار، والغش في البيع والشراء.",
+            "en": "Prohibited foods: pork and its derivatives, carrion (an animal that died without lawful slaughter), flowing blood, and what was sacrificed for other than Allah, and all intoxicants in any form. The slaughter of the People of the Book (Jews and Christians) is halal according to the preponderant view. Prohibited conduct: associating partners with Allah (the greatest sin), killing unjustly, fornication/adultery, false accusation of chaste women, theft, drinking intoxicants, lying, cheating, and usury. Sharia penalties are linked to major sins to deter people and protect society. Prohibited in transactions: usury (riba) in all forms, gharar (selling the unknown), gambling, and cheating in buying and selling."
+          },
+          "keyPoints": {
+            "ar": [
+              "محرمات الطعام: الخنزير، الميتة، الدم المسفوح، ما ذُبح لغير الله، المسكرات",
+              "ذبيحة أهل الكتاب حلال — المسلم يأكل من طعام اليهودي والمسيحي",
+              "الربا محرم بجميع صوره — «أَحَلَّ اللَّهُ الْبَيْعَ وَحَرَّمَ الرِّبَا»",
+              "الكبائر: الشرك، القتل، الزنا، السرقة، الخمر، قذف المحصنات، الكذب والغش"
+            ],
+            "en": [
+              "Prohibited foods: pork, carrion, flowing blood, what was sacrificed for other than Allah, intoxicants",
+              "People of the Book's slaughter is halal — a Muslim may eat from a Jew's or Christian's food",
+              "Usury is forbidden in all forms — 'Allah has permitted trade and forbidden usury'",
+              "Major sins: shirk, murder, fornication, theft, intoxicants, false accusation, lying and cheating"
+            ]
+          }
+        }
+      ],
+      "quiz": [
+        {
+          "q": { "ar": "ما الأصل في الأشياء وفق القاعدة الفقهية الكبرى؟", "en": "What is the default ruling for things according to the major jurisprudential principle?" },
+          "o": {
+            "ar": ["الإباحة حتى يرد دليل التحريم", "التحريم حتى يرد دليل الإباحة", "الكراهة في الشك", "الوقف والامتناع"],
+            "en": ["Permissibility until evidence of prohibition is established", "Prohibition until evidence of permissibility", "Dislike in cases of doubt", "Suspension and abstention"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "هل ذبيحة أهل الكتاب (اليهود والنصارى) حلال للمسلمين؟", "en": "Is the slaughter of the People of the Book (Jews and Christians) halal for Muslims?" },
+          "o": {
+            "ar": ["نعم، وفق القول الراجح المستند إلى الآية الكريمة", "لا، لأنهم ليسوا مسلمين", "مكروهة فقط لا محرمة", "خلاف بين العلماء ولا يجوز"],
+            "en": ["Yes, according to the preponderant view based on the Quranic verse", "No, because they are not Muslims", "Only disliked, not forbidden", "Disputed by scholars and therefore not allowed"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "ما الضرورات الخمس التي جاءت المحرمات لحمايتها؟", "en": "What are the five necessities that prohibitions protect?" },
+          "o": {
+            "ar": ["الدين والنفس والعقل والنسل والمال", "الصلاة والصوم والزكاة والحج والجهاد", "الأمن والصحة والعلم والمال والأسرة", "التوحيد والشريعة والأخلاق والمعاملات والسياسة"],
+            "en": ["Religion, life, intellect, lineage, and wealth", "Prayer, fasting, zakat, Hajj, and jihad", "Security, health, knowledge, wealth, and family", "Tawheed, Sharia, ethics, transactions, and politics"]
+          },
+          "a": 0
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "icon": "🌟",
+      "x": 1060,
+      "y": 80,
+      "era": "akhlaq",
+      "eraIcon": "🌟",
+      "eraColor": "#f0abfc",
+      "eraGradient": ["#0f001a", "#1a002d", "#07000f"],
+      "eraLabel": { "ar": "الأخلاق الإسلامية", "en": "Islamic Character" },
+      "eraTheme": { "ar": "الثمرة الأخيرة", "en": "The Final Fruit" },
+      "title": { "ar": "الأخلاق الإسلامية: ثمرة العلم والعبادة", "en": "Islamic Character: The Fruit of Knowledge and Worship" },
+      "focus": { "ar": "الأخلاق الواجبة التي يجب على كل مسلم تحقيقها", "en": "The obligatory manners every Muslim must embody" },
+      "goal": { "ar": "أن تجعل الأخلاق الإسلامية جزءًا من شخصيتك لا مجرد قواعد", "en": "Make Islamic character part of your identity, not mere rules" },
+      "reading": [
+        ["رياض الصالحين — النووي", "الجامع لأخلاق الإسلام من السنة النبوية"],
+        ["إحياء علوم الدين — الغزالي (كتاب الأخلاق)", "العلاج الروحي للأخلاق الذميمة"],
+        ["مختصر منهاج القاصدين — ابن قدامة", "مختصر عملي في تزكية النفس"]
+      ],
+      "steps": [
+        {
+          "title": { "ar": "الصدق والأمانة: أساس الشخصية المسلمة", "en": "Honesty and Trustworthiness: The Muslim's Core" },
+          "narrative": {
+            "ar": "قال النبي ﷺ: «عليكم بالصدق، فإن الصدق يهدي إلى البر، وإن البر يهدي إلى الجنة». الصدق في الإسلام ليس فضيلة اختيارية بل واجب شرعي — الكذب حرام إلا في ثلاث: الإصلاح بين الناس، وحديث الرجل زوجته، والحرب. الأمانة وصف النبي ﷺ الذي عُرف به قبل النبوة — وهو الشرط الأول للثقة في المجتمع. الأمانة تشمل: حفظ أموال الناس وأسرارهم وعرضهم، والوفاء بالعهود والمواعيد، وأداء الواجبات الوظيفية على أكمل وجه. أتقى الأعمال الصدق مع الله والناس والنفس.",
+            "en": "The Prophet ﷺ said: 'Hold to honesty, for honesty leads to righteousness, and righteousness leads to Paradise.' Truthfulness in Islam is not an optional virtue but a legal obligation — lying is forbidden except in three cases: reconciling between people, a husband speaking to his wife, and in war. Trustworthiness was the description of the Prophet ﷺ known before prophethood — it is the first requirement of social trust. Trustworthiness includes: safeguarding people's property, secrets, and honor; fulfilling covenants and appointments; and performing professional duties to the fullest. The most pious deeds are honesty with Allah, people, and oneself."
+          },
+          "keyPoints": {
+            "ar": [
+              "الصدق فريضة — الكذب حرام إلا في ثلاث استثناءات ضيقة",
+              "الأمانة صفة النبي ﷺ قبل النبوة — وهي أساس الثقة الاجتماعية",
+              "الأمانة تشمل: المال والأسرار والعهود والواجبات الوظيفية",
+              "«الصدق يهدي إلى البر، والبر يهدي إلى الجنة» — متفق عليه"
+            ],
+            "en": [
+              "Honesty is obligatory — lying is forbidden except in three narrow exceptions",
+              "Trustworthiness was the Prophet's ﷺ attribute before prophethood — it is the basis of social trust",
+              "Trustworthiness includes: property, secrets, covenants, and professional duties",
+              "'Honesty leads to righteousness and righteousness leads to Paradise' — agreed-upon hadith"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "حقوق المسلم على المسلم", "en": "The Muslim's Rights Over Fellow Muslims" },
+          "narrative": {
+            "ar": "قال النبي ﷺ: «حق المسلم على المسلم ست: إذا لقيته فسلّم عليه، وإذا دعاك فأجبه، وإذا استنصحك فانصحه، وإذا عطس فحمد الله فشمّته، وإذا مرض فعُدْه، وإذا مات فاتّبعه». هذه الحقوق الست تبني نسيج المجتمع المسلم. وأعظم حقوق المسلم على المسلم: السلامة من لسانه ويده. قال ﷺ: «المسلم من سلم المسلمون من لسانه ويده». ومن الواجبات الأخلاقية: الوفاء بالوعد، وردّ السلام، وعيادة المريض، والنصيحة بالحق، وستر العيوب، وحفظ الغيبة.",
+            "en": "The Prophet ﷺ said: 'The Muslim has six rights over a fellow Muslim: when you meet him greet him, when he invites you respond, when he asks your advice give it sincerely, when he sneezes and praises Allah respond, when he is sick visit him, and when he dies follow his bier.' These six rights build the fabric of Muslim society. The greatest right of one Muslim over another is being safe from his tongue and hand. The Prophet ﷺ said: 'The Muslim is the one from whose tongue and hand Muslims are safe.' Ethical obligations include: keeping promises, returning greetings, visiting the sick, sincere advice, concealing faults, and guarding against backbiting."
+          },
+          "keyPoints": {
+            "ar": [
+              "حقوق المسلم على المسلم الست: السلام، الإجابة للدعوة، النصيحة، التشميت، عيادة المريض، تشييع الجنازة",
+              "المسلم الحقيقي من سلم المسلمون من لسانه ويده",
+              "الغيبة (ذكر المسلم بما يكره) حرام كحرمة الدم",
+              "النصيحة حق على كل مسلم — والدين النصيحة"
+            ],
+            "en": [
+              "Six rights of Muslim over Muslim: greeting, responding to invitation, sincere advice, responding to sneeze, visiting sick, following bier",
+              "The true Muslim is the one from whose tongue and hand Muslims are safe",
+              "Backbiting (mentioning a Muslim what he dislikes) is as forbidden as bloodshed",
+              "Giving sincere advice is a duty — 'The religion is sincere counsel'"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "الأخلاق مع الله: التوبة والشكر والتوكل", "en": "Character with Allah: Repentance, Gratitude, and Trust" },
+          "narrative": {
+            "ar": "الأخلاق الإسلامية ليست فقط في معاملة الناس بل تبدأ بمعاملة الله. ثلاثة من أعظم الأخلاق مع الله: التوبة (الرجوع إلى الله فور الذنب بندم وعزم على عدم العودة)، والشكر (الاعتراف بأن كل نعمة من الله والتعبير عنه بالقلب واللسان والعمل)، والتوكل (الاعتماد على الله في الأسباب مع الأخذ بها كاملًا). التوبة باب لا يُغلق: «قل يا عبادي الذين أسرفوا على أنفسهم لا تقنطوا من رحمة الله». والشكر يزيد النعمة: «لئن شكرتم لأزيدنكم». والتوكل لا يعني ترك الأسباب بل إحسان الأسباب مع التفويض لله.",
+            "en": "Islamic character is not only in dealing with people; it begins with how we relate to Allah. Three of the greatest character traits with Allah: repentance (returning to Allah immediately after sin, with remorse and resolve not to return), gratitude (acknowledging that every blessing is from Allah and expressing it through heart, tongue, and action), and tawakkul — trust in Allah (relying on Allah in matters while fully taking the means). The door of repentance never closes: 'Say: O My servants who have transgressed against themselves — do not despair of Allah's mercy.' Gratitude multiplies blessings: 'If you are grateful, I will surely increase you.' Tawakkul does not mean abandoning means, but perfecting them while entrusting the outcome to Allah."
+          },
+          "keyPoints": {
+            "ar": [
+              "التوبة واجبة فور الذنب — شروطها: الندم، والإقلاع، والعزم على عدم العودة",
+              "الشكر بالقلب (الاعتراف) واللسان (الحمد) والجوارح (الطاعة) — «لئن شكرتم لأزيدنكم»",
+              "التوكل: إحسان الأسباب + تفويض النتيجة لله — «اعقلها وتوكل»",
+              "«لا تقنطوا من رحمة الله» — باب التوبة مفتوح لكل مذنب مهما بلغ ذنبه"
+            ],
+            "en": [
+              "Repentance is obligatory immediately after sin — conditions: remorse, stopping, resolving not to return",
+              "Gratitude: in heart (acknowledgment), tongue (praise), and limbs (obedience) — 'If you are grateful, I will increase you'",
+              "Tawakkul: perfect the means + entrust the outcome to Allah — 'Tie it, then trust in Allah'",
+              "'Do not despair of Allah's mercy' — the door of repentance is open for every sinner regardless of their sin"
+            ]
+          }
+        }
+      ],
+      "quiz": [
+        {
+          "q": { "ar": "كم عدد حقوق المسلم على المسلم التي ذكرها النبي ﷺ؟", "en": "How many rights does the Muslim have over a fellow Muslim, as mentioned by the Prophet ﷺ?" },
+          "o": {
+            "ar": ["ست حقوق", "ثلاثة حقوق", "خمسة حقوق", "عشرة حقوق"],
+            "en": ["Six rights", "Three rights", "Five rights", "Ten rights"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "ما شروط التوبة الصحيحة؟", "en": "What are the conditions of a valid repentance?" },
+          "o": {
+            "ar": ["الندم، والإقلاع عن الذنب، والعزم على عدم العودة", "النطق بالاستغفار فقط", "الصيام والصدقة فقط", "الاعتراف أمام الناس"],
+            "en": ["Remorse, stopping the sin, and resolving not to return", "Only pronouncing istighfar", "Only fasting and charity", "Confessing in front of people"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "ما معنى التوكل الصحيح في الإسلام؟", "en": "What is the correct meaning of tawakkul in Islam?" },
+          "o": {
+            "ar": ["إحسان الأسباب مع تفويض النتيجة لله", "ترك الأسباب والاكتفاء بالدعاء", "العمل بلا دعاء لأن الله يعلم الحاجة", "الاعتماد على النفس دون الله"],
+            "en": ["Perfecting the means while entrusting the outcome to Allah", "Abandoning means and relying only on dua", "Working without dua since Allah knows the need", "Relying on oneself without Allah"]
+          },
+          "a": 0
+        }
+      ]
+    }
+  ]
+}

@@ -28,13 +28,16 @@ const DISABLED_PATHS = {
 };
 
 async function loadPathData() {
-  try {
-    const res = await fetch("/data/prophet.json");
-    const data = await res.json();
-    PATHS[data.id] = data;
-  } catch (e) {
-    console.error("Failed to load path data:", e);
-  }
+  const files = ["/data/prophet.json", "/data/essentials.json"];
+  await Promise.all(files.map(async (url) => {
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      PATHS[data.id] = data;
+    } catch (e) {
+      console.error("Failed to load path data:", url, e);
+    }
+  }));
 }
 
 const LEVELS = ["beginner", "intermediate", "advanced"];

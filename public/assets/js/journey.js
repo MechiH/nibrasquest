@@ -188,16 +188,24 @@ function renderStoryHeader() {
   byId("story-title").textContent = activeStage.title[G.lang];
   byId("story-date").textContent = `${t().storyDate}: ${stageDateLabel(activeStage)}`;
 }
+const PATH_PERIODS = {
+  prophet: [
+    { eras: ["jahiliyyah", "birth"], icon: "🏜️", label: { ar: "قبل البعثة", en: "Pre-Revelation" }, color: "#8B6914" },
+    { eras: ["character", "revelation"], icon: "🕯️", label: { ar: "البعثة والوحي", en: "Revelation" }, color: "#E8D44D" },
+    { eras: ["struggle", "hijra"], icon: "🔥", label: { ar: "الابتلاء والهجرة", en: "Trials & Hijra" }, color: "#D4603A" },
+    { eras: ["madinah", "legacy"], icon: "🕌", label: { ar: "المدينة والإرث", en: "Madinah & Legacy" }, color: "#2E8B57" },
+  ],
+  essentials: [
+    { eras: ["tawheed", "pillars"], icon: "🕋", label: { ar: "العقيدة والأركان", en: "Creed & Pillars" }, color: "#10b981" },
+    { eras: ["taharah", "salah"], icon: "💧", label: { ar: "الطهارة والصلاة", en: "Purity & Prayer" }, color: "#38bdf8" },
+    { eras: ["sawm", "zakat"], icon: "🌙", label: { ar: "الصيام والزكاة", en: "Fasting & Zakat" }, color: "#8b5cf6" },
+    { eras: ["halal", "akhlaq"], icon: "⚖️", label: { ar: "الحلال والأخلاق", en: "Halal & Character" }, color: "#f59e0b" },
+  ],
+};
 function renderEraStrip() {
   const strip = byId("era-strip");
   strip.innerHTML = "";
-  /* Group 8 eras into 4 visual periods */
-  const periods = [
-    { eras: ["jahiliyyah", "birth"], icon: "🏜️", label: { ar: "قبل البعثة", en: "Pre-Revelation" }, theme: { ar: "التمهيد والنشأة", en: "Preparation" }, color: "#8B6914" },
-    { eras: ["character", "revelation"], icon: "🕯️", label: { ar: "البعثة والوحي", en: "Revelation" }, theme: { ar: "الصدق والرسالة", en: "Truth & Message" }, color: "#E8D44D" },
-    { eras: ["struggle", "hijra"], icon: "🔥", label: { ar: "الابتلاء والهجرة", en: "Trials & Hijra" }, theme: { ar: "الصبر والتحول", en: "Patience & Shift" }, color: "#D4603A" },
-    { eras: ["madinah", "legacy"], icon: "🕌", label: { ar: "المدينة والإرث", en: "Madinah & Legacy" }, theme: { ar: "البناء والخلود", en: "Nation & Eternity" }, color: "#2E8B57" },
-  ];
+  const periods = PATH_PERIODS[G.path] || PATH_PERIODS.prophet;
   periods.forEach((p) => {
     const active = p.eras.includes(activeStage.era);
     const c = document.createElement("div");
