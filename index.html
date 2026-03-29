@@ -1,0 +1,1862 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
+    <title>نور — Noor Quest Paths</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Amiri:wght@400;700&family=Nunito:wght@400;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #040812;
+            --bg2: #09101d;
+            --panel: rgba(10, 15, 28, .78);
+            --panel-2: rgba(255, 255, 255, .05);
+            --gold: #d4a843;
+            --gold-2: #f5d96a;
+            --gold-3: #8a6010;
+            --emerald: #10b981;
+            --violet: #9b59b6;
+            --red: #ef4444;
+            --blue: #60a5fa;
+            --text: #ffffff;
+            --muted: rgba(255, 255, 255, .74);
+            --dim: rgba(255, 255, 255, .34);
+            --line: rgba(212, 168, 67, .18);
+            --line-strong: rgba(212, 168, 67, .42);
+            --shadow: 0 18px 60px rgba(0, 0, 0, .42);
+            --radius: 24px;
+            --ff: 'Cairo', sans-serif;
+            --fd: 'Amiri', serif;
+            --fe: 'Nunito', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: radial-gradient(circle at top, #0d1a34 0%, #040812 45%, #02050c 100%);
+            color: var(--text);
+            font-family: var(--ff);
+            -webkit-tap-highlight-color: transparent;
+            user-select: none
+        }
+
+        button {
+            font: inherit
+        }
+
+        #bg,
+        #fx {
+            position: fixed;
+            inset: 0;
+            display: block
+        }
+
+        #bg {
+            z-index: 0
+        }
+
+        #fx {
+            z-index: 30;
+            pointer-events: none
+        }
+
+        .screen {
+            position: fixed;
+            inset: 0;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .35s ease
+        }
+
+        .screen.on {
+            opacity: 1;
+            pointer-events: auto
+        }
+
+        .glass {
+            background: var(--panel);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow)
+        }
+
+        .hidden {
+            display: none !important
+        }
+
+        @keyframes floatY {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-10px)
+            }
+        }
+
+        @keyframes glowPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 18px rgba(212, 168, 67, .24), 0 0 42px rgba(212, 168, 67, .08)
+            }
+
+            50% {
+                box-shadow: 0 0 28px rgba(212, 168, 67, .48), 0 0 80px rgba(212, 168, 67, .14)
+            }
+        }
+
+        @keyframes rise {
+            from {
+                transform: translateY(14px);
+                opacity: 0
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1
+            }
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(.8);
+                opacity: 0
+            }
+
+            70% {
+                transform: scale(1.05);
+                opacity: 1
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1
+            }
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0)
+            }
+
+            20% {
+                transform: translateX(-5px)
+            }
+
+            40% {
+                transform: translateX(5px)
+            }
+
+            60% {
+                transform: translateX(-4px)
+            }
+
+            80% {
+                transform: translateX(4px)
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% center
+            }
+
+            100% {
+                background-position: 200% center
+            }
+        }
+
+        .top-controls {
+            position: fixed;
+            top: 14px;
+            left: 14px;
+            right: 14px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            pointer-events: none
+        }
+
+        .top-controls>* {
+            pointer-events: auto
+        }
+
+        .langbar,
+        .backbtn,
+        .soundbtn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 0, 0, .42);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            padding: 6px
+        }
+
+        .langbar button,
+        .backbtn button,
+        .soundbtn button {
+            border: none;
+            background: none;
+            color: var(--muted);
+            padding: 8px 13px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: 800;
+            font-size: 12px;
+            transition: .2s
+        }
+
+        .langbar button.active,
+        .soundbtn button.active {
+            background: linear-gradient(135deg, var(--gold), #a9700a);
+            color: #071019
+        }
+
+        #title {
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px
+        }
+
+        .hero {
+            position: relative;
+            text-align: center;
+            max-width: 980px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+            animation: rise .7s ease
+        }
+
+        .moon-wrap {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            animation: floatY 6s ease-in-out infinite
+        }
+
+        .moon-wrap::before,
+        .moon-wrap::after {
+            content: "";
+            position: absolute;
+            inset: -26px;
+            border-radius: 50%;
+            border: 1px solid rgba(212, 168, 67, .09)
+        }
+
+        .moon-wrap::after {
+            inset: -44px;
+            opacity: .6
+        }
+
+        .moon-core {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #fff8d7 0%, #f0d36e 52%, #bb8428 100%);
+            filter: drop-shadow(0 0 28px rgba(212, 168, 67, .35))
+        }
+
+        .moon-cut {
+            position: absolute;
+            right: 8px;
+            top: 0;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: var(--bg)
+        }
+
+        .kicker {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: rgba(212, 168, 67, .54);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .35em;
+            text-transform: uppercase
+        }
+
+        .kicker::before,
+        .kicker::after {
+            content: "";
+            width: 68px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(212, 168, 67, .42), transparent)
+        }
+
+        .logo {
+            font-family: var(--fd);
+            font-size: clamp(5rem, 16vw, 10rem);
+            line-height: .9;
+            background: linear-gradient(180deg, #fff2b8 0%, #d4a843 50%, #7b580d 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            filter: drop-shadow(0 0 32px rgba(212, 168, 67, .28))
+        }
+
+        html.en .logo {
+            font-family: var(--fe);
+            font-size: clamp(4rem, 11vw, 6rem);
+            font-weight: 900;
+            letter-spacing: .06em
+        }
+
+        .subtitle {
+            font-size: 15px;
+            color: rgba(212, 168, 67, .68);
+            letter-spacing: .18em;
+            text-transform: uppercase
+        }
+
+        .chip-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center
+        }
+
+        .chip {
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid var(--line);
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 700
+        }
+
+        .cta-wrap {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center
+        }
+
+        .cta,
+        .ghost {
+            border: none;
+            cursor: pointer;
+            border-radius: 999px;
+            padding: 16px 28px;
+            font-size: 17px;
+            font-weight: 800;
+            transition: .18s transform, .18s filter;
+            position: relative;
+            overflow: hidden
+        }
+
+        .cta {
+            background: linear-gradient(135deg, var(--gold), #a86e08);
+            color: #071019;
+            animation: glowPulse 2.4s ease-in-out infinite
+        }
+
+        .cta::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(115deg, transparent 10%, rgba(255, 255, 255, .24) 30%, transparent 46%);
+            background-size: 200% 100%;
+            animation: shimmer 2.7s linear infinite
+        }
+
+        .ghost {
+            background: rgba(255, 255, 255, .05);
+            color: var(--text);
+            border: 1px solid var(--line)
+        }
+
+        .mission-card {
+            max-width: 760px;
+            padding: 18px 20px;
+            border-radius: 22px;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid var(--line);
+            color: var(--muted);
+            line-height: 1.8;
+            font-size: 14px
+        }
+
+        #paths {
+            padding: 86px 18px 20px;
+            overflow: auto
+        }
+
+        .path-shell {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px
+        }
+
+        .path-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 12px;
+            flex-wrap: wrap
+        }
+
+        .path-title {
+            font-size: 34px;
+            font-family: var(--fd)
+        }
+
+        html.en .path-title {
+            font-family: var(--fe)
+        }
+
+        .path-sub {
+            color: var(--muted);
+            line-height: 1.8;
+            max-width: 760px
+        }
+
+        .level-picker {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap
+        }
+
+        .level-pill {
+            padding: 12px 16px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, .04);
+            cursor: pointer;
+            font-weight: 800;
+            color: var(--text)
+        }
+
+        .level-pill.active {
+            background: linear-gradient(135deg, var(--gold), #a86e08);
+            color: #071019
+        }
+
+        .path-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px
+        }
+
+        .path-card {
+            padding: 18px;
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            cursor: pointer;
+            transition: .18s transform, .18s border-color
+        }
+
+        .path-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--line-strong)
+        }
+
+        .path-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px
+        }
+
+        .path-badge {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            display: grid;
+            place-items: center;
+            background: rgba(212, 168, 67, .08);
+            border: 1px solid rgba(212, 168, 67, .18);
+            font-size: 24px
+        }
+
+        .path-name {
+            font-size: 22px;
+            font-weight: 900
+        }
+
+        .path-desc {
+            color: var(--muted);
+            line-height: 1.8;
+            font-size: 13px
+        }
+
+        .path-meta {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap
+        }
+
+        .meta-pill {
+            padding: 8px 10px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid var(--line);
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 700
+        }
+
+        .path-progress {
+            height: 8px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .08);
+            overflow: hidden
+        }
+
+        .path-progress>span {
+            display: block;
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--gold), var(--gold-2))
+        }
+
+        #map {
+            background: linear-gradient(180deg, rgba(4, 8, 18, .28), rgba(4, 8, 18, .58))
+        }
+
+        .map-hud {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 1.2fr;
+            align-items: center;
+            gap: 12px;
+            padding: 20px 20px 8px
+        }
+
+        .hud-card {
+            padding: 14px 16px;
+            border-radius: 20px
+        }
+
+        .hud-left,
+        .hud-center,
+        .hud-right {
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .hud-left {
+            justify-content: flex-start
+        }
+
+        .hud-center {
+            justify-content: center;
+            flex-direction: column;
+            text-align: center
+        }
+
+        .hud-right {
+            justify-content: flex-end;
+            flex-wrap: wrap
+        }
+
+        .label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: .18em;
+            color: var(--gold);
+            font-weight: 800
+        }
+
+        .value {
+            font-weight: 900
+        }
+
+        .xp-bar {
+            width: min(220px, 40vw);
+            height: 8px;
+            background: rgba(255, 255, 255, .08);
+            border-radius: 999px;
+            overflow: hidden
+        }
+
+        .xp-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold), var(--gold-2));
+            border-radius: 999px;
+            transition: width .7s ease
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid var(--line);
+            font-size: 13px;
+            font-weight: 800
+        }
+
+        .map-wrap {
+            position: relative;
+            flex: 1;
+            min-height: 0
+        }
+
+        #mapSvg {
+            width: 100%;
+            height: 100%;
+            display: block
+        }
+
+        .tooltip {
+            position: absolute;
+            pointer-events: none;
+            z-index: 4;
+            opacity: 0;
+            transform: translateY(8px);
+            transition: .18s;
+            background: rgba(3, 6, 14, .94);
+            border: 1px solid var(--line-strong);
+            border-radius: 14px;
+            padding: 10px 12px;
+            min-width: 160px;
+            box-shadow: var(--shadow)
+        }
+
+        .tooltip.on {
+            opacity: 1;
+            transform: translateY(0)
+        }
+
+        .tooltip .tt-state {
+            font-size: 10px;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 5px;
+            font-weight: 900
+        }
+
+        .tooltip .tt-name {
+            font-weight: 800;
+            margin-bottom: 4px
+        }
+
+        .tooltip .tt-meta {
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .panel-toggle {
+            position: absolute;
+            bottom: 18px;
+            left: 18px;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 14px;
+            border-radius: 999px;
+            background: rgba(5, 10, 20, .9);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            font-weight: 900;
+            color: var(--text)
+        }
+
+        .panel-toggle .mini {
+            color: var(--gold);
+            font-size: 12px;
+            letter-spacing: .12em;
+            text-transform: uppercase
+        }
+
+        .side-panel {
+            position: absolute;
+            bottom: 18px;
+            left: 18px;
+            z-index: 4;
+            width: min(360px, calc(100% - 36px));
+            padding: 16px 16px 14px;
+            border-radius: 22px;
+            transition: transform .22s ease, opacity .22s ease;
+            overflow: hidden
+        }
+
+        .side-panel.hidden-panel {
+            transform: translateY(18px);
+            opacity: 0;
+            pointer-events: none
+        }
+
+        .quest-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px
+        }
+
+        .quest-title {
+            font-weight: 900;
+            font-size: 16px
+        }
+
+        .quest-sub {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.6
+        }
+
+        .quest-progress {
+            display: flex;
+            gap: 6px;
+            margin-top: 10px
+        }
+
+        .mini-dot {
+            flex: 1;
+            height: 8px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .08);
+            overflow: hidden
+        }
+
+        .mini-dot>span {
+            display: block;
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--gold), var(--gold-2))
+        }
+
+        .deep-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 12px
+        }
+
+        .deep-card {
+            padding: 12px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid var(--line)
+        }
+
+        .deep-card .dt {
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: 800;
+            margin-bottom: 8px
+        }
+
+        .deep-card .dv {
+            font-size: 13px;
+            line-height: 1.7
+        }
+
+        .deep-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        .book-item {
+            padding: 9px 10px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 255, 255, .06)
+        }
+
+        .book-item .b1 {
+            font-size: 12px;
+            font-weight: 900
+        }
+
+        .book-item .b2 {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 4px
+        }
+
+        #story {
+            justify-content: space-between
+        }
+
+        .story-shell {
+            position: relative;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 86px 20px 20px;
+            overflow: auto
+        }
+
+        .story-card {
+            margin: auto;
+            max-width: 1100px;
+            width: 100%;
+            padding: 24px;
+            border-radius: 28px;
+            position: relative;
+            overflow: hidden
+        }
+
+        .story-top {
+            text-align: center;
+            margin-bottom: 18px
+        }
+
+        .story-top .chapter {
+            font-size: 10px;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            color: var(--dim);
+            font-weight: 800
+        }
+
+        .story-top .icon {
+            font-size: 52px;
+            filter: drop-shadow(0 0 18px rgba(212, 168, 67, .22))
+        }
+
+        .story-top .title {
+            font-family: var(--fd);
+            font-size: 34px;
+            margin-top: 6px
+        }
+
+        html.en .story-top .title {
+            font-family: var(--fe)
+        }
+
+        .story-divider {
+            width: 220px;
+            height: 1px;
+            margin: 10px auto 0;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent)
+        }
+
+        .era-strip {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin: 16px 0
+        }
+
+        .era-card {
+            padding: 12px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid var(--line);
+            text-align: center
+        }
+
+        .era-card.active {
+            border-color: rgba(212, 168, 67, .42);
+            background: rgba(212, 168, 67, .08)
+        }
+
+        .era-card .e1 {
+            font-size: 24px
+        }
+
+        .era-card .e2 {
+            font-size: 12px;
+            font-weight: 800;
+            margin-top: 5px
+        }
+
+        .era-card .e3 {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 3px
+        }
+
+        .story-body {
+            min-height: 190px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 10px 2px
+        }
+
+        .story-text {
+            max-width: 860px;
+            text-align: center;
+            font-size: 20px;
+            line-height: 2.05;
+            color: var(--text);
+            transition: .35s
+        }
+
+        .story-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 0 12px
+        }
+
+        .story-dots span {
+            height: 6px;
+            width: 26px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .1);
+            transition: .22s
+        }
+
+        .story-dots span.active {
+            width: 42px;
+            background: var(--gold)
+        }
+
+        .story-rewards {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 2px
+        }
+
+        .reward-pill {
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid var(--line);
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 700
+        }
+
+        .story-nav {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px
+        }
+
+        .story-nav button {
+            border: none;
+            border-radius: 16px;
+            padding: 14px 18px;
+            cursor: pointer;
+            font-weight: 800
+        }
+
+        .story-skip {
+            background: rgba(255, 255, 255, .05);
+            color: var(--text);
+            border: 1px solid var(--line)
+        }
+
+        .story-next {
+            flex: 1;
+            background: linear-gradient(135deg, var(--gold), var(--gold-3));
+            color: #071019
+        }
+
+        .reference-board {
+            margin-top: 16px;
+            display: grid;
+            grid-template-columns: 1.2fr .8fr;
+            gap: 12px
+        }
+
+        .ref-card {
+            padding: 14px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid var(--line)
+        }
+
+        .ref-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px
+        }
+
+        .ref-title {
+            font-size: 14px;
+            font-weight: 900
+        }
+
+        .ref-copy {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.8
+        }
+
+        .endorse-list,
+        .reading-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 10px
+        }
+
+        #quiz {
+            padding: 82px 16px 18px;
+            align-items: center
+        }
+
+        .quiz-shell {
+            max-width: 960px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 14px
+        }
+
+        .quiz-top {
+            padding: 16px 18px;
+            border-radius: 24px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 12px
+        }
+
+        .quiz-label {
+            font-size: 11px;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: var(--dim);
+            font-weight: 900
+        }
+
+        .combo {
+            justify-self: center;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(212, 168, 67, .1);
+            border: 1px solid rgba(212, 168, 67, .2);
+            color: var(--gold);
+            font-weight: 900;
+            opacity: 0;
+            transform: scale(.85);
+            transition: .2s
+        }
+
+        .combo.on {
+            opacity: 1;
+            transform: scale(1)
+        }
+
+        .quiz-count {
+            font-weight: 800;
+            color: var(--muted)
+        }
+
+        .progress {
+            height: 8px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .08);
+            overflow: hidden
+        }
+
+        .progress>span {
+            display: block;
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--gold), var(--gold-2));
+            transition: width .28s ease
+        }
+
+        .booster-bar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap
+        }
+
+        .booster {
+            padding: 10px 12px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid var(--line);
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 800
+        }
+
+        .booster.active {
+            border-color: rgba(212, 168, 67, .36);
+            background: rgba(212, 168, 67, .08);
+            color: var(--gold)
+        }
+
+        .mission-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px
+        }
+
+        .mission-card-mini {
+            padding: 14px 12px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid var(--line);
+            text-align: center
+        }
+
+        .mission-card-mini .mi {
+            font-size: 22px
+        }
+
+        .mission-card-mini .mt {
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: 800;
+            margin-top: 6px
+        }
+
+        .mission-card-mini .mv {
+            font-size: 16px;
+            font-weight: 900;
+            color: var(--gold);
+            margin-top: 4px
+        }
+
+        .question-card {
+            padding: 20px;
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden
+        }
+
+        .question-text {
+            font-size: 24px;
+            font-weight: 900;
+            line-height: 1.65;
+            text-align: center
+        }
+
+        .answer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px
+        }
+
+        .answer {
+            padding: 16px 14px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, .05);
+            border: 1px solid rgba(255, 255, 255, .08);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            cursor: pointer;
+            transition: .16s transform, .16s border-color, .16s background;
+            color: #fff
+        }
+
+        .answer:hover:not(.locked) {
+            transform: translateY(-2px);
+            border-color: rgba(212, 168, 67, .28);
+            background: rgba(255, 255, 255, .08)
+        }
+
+        .answer.correct {
+            background: rgba(16, 185, 129, .14);
+            border-color: var(--emerald)
+        }
+
+        .answer.wrong {
+            background: rgba(239, 68, 68, .12);
+            border-color: var(--red);
+            animation: shake .28s ease
+        }
+
+        .answer.dim {
+            opacity: .28
+        }
+
+        .answer-key {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            background: rgba(212, 168, 67, .1);
+            border: 1px solid rgba(212, 168, 67, .18);
+            color: var(--gold);
+            font-size: 13px;
+            font-weight: 900;
+            flex-shrink: 0
+        }
+
+        .answer-text {
+            font-size: 15px;
+            font-weight: 700;
+            line-height: 1.45;
+            color: #fff
+        }
+
+        .feedback {
+            height: 32px;
+            display: grid;
+            place-items: center;
+            font-size: 15px;
+            font-weight: 900;
+            animation: rise .22s ease
+        }
+
+        .feedback.ok {
+            color: var(--emerald)
+        }
+
+        .feedback.no {
+            color: var(--red)
+        }
+
+        #result {
+            align-items: center;
+            justify-content: center;
+            padding: 20px
+        }
+
+        .result-card {
+            max-width: 760px;
+            width: 100%;
+            padding: 28px;
+            border-radius: 30px;
+            text-align: center;
+            animation: pop .55s cubic-bezier(.34, 1.56, .64, 1)
+        }
+
+        .result-emoji {
+            font-size: 92px;
+            filter: drop-shadow(0 0 24px rgba(212, 168, 67, .34))
+        }
+
+        .result-title {
+            font-size: 46px;
+            font-family: var(--fd);
+            margin-top: 6px
+        }
+
+        html.en .result-title {
+            font-family: var(--fe)
+        }
+
+        .result-sub {
+            margin-top: 5px;
+            color: var(--muted);
+            font-weight: 700
+        }
+
+        .stars {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 18px 0 12px
+        }
+
+        .stars span {
+            font-size: 54px;
+            opacity: .15;
+            transform: scale(.84);
+            transition: .3s
+        }
+
+        .stars span.on {
+            opacity: 1;
+            transform: scale(1);
+            filter: drop-shadow(0 0 14px rgba(245, 217, 106, .45))
+        }
+
+        .loot-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 16px 0 22px
+        }
+
+        .loot {
+            padding: 16px 10px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid var(--line)
+        }
+
+        .loot .n {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--gold)
+        }
+
+        .loot .l {
+            font-size: 10px;
+            color: var(--dim);
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            font-weight: 900
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap
+        }
+
+        .result-actions button {
+            border: none;
+            border-radius: 16px;
+            padding: 14px 20px;
+            cursor: pointer;
+            font-weight: 900
+        }
+
+        .primary {
+            background: linear-gradient(135deg, var(--gold), var(--gold-3));
+            color: #071019
+        }
+
+        .secondary {
+            background: rgba(255, 255, 255, .05);
+            color: var(--text);
+            border: 1px solid var(--line)
+        }
+
+        .popup {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(0, 0, 0, .66);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px;
+            opacity: 0;
+            pointer-events: none;
+            transition: .25s
+        }
+
+        .popup.on {
+            opacity: 1;
+            pointer-events: auto
+        }
+
+        .popup-card {
+            max-width: 620px;
+            width: 100%;
+            padding: 24px;
+            border-radius: 28px;
+            position: relative;
+            animation: pop .38s cubic-bezier(.34, 1.56, .64, 1)
+        }
+
+        .close {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, .06);
+            color: var(--muted);
+            padding: 8px 10px;
+            cursor: pointer
+        }
+
+        .popup-head {
+            text-align: center
+        }
+
+        .popup-ico {
+            font-size: 56px
+        }
+
+        .popup-kicker {
+            font-size: 10px;
+            color: var(--dim);
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            font-weight: 900;
+            margin-top: 6px
+        }
+
+        .popup-title {
+            font-size: 28px;
+            font-family: var(--fd);
+            margin-top: 4px
+        }
+
+        html.en .popup-title {
+            font-family: var(--fe)
+        }
+
+        .popup-desc {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.8;
+            text-align: center;
+            margin: 12px 0 14px
+        }
+
+        .popup-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 14px
+        }
+
+        .popup-mini {
+            padding: 12px 6px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid var(--line);
+            text-align: center
+        }
+
+        .popup-mini .i {
+            font-size: 20px
+        }
+
+        .popup-mini .t {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 5px;
+            font-weight: 800
+        }
+
+        .popup-btn {
+            width: 100%;
+            border: none;
+            border-radius: 16px;
+            padding: 15px;
+            font-weight: 900;
+            cursor: pointer;
+            color: #071019;
+            background: linear-gradient(135deg, var(--gold), var(--gold-3))
+        }
+
+        .toast,
+        .achievement {
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%) translateY(-140px);
+            z-index: 3000;
+            padding: 14px 18px;
+            border-radius: 18px;
+            background: rgba(5, 10, 20, .95);
+            border: 1px solid rgba(212, 168, 67, .36);
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: transform .42s cubic-bezier(.34, 1.56, .64, 1)
+        }
+
+        .toast.on,
+        .achievement.on {
+            transform: translateX(-50%) translateY(0)
+        }
+
+        .toast {
+            top: 70px
+        }
+
+        .achievement {
+            top: 132px
+        }
+
+        .toast .i,
+        .achievement .i {
+            font-size: 26px
+        }
+
+        .toast .t1,
+        .achievement .t1 {
+            font-size: 10px;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            color: var(--gold);
+            font-weight: 900
+        }
+
+        .toast .t2,
+        .achievement .t2 {
+            font-weight: 800
+        }
+
+        @media (max-width: 980px) {
+
+            .path-grid,
+            .reference-board,
+            .deep-grid,
+            .era-strip,
+            .answer-grid,
+            .loot-grid,
+            .popup-grid {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .map-hud {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                padding-top: 78px
+            }
+
+            .hud-left,
+            .hud-center,
+            .hud-right {
+                justify-content: center
+            }
+        }
+
+        @media (max-width: 680px) {
+
+            .path-grid,
+            .reference-board,
+            .deep-grid,
+            .era-strip,
+            .mission-row,
+            .answer-grid,
+            .loot-grid,
+            .popup-grid {
+                grid-template-columns: 1fr
+            }
+
+            .story-text {
+                font-size: 18px
+            }
+
+            .question-text {
+                font-size: 20px
+            }
+
+            .story-shell {
+                padding-top: 86px
+            }
+
+            .map-wrap {
+                padding-bottom: 150px
+            }
+
+            .logo {
+                font-size: 74px
+            }
+
+            html.en .logo {
+                font-size: 54px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="bg"></canvas><canvas id="fx"></canvas>
+    <div class="top-controls">
+        <div class="langbar"><button id="lang-ar" class="active">عربي</button><button id="lang-en">EN</button></div>
+        <div style="display:flex;gap:8px">
+            <div class="soundbtn"><button id="sound-toggle" class="active">🔊 SFX</button></div>
+            <div class="backbtn hidden" id="backWrap"><button id="back-btn">← رجوع</button></div>
+        </div>
+    </div>
+    <section id="title" class="screen on">
+        <div class="hero">
+            <div class="moon-wrap">
+                <div class="moon-core"></div>
+                <div class="moon-cut"></div>
+            </div>
+            <div class="kicker" id="hero-kicker">Journey of Light</div>
+            <div class="logo" id="hero-logo">نور</div>
+            <div class="subtitle" id="hero-sub">مسارات تعلّم أعمق وأكثر لعبية</div>
+            <div class="chip-row">
+                <div class="chip" id="chip-1">🧭 مسارات مختلفة</div>
+                <div class="chip" id="chip-2">🎚️ مستويات بدء</div>
+                <div class="chip" id="chip-3">📚 مراجع وتزكية</div>
+                <div class="chip" id="chip-4">🗺️ خرائط عصر ومراحل</div>
+            </div>
+            <div class="mission-card" id="mission-copy">اختر مسارًا، حدّد مستواك، تقدّم على خريطة خاصة بكل موضوع، وافتح
+                محتوى أعمق مع تتبع شامل للتقدّم ومراجع مقترحة للتوسّع.</div>
+            <div class="cta-wrap"><button class="cta" id="start-btn">▶ اختر المسار</button><button class="ghost"
+                    id="demo-btn">★ عرض الإنجازات</button></div>
+        </div>
+    </section>
+    <section id="paths" class="screen">
+        <div class="path-shell">
+            <div class="path-head">
+                <div>
+                    <div class="path-title" id="paths-title">اختر مسار التعلّم</div>
+                    <div class="path-sub" id="paths-sub">ابدأ من المبتدئ حتى لو كنت متقدمًا. هذا يعطيك تسلسلًا أوضح
+                        ويقوي التجربة. ويمكنك رفع المستوى مباشرة متى شئت.</div>
+                </div>
+                <div class="level-picker" id="level-picker"></div>
+            </div>
+            <div class="path-grid" id="path-grid"></div>
+        </div>
+    </section>
+    <section id="map" class="screen">
+        <div class="map-hud">
+            <div class="hud-left glass hud-card">
+                <div>
+                    <div class="label" id="level-label">المستوى</div>
+                    <div class="value" id="level-value">1</div>
+                </div>
+                <div>
+                    <div class="xp-bar">
+                        <div class="xp-fill" id="xp-fill"></div>
+                    </div>
+                    <div style="font-size:12px;color:var(--muted);margin-top:6px" id="xp-text">0 XP</div>
+                </div>
+            </div>
+            <div class="hud-center glass hud-card">
+                <div class="label" id="map-label">الخريطة</div>
+                <div class="value" id="map-title">اختر المرحلة التالية</div>
+            </div>
+            <div class="hud-right glass hud-card">
+                <div class="stat">⭐ <span id="stat-stars">0</span></div>
+                <div class="stat">💎 <span id="stat-gems">0</span></div>
+                <div class="stat">🔥 <span id="stat-streak">0</span></div>
+                <div class="stat">🏅 <span id="stat-ach">0</span></div>
+            </div>
+        </div>
+        <div class="map-wrap"><svg id="mapSvg" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid meet"></svg>
+            <div class="tooltip" id="tooltip">
+                <div class="tt-state" id="tt-state"></div>
+                <div class="tt-name" id="tt-name"></div>
+                <div class="tt-meta" id="tt-meta"></div>
+            </div><button class="panel-toggle" id="panel-toggle"><span>🎯</span><span class="mini"
+                    id="panel-toggle-label">Quest</span></button>
+            <div class="side-panel glass hidden-panel" id="quest-panel">
+                <div class="quest-head">
+                    <div class="quest-title" id="panel-title">المهمة الحالية</div>
+                    <div class="stat">⚔️ <span id="panel-rank">R1</span></div>
+                </div>
+                <div class="quest-sub" id="panel-copy">أكمل المرحلة الحالية للحصول على XP وفتح المرحلة التالية.</div>
+                <div class="quest-progress" id="quest-progress"></div>
+                <div class="deep-grid">
+                    <div class="deep-card">
+                        <div class="dt" id="deep-focus-label">محور المرحلة</div>
+                        <div class="dv" id="deep-focus-value">—</div>
+                    </div>
+                    <div class="deep-card">
+                        <div class="dt" id="deep-goal-label">هدف التقدّم</div>
+                        <div class="dv" id="deep-goal-value">—</div>
+                    </div>
+                    <div class="deep-card" style="grid-column:1/-1">
+                        <div class="dt" id="deep-books-label">للتوسّع</div>
+                        <div class="deep-list" id="deep-books-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="story" class="screen">
+        <div class="story-shell">
+            <div class="story-card glass">
+                <div class="story-top">
+                    <div class="chapter" id="story-chapter"></div>
+                    <div class="icon" id="story-icon"></div>
+                    <div class="title" id="story-title"></div>
+                    <div class="story-divider"></div>
+                </div>
+                <div class="era-strip" id="era-strip"></div>
+                <div class="story-body">
+                    <div class="story-text" id="story-text"></div>
+                </div>
+                <div class="story-dots" id="story-dots"></div>
+                <div class="story-rewards">
+                    <div class="reward-pill" id="reward-1">⭐ حتى 3 نجوم</div>
+                    <div class="reward-pill" id="reward-2">💎 جوهرة إضافية</div>
+                    <div class="reward-pill" id="reward-3">🔥 سلسلة إجابات</div>
+                </div>
+                <div class="reference-board">
+                    <div class="ref-card">
+                        <div class="ref-head">
+                            <div class="ref-title" id="reading-title">قراءات أعمق</div>
+                        </div>
+                        <div class="ref-copy" id="reading-copy">مراجع مقترحة داخل التطبيق لإكمال الرحلة بشكل أعمق.</div>
+                        <div class="reading-list" id="reading-list"></div>
+                    </div>
+                    <div class="ref-card">
+                        <div class="ref-head">
+                            <div class="ref-title" id="endorse-title">تزكيات ومدخلات</div>
+                        </div>
+                        <div class="ref-copy" id="endorse-copy">أسماء ومدارس معرفية يمكن ربطها لاحقًا بمراجع موثقة
+                            ومحتوى موسع.</div>
+                        <div class="endorse-list" id="endorse-list"></div>
+                    </div>
+                </div>
+                <div class="story-nav"><button class="story-skip" id="story-skip">تخطي</button><button
+                        class="story-next" id="story-next">التالي</button></div>
+            </div>
+        </div>
+    </section>
+    <section id="quiz" class="screen">
+        <div class="quiz-shell">
+            <div class="quiz-top glass">
+                <div class="quiz-label" id="quiz-label">اختبار المعرفة</div>
+                <div class="combo" id="combo">🔥 2× Combo</div>
+                <div class="quiz-count" id="quiz-count">1 / 2</div>
+            </div>
+            <div class="progress glass"><span id="quiz-progress"></span></div>
+            <div class="booster-bar">
+                <div class="booster" id="booster-combo">Combo: 0</div>
+                <div class="booster" id="booster-perfect">Perfect Bonus</div>
+                <div class="booster" id="booster-speed">Quick Bonus</div>
+            </div>
+            <div class="mission-row">
+                <div class="mission-card-mini">
+                    <div class="mi">🎯</div>
+                    <div class="mt" id="mini-goal-label">Goal</div>
+                    <div class="mv" id="mini-goal-value">2/2</div>
+                </div>
+                <div class="mission-card-mini">
+                    <div class="mi">⚡</div>
+                    <div class="mt" id="mini-bonus-label">Bonus</div>
+                    <div class="mv" id="mini-bonus-value">+0 XP</div>
+                </div>
+                <div class="mission-card-mini">
+                    <div class="mi">🔥</div>
+                    <div class="mt" id="mini-streak-label">Streak</div>
+                    <div class="mv" id="mini-streak-value">0</div>
+                </div>
+            </div>
+            <div class="question-card glass">
+                <div class="question-text" id="question-text"></div>
+            </div>
+            <div class="answer-grid" id="answer-grid"></div>
+            <div class="feedback" id="feedback"></div>
+        </div>
+    </section>
+    <section id="result" class="screen">
+        <div class="result-card glass">
+            <div class="result-emoji" id="result-emoji">🏆</div>
+            <div class="result-title" id="result-title">ممتاز</div>
+            <div class="result-sub" id="result-sub">2 / 2 صحيحة</div>
+            <div class="stars" id="result-stars"></div>
+            <div class="loot-grid">
+                <div class="loot">
+                    <div class="n" id="loot-xp">+0</div>
+                    <div class="l">XP</div>
+                </div>
+                <div class="loot">
+                    <div class="n" id="loot-gems">+0</div>
+                    <div class="l" id="loot-gems-label">Gem</div>
+                </div>
+                <div class="loot">
+                    <div class="n" id="loot-streak">0</div>
+                    <div class="l" id="loot-streak-label">Streak</div>
+                </div>
+                <div class="loot">
+                    <div class="n" id="loot-rank">R1</div>
+                    <div class="l" id="loot-rank-label">Rank</div>
+                </div>
+            </div>
+            <div class="result-actions"><button class="primary" id="next-stage-btn">الفصل التالي</button><button
+                    class="secondary" id="map-btn">الخريطة</button><button class="secondary"
+                    id="retry-btn">إعادة</button></div>
+        </div>
+    </section>
+    <div class="popup" id="popup">
+        <div class="popup-card glass" id="popup-card"></div>
+    </div>
+    <div class="toast" id="toast">
+        <div class="i" id="toast-i">⚡</div>
+        <div>
+            <div class="t1" id="toast-t1">LEVEL UP</div>
+            <div class="t2" id="toast-t2">+100 XP</div>
+        </div>
+    </div>
+    <div class="achievement" id="achievement">
+        <div class="i" id="achievement-i">🏅</div>
+        <div>
+            <div class="t1" id="achievement-t1">Achievement</div>
+            <div class="t2" id="achievement-t2">First Step</div>
+        </div>
+    </div>
+    <script>
+        const PATHS = {
+            prophet: { id: 'prophet', icon: '🌙', color: '#d4a843', name: { ar: 'السيرة النبوية', en: 'Prophet Life' }, desc: { ar: 'رحلة زمنية عبر مراحل السيرة مع انتقالات بصرية بين العصور.', en: 'A time-based journey across the eras of the Prophet\'s life.' }, refs: [['الرحيق المختوم', 'سيرة مرتبة للمراحل'], ['فقه السيرة', 'فهم الحدث والدروس'], ['This path can later link to verified biographies', 'Reference slot']], endorsers: ['مدرسو السيرة', 'برامج المساجد', 'حلقات الشباب'], stages: [{ id: 1, icon: '🏜️', x: 170, y: 540, era: 'makkah', eraIcon: '🏜️', eraLabel: { ar: 'مكة قبل البعثة', en: 'Pre-Revelation Makkah' }, eraTheme: { ar: 'المجتمع والبيئة', en: 'Society and setting' }, title: { ar: 'العالم قبل النور', en: 'Before the Light' }, focus: { ar: 'بيئة الجزيرة وقيمها وتحدياتها', en: 'Arabia, values, and challenges' }, goal: { ar: 'فهم المشهد الذي سبق الرسالة', en: 'Understand the world before revelation' }, story: { ar: ['تبدأ الرحلة من الجزيرة العربية قبل البعثة، حيث كانت البيئة قاسية لكنها غنية بالقيم واللغة والشعر.', 'كان المجتمع يحمل جوانب قوة وضعف، ويحتاج إلى ميزان جديد يعيد ترتيب الإنسان والحياة.', 'هذه المرحلة تمهّد لفهم لماذا كانت الرسالة تحوّلًا جذريًا لا مجرد حدث عابر.'], en: ['The journey begins in Arabia before revelation, where the environment was harsh yet rich in values, language, and poetry.', 'Society had strengths and weaknesses, and it needed a new balance for human life.', 'This stage explains why the message was a transformation, not a passing event.'] }, quiz: [{ q: { ar: 'ما الهدف من هذه المرحلة؟', en: 'What is the goal of this stage?' }, o: { ar: ['فهم المشهد السابق للرسالة', 'حفظ الأنساب فقط', 'تعلم الفقه فقط', 'دراسة التجارة فقط'], en: ['Understand the world before revelation', 'Memorize lineages only', 'Study only fiqh', 'Study only trade'] }, a: 0 }, { q: { ar: 'ماذا تميّزت به البيئة؟', en: 'What characterized the environment?' }, o: { ar: ['القسوة واللغة والشعر', 'الثلوج والغابات', 'المدن الحديثة', 'الأنهار الكبيرة'], en: ['Harshness, language, and poetry', 'Snow and forests', 'Modern cities', 'Great rivers'] }, a: 0 }], reading: [['الرحيق المختوم', 'مدخل سردي'], ['فقه السيرة', 'زاوية تحليلية']], endorse: ['معلم سيرة', 'حلقة شباب', 'برنامج تأسيسي'] }, { id: 2, icon: '⭐', x: 470, y: 410, era: 'makkah', eraIcon: '⭐', eraLabel: { ar: 'مولد النبي ﷺ', en: 'Birth Era' }, eraTheme: { ar: 'البدايات الأولى', en: 'Early beginnings' }, title: { ar: 'المولد والنشأة', en: 'Birth and Upbringing' }, focus: { ar: 'النشأة والتهيئة المبكرة', en: 'Early upbringing and preparation' }, goal: { ar: 'رؤية أثر التربية والابتلاء المبكر', en: 'See how early trials shaped character' }, story: { ar: ['في عام الفيل وُلد النبي ﷺ، وبدأت مرحلة التهيئة الربانية المبكرة.', 'تتابعت عليه الابتلاءات في طفولته، لكنها صنعت الرحمة والثبات والوعي.', 'كل تفصيل في النشأة يقدّم مفتاحًا لفهم القيادة النبوية لاحقًا.'], en: ['In the Year of the Elephant, the Prophet ﷺ was born and an early divine preparation began.', 'Trials in childhood shaped mercy, steadiness, and awareness.', 'Each detail of his upbringing helps explain later prophetic leadership.'] }, quiz: [{ q: { ar: 'ما الذي صنعته الابتلاءات المبكرة؟', en: 'What did the early trials shape?' }, o: { ar: ['الرحمة والثبات', 'السلطة والثروة', 'الشهرة', 'العزلة فقط'], en: ['Mercy and steadiness', 'Power and wealth', 'Fame', 'Isolation only'] }, a: 0 }, { q: { ar: 'هذه المرحلة تساعد على فهم ماذا؟', en: 'This stage helps explain what?' }, o: { ar: ['القيادة النبوية لاحقًا', 'اللغة فقط', 'التجارة فقط', 'الجغرافيا فقط'], en: ['Later prophetic leadership', 'Only language', 'Only trade', 'Only geography'] }, a: 0 }], reading: [['شمائل النبي', 'البعد الشخصي'], ['فقه السيرة', 'ربط الحدث بالمعنى']], endorse: ['خطباء الجمعة', 'مركز السيرة', 'مرشد أسري'] }, { id: 3, icon: '🕯️', x: 760, y: 250, era: 'revelation', eraIcon: '🕯️', eraLabel: { ar: 'بداية الوحي', en: 'Beginning of Revelation' }, eraTheme: { ar: 'التحول الرسالي', en: 'Message begins' }, title: { ar: 'نزول الوحي', en: 'First Revelation' }, focus: { ar: 'من الخلوة إلى التكليف', en: 'From retreat to mission' }, goal: { ar: 'فهم بداية الرسالة والتحول النفسي', en: 'Understand the beginning of revelation' }, story: { ar: ['كان غار حراء محطة تأمل عميق، حتى جاءت لحظة اقرأ وبدأ التحول الأكبر.', 'هنا تنتقل السيرة من التهيئة إلى الرسالة، ومن الفرد إلى الأمة.', 'الحدث ليس مجرد بداية نص، بل بداية تغيير تاريخي شامل.'], en: ['Cave Hira was a place of deep reflection until the moment of Read transformed everything.', 'The story moves from preparation to mission, and from the individual to the community.', 'This was not just the start of a text, but of a civilizational change.'] }, quiz: [{ q: { ar: 'إلى ماذا انتقلت السيرة هنا؟', en: 'What did the story transition to here?' }, o: { ar: ['من التهيئة إلى الرسالة', 'من المدينة إلى الريف', 'من التجارة إلى الزراعة', 'من اللغة إلى النحو'], en: ['From preparation to mission', 'From city to countryside', 'From trade to farming', 'From language to grammar'] }, a: 0 }, { q: { ar: 'لماذا هذا الحدث كبير؟', en: 'Why is this event major?' }, o: { ar: ['بداية تغيير تاريخي شامل', 'لأنه حدث شخصي فقط', 'لأنه اقتصادي', 'لأنه عسكري'], en: ['It begins a civilizational shift', 'It was only personal', 'It was economic', 'It was military'] }, a: 0 }], reading: [['الوحي في السيرة', 'البداية الرسالية'], ['دلائل النبوة', 'أثر الحدث']], endorse: ['مدرس قرآن', 'باحث سيرة', 'مجلس علم'] }, { id: 4, icon: '🕌', x: 930, y: 150, era: 'madinah', eraIcon: '🕌', eraLabel: { ar: 'المدينة وبناء الأمة', en: 'Madinah and Ummah' }, eraTheme: { ar: 'المجتمع والنظام', en: 'Community and order' }, title: { ar: 'بناء المجتمع', en: 'Building the Community' }, focus: { ar: 'الأخوة والتنظيم والقيم العملية', en: 'Brotherhood, order, applied values' }, goal: { ar: 'فهم كيف تحوّلت الرسالة إلى مجتمع حي', en: 'See how the message became a living society' }, story: { ar: ['في المدينة ظهرت السيرة في صورتها الاجتماعية والسياسية والتربوية.', 'انتقل المسلمون من مرحلة التأسيس الفردي إلى بناء جماعة وقيم ونظام.', 'هذا التحول يمنح المتعلم رؤية أوسع للسيرة بوصفها مشروع حياة.'], en: ['In Madinah, the prophetic life appeared in its social, civic, and educational dimensions.', 'Muslims moved from individual formation to building a value-based community.', 'This gives the learner a wider view of the Prophet\'s life as a full way of life.'] }, quiz: [{ q: { ar: 'ماذا ظهر في المدينة؟', en: 'What emerged in Madinah?' }, o: { ar: ['البعد الاجتماعي والنظام', 'الشعر فقط', 'التجارة فقط', 'اللغة فقط'], en: ['Social and civic order', 'Only poetry', 'Only trade', 'Only language'] }, a: 0 }, { q: { ar: 'كيف ننظر للسيرة هنا؟', en: 'How is the prophetic life viewed here?' }, o: { ar: ['كمشروع حياة', 'كحدث منعزل', 'كقصة قصيرة', 'كمهارة لغوية'], en: ['As a way of life', 'As an isolated event', 'As a short story', 'As a language skill'] }, a: 0 }], reading: [['السيرة في المدينة', 'البعد المجتمعي'], ['السياسة الشرعية التأسيسية', 'قراءة مؤسسية']], endorse: ['أستاذ تربية', 'مرشد شبابي', 'إمام مسجد'] }] },
+            principles: { id: 'principles', icon: '⚖️', color: '#60a5fa', name: { ar: 'مبادئ الإسلام', en: 'Islam Principles' }, desc: { ar: 'خريطة موضوعية للأركان والمقاصد والأخلاق والعبادات والمعاملات.', en: 'A thematic map of pillars, ethics, objectives, and practice.' }, refs: [['الأربعون النووية', 'مدخل جامع'], ['رياض الصالحين', 'تهذيب عملي'], ['Later verified curriculum slots', 'Reference slot']], endorsers: ['معلم تأسيسي', 'مرشد مسجد', 'برنامج ناشئة'], stages: [{ id: 1, icon: '🧭', x: 180, y: 540, era: 'core', eraIcon: '🧭', eraLabel: { ar: 'الأساس', en: 'Foundation' }, eraTheme: { ar: 'لماذا الإسلام', en: 'Why Islam' }, title: { ar: 'الرؤية الكلية', en: 'Big Picture' }, focus: { ar: 'ما الإسلام ولماذا نتعلمه بنظام', en: 'What Islam is and how to study it' }, goal: { ar: 'بناء تصور شامل قبل التفاصيل', en: 'Build the big picture before details' }, story: { ar: ['هذا المسار لا يبدأ بالتفاصيل المتفرقة، بل بالصورة الكبرى.', 'فهم المبادئ قبل الجزئيات يجعل التعلّم أعمق وأثبت.', 'كل محطة لاحقة ستنطلق من هذا البناء الكلي.'], en: ['This path begins with the big picture, not scattered details.', 'Understanding principles before details makes learning deeper and more stable.', 'Every later stage grows out of this foundation.'] }, quiz: [{ q: { ar: 'كيف يبدأ هذا المسار؟', en: 'How does this path begin?' }, o: { ar: ['بالصورة الكبرى', 'بالجزئيات فقط', 'بالخلافات', 'بالجداول فقط'], en: ['With the big picture', 'With details only', 'With disputes', 'With tables only'] }, a: 0 }, { q: { ar: 'لماذا نبدأ بالمبادئ؟', en: 'Why begin with principles?' }, o: { ar: ['لثبات الفهم', 'لإطالة الوقت', 'لتقليل التعلم', 'للتشويش'], en: ['For stable understanding', 'To waste time', 'To reduce learning', 'To confuse'] }, a: 0 }], reading: [['الأربعون النووية', 'مدخل'], ['مدارج التعلم', 'تصور تأسيسي']], endorse: ['معلم تأسيسي', 'دورة للمبتدئين', 'حلقة ناشئة'] }, { id: 2, icon: '🕌', x: 520, y: 420, era: 'pillars', eraIcon: '🕌', eraLabel: { ar: 'الأركان', en: 'Pillars' }, eraTheme: { ar: 'البناء العملي', en: 'Core practice' }, title: { ar: 'الأركان والعبادات', en: 'Pillars and Worship' }, focus: { ar: 'العبادات كصناعة للإنسان', en: 'Worship as human formation' }, goal: { ar: 'ربط العبادة بالمعنى لا بالشكل فقط', en: 'Connect worship to meaning' }, story: { ar: ['الأركان ليست مهام منفصلة، بل بناء متكامل يصوغ القلب والسلوك.', 'كل عبادة تحمل أثرًا تربويًا ومعنى مقصودًا.', 'حين يفهم الطالب هذا المعنى تصبح العبادة أوضح وأقرب.'], en: ['The pillars are not separate tasks but an integrated system shaping heart and conduct.', 'Each act of worship has an intended formative effect.', 'When learners see that meaning, worship becomes clearer and closer.'] }, quiz: [{ q: { ar: 'الأركان هي ماذا؟', en: 'The pillars are what?' }, o: { ar: ['بناء متكامل', 'أعمال منفصلة فقط', 'ألفاظ فقط', 'معلومات نظرية فقط'], en: ['An integrated structure', 'Separate acts only', 'Only phrases', 'Only theory'] }, a: 0 }, { q: { ar: 'ما المطلوب ربطه بالعبادة؟', en: 'What should be linked to worship?' }, o: { ar: ['المعنى', 'الشكل فقط', 'العادة فقط', 'السرعة'], en: ['Meaning', 'Form only', 'Habit only', 'Speed'] }, a: 0 }], reading: [['فقه العبادات الميسر', 'مدخل عملي'], ['رياض الصالحين', 'تزكية'], ['كتاب الأركان', 'مراجعة منهجية']], endorse: ['إمام مسجد', 'معلم فقه', 'مدرب ناشئة'] }, { id: 3, icon: '🤝', x: 820, y: 260, era: 'ethics', eraIcon: '🤝', eraLabel: { ar: 'الأخلاق والمعاملات', en: 'Ethics' }, eraTheme: { ar: 'الإسلام في الواقع', en: 'Islam in life' }, title: { ar: 'الأخلاق والمعاملة', en: 'Ethics and Conduct' }, focus: { ar: 'كيف يظهر الإسلام في التعامل اليومي', en: 'How Islam appears in daily conduct' }, goal: { ar: 'تحويل القيم إلى سلوك', en: 'Turn values into behavior' }, story: { ar: ['المبدأ الحقيقي يظهر في المعاملة، لا في المعرفة النظرية فقط.', 'هذا الجزء يجعل الإسلام حاضرًا في الأسرة والعمل والعلاقات.', 'كل قيمة هنا يمكن تحويلها إلى مهمة تطبيقية داخل التجربة.'], en: ['Real principles appear in conduct, not theory alone.', 'This section places Islam into family, work, and relationships.', 'Each value here can become an in-app practical mission.'] }, quiz: [{ q: { ar: 'أين يظهر المبدأ الحقيقي؟', en: 'Where do real principles appear?' }, o: { ar: ['في المعاملة', 'في العناوين فقط', 'في الزينة فقط', 'في الشعارات فقط'], en: ['In conduct', 'Only in titles', 'Only in decoration', 'Only in slogans'] }, a: 0 }, { q: { ar: 'ما الهدف هنا؟', en: 'What is the aim here?' }, o: { ar: ['تحويل القيم إلى سلوك', 'زيادة الحفظ فقط', 'تقليل التطبيق', 'الانفصال عن الواقع'], en: ['Turn values into behavior', 'Memorize more only', 'Reduce application', 'Disconnect from life'] }, a: 0 }], reading: [['الأدب المفرد', 'أخلاق'], ['رياض الصالحين', 'سلوك'], ['فقه المعاملات الميسر', 'التطبيق']], endorse: ['مرشد أسري', 'مربي', 'خطيب'] }] },
+            faith: { id: 'faith', icon: '✨', color: '#9b59b6', name: { ar: 'الإيمان والعقيدة', en: 'Faith' }, desc: { ar: 'رحلة تبني اليقين والفهم المتدرج في مسائل الإيمان.', en: 'A gradual path to conviction and understanding in faith.' }, refs: [['كتاب التوحيد', 'مدخل موضوعي'], ['العقيدة الواسطية', 'بناء علمي'], ['Later verified theology references', 'Reference slot']], endorsers: ['معلم عقيدة', 'حلقة تأسيس', 'مرشد شباب'], stages: [{ id: 1, icon: '💡', x: 180, y: 540, era: 'intro', eraIcon: '💡', eraLabel: { ar: 'البداية', en: 'Intro' }, eraTheme: { ar: 'لماذا الإيمان', en: 'Why faith' }, title: { ar: 'معنى الإيمان', en: 'Meaning of Faith' }, focus: { ar: 'التصور الأولي للإيمان وآثاره', en: 'What faith means and how it affects life' }, goal: { ar: 'بناء بداية مطمئنة لا معقدة', en: 'A calm and clear beginning' }, story: { ar: ['هذا المسار يقدّم الإيمان بوصفه حياة ومعنى ويقينًا، لا مجرد مصطلحات.', 'البدء الهادئ يجعل الطالب أكثر قدرة على الاستمرار والفهم.', 'ثم تتدرج الرحلة نحو موضوعات أعمق دون قفز مفاجئ.'], en: ['This path presents faith as meaning, life, and conviction, not just terminology.', 'A calm beginning helps learners continue with clarity.', 'Then the journey deepens gradually without abrupt jumps.'] }, quiz: [{ q: { ar: 'كيف يقدَّم الإيمان هنا؟', en: 'How is faith presented here?' }, o: { ar: ['كحياة ومعنى ويقين', 'كمصطلحات فقط', 'كخلافات فقط', 'كمعلومات مجردة'], en: ['As life, meaning, and conviction', 'As terminology only', 'As disputes only', 'As abstract info'] }, a: 0 }, { q: { ar: 'ماذا يحقق البدء الهادئ؟', en: 'What does a calm beginning achieve?' }, o: { ar: ['الاستمرار والوضوح', 'الملل', 'التعقيد', 'الانقطاع'], en: ['Continuation and clarity', 'Boredom', 'Complexity', 'Drop-off'] }, a: 0 }], reading: [['كتاب التوحيد', 'مدخل'], ['العقيدة الميسرة', 'تدرج']], endorse: ['معلم عقيدة', 'دورة تمهيدية', 'مرشد شباب'] }, { id: 2, icon: '🛡️', x: 520, y: 420, era: 'beliefs', eraIcon: '🛡️', eraLabel: { ar: 'الأصول', en: 'Core Beliefs' }, eraTheme: { ar: 'الأساس العلمي', en: 'Scientific foundation' }, title: { ar: 'أصول الاعتقاد', en: 'Core Beliefs' }, focus: { ar: 'الأركان العقدية وموقعها من الحياة', en: 'Faith pillars and their role' }, goal: { ar: 'تكوين بنية معرفية واضحة', en: 'Build a clear doctrinal structure' }, story: { ar: ['بعد التمهيد تأتي البنية العقدية المنظمة.', 'هنا يتعرّف الطالب على الأركان بطريقة تربط بين العلم والطمأنينة.', 'كل ركن يصبح بابًا لفهم أوسع لا مجرد عنوان محفوظ.'], en: ['After the introduction comes the organized doctrinal structure.', 'Here the learner meets the pillars of faith in a way that joins knowledge and reassurance.', 'Each pillar becomes a doorway to broader understanding.'] }, quiz: [{ q: { ar: 'كيف نتعامل مع الأركان هنا؟', en: 'How are the pillars treated here?' }, o: { ar: ['كأبواب لفهم أوسع', 'كعناوين محفوظة فقط', 'كأرقام فقط', 'كأسئلة امتحان فقط'], en: ['As doors to wider understanding', 'As memorized titles only', 'As numbers only', 'As test items only'] }, a: 0 }, { q: { ar: 'ماذا نبني هنا؟', en: 'What is built here?' }, o: { ar: ['بنية معرفية واضحة', 'غموضًا أكبر', 'حفظًا بلا فهم', 'تشتتًا'], en: ['A clear structure', 'More confusion', 'Memorization without understanding', 'Distraction'] }, a: 0 }], reading: [['العقيدة الواسطية', 'بناء علمي'], ['شرح أركان الإيمان', 'تبسيط']], endorse: ['مدرس علمي', 'حلقة مسجد', 'نادي شبابي'] }, { id: 3, icon: '🌌', x: 820, y: 260, era: 'reflection', eraIcon: '🌌', eraLabel: { ar: 'اليقين والتأمل', en: 'Reflection' }, eraTheme: { ar: 'من العلم إلى اليقين', en: 'From knowledge to conviction' }, title: { ar: 'اليقين والتدبر', en: 'Conviction and Reflection' }, focus: { ar: 'كيف يتحول العلم إلى ثبات', en: 'How knowledge becomes firmness' }, goal: { ar: 'الربط بين الدليل والقلب', en: 'Link proof and the heart' }, story: { ar: ['الإيمان لا يكتمل عند جمع المعلومات فقط، بل عندما يتحول إلى سكينة وثبات.', 'هذه المرحلة تفتح باب التأمل والتدبر وربط المعنى بالواقع.', 'هنا تصبح الرحلة أعمق وأكثر شخصنة للمتعلم.'], en: ['Faith is not complete by collecting information alone, but when it becomes calm and steadiness.', 'This stage opens reflection and connection to lived reality.', 'Here the journey becomes deeper and more personal.'] }, quiz: [{ q: { ar: 'متى يكتمل الإيمان تربويًا؟', en: 'When does faith become complete educationally?' }, o: { ar: ['عندما يتحول إلى ثبات', 'عند جمع المعلومات فقط', 'عند كثرة الجدل', 'عند التكرار فقط'], en: ['When it becomes firmness', 'When it is only information', 'When there is much debate', 'When it is mere repetition'] }, a: 0 }, { q: { ar: 'ماذا تربط هذه المرحلة؟', en: 'What does this stage connect?' }, o: { ar: ['الدليل والقلب', 'الحفظ والسرعة', 'الجدل فقط', 'الأرقام فقط'], en: ['Proof and the heart', 'Memory and speed', 'Debate only', 'Numbers only'] }, a: 0 }], reading: [['مدارج السالكين - مختارات', 'تزكية ويقين'], ['التدبر الإيماني', 'معايشة']], endorse: ['مربٍّ', 'معلم تدبر', 'مشرف حلقة'] }] },
+            grammar: { id: 'grammar', icon: '✍️', color: '#52b788', name: { ar: 'النحو العربي', en: 'Arabic Grammar' }, desc: { ar: 'من الجملة إلى الإعراب فالتراكيب في خريطة أوضح وأسهل.', en: 'A clear map from sentence basics to grammar patterns.' }, refs: [['الآجرومية', 'بداية كلاسيكية'], ['النحو الواضح', 'تدرج تعليمي'], ['Later verified Arabic references', 'Reference slot']], endorsers: ['معلم لغة', 'حلقة عربية', 'برنامج قرائي'], stages: [{ id: 1, icon: '🔤', x: 180, y: 540, era: 'sentence', eraIcon: '🔤', eraLabel: { ar: 'مدخل الجملة', en: 'Sentence Entry' }, eraTheme: { ar: 'الأساس', en: 'Foundation' }, title: { ar: 'أنواع الكلام والجملة', en: 'Speech and Sentences' }, focus: { ar: 'فهم البنية قبل الإعراب', en: 'Understand structure before parsing' }, goal: { ar: 'إزالة رهبة النحو في البداية', en: 'Remove the fear of grammar' }, story: { ar: ['هذا المسار يجعل النحو أقرب وأوضح، ويبدأ بالبنية قبل المصطلح الثقيل.', 'حين يفهم الطالب الجملة أولًا يصبح الإعراب أسهل بكثير.', 'التدرج هنا مهم حتى لا يتحول النحو إلى عبء.'], en: ['This path makes grammar clearer and friendlier, beginning with structure before heavy terms.', 'When the learner understands the sentence first, parsing becomes much easier.', 'Gradual pacing matters so grammar does not feel burdensome.'] }, quiz: [{ q: { ar: 'بماذا يبدأ هذا المسار؟', en: 'What does this path begin with?' }, o: { ar: ['بالبنية قبل المصطلح', 'بالإعراب التفصيلي مباشرة', 'بالخلافات النحوية', 'بالأبواب المتقدمة'], en: ['Structure before terminology', 'Detailed parsing immediately', 'Grammar disputes', 'Advanced chapters'] }, a: 0 }, { q: { ar: 'ما الفائدة من ذلك؟', en: 'What is the benefit?' }, o: { ar: ['إزالة الرهبة', 'زيادة التعقيد', 'إبطاء التعلم', 'منع الفهم'], en: ['Removes fear', 'Adds complexity', 'Slows learning', 'Blocks understanding'] }, a: 0 }], reading: [['الآجرومية', 'مدخل'], ['النحو الواضح', 'تدرج']], endorse: ['معلم لغة', 'مدرب تأسيسي', 'برنامج لسان'] }, { id: 2, icon: '📘', x: 520, y: 420, era: 'i3rab', eraIcon: '📘', eraLabel: { ar: 'الإعراب', en: 'Parsing' }, eraTheme: { ar: 'المهارة الأساسية', en: 'Core skill' }, title: { ar: 'علامات الإعراب', en: 'Parsing Marks' }, focus: { ar: 'من الفهم إلى التطبيق', en: 'From understanding to application' }, goal: { ar: 'تثبيت العلامات بطريقة ممتعة', en: 'Make parsing signs memorable' }, story: { ar: ['بعد فهم الجملة تأتي علامات الإعراب كأداة قراءة وفهم أدق.', 'في النسخة القادمة يمكن تحويلها إلى تحديات سحب وإفلات وتركيب بصري.', 'هذا يجعل النحو أقرب إلى اللعبة التعليمية لا الحفظ الجاف.'], en: ['After understanding the sentence, parsing marks become a tool for precise reading.', 'In later versions this can become drag-and-drop visual challenges.', 'That turns grammar into a learning game instead of dry memorization.'] }, quiz: [{ q: { ar: 'علامات الإعراب هي ماذا؟', en: 'Parsing marks are what?' }, o: { ar: ['أداة فهم أدق', 'زينة لغوية', 'حفظ بلا معنى', 'تفصيل غير مهم'], en: ['A tool for precise understanding', 'Decoration', 'Meaningless memorization', 'Unimportant detail'] }, a: 0 }, { q: { ar: 'كيف يمكن تطويرها لاحقًا؟', en: 'How can this be improved later?' }, o: { ar: ['بتحديات بصرية', 'بحذف التطبيق', 'بتقليل الأمثلة', 'بإلغاء التدرج'], en: ['With visual challenges', 'By removing practice', 'By reducing examples', 'By removing progression'] }, a: 0 }], reading: [['النحو الواضح', 'تمارين'], ['شذا العرف - مختارات', 'توسيع']], endorse: ['معلم نحو', 'مصحح لغة', 'حلقة قراءة'] }, { id: 3, icon: '🧩', x: 820, y: 260, era: 'patterns', eraIcon: '🧩', eraLabel: { ar: 'التراكيب', en: 'Patterns' }, eraTheme: { ar: 'اللعب بالتركيب', en: 'Structure play' }, title: { ar: 'تراكيب وجمل', en: 'Patterns and Structures' }, focus: { ar: 'بناء الجملة وتحويلها', en: 'Build and transform structures' }, goal: { ar: 'الوصول إلى مرحلة التطبيق الذكي', en: 'Reach smart application' }, story: { ar: ['هنا يصبح النحو مهارة تركيب وبناء، لا مجرد تعريفات.', 'يمكن للمتعلم أن يرى كيف تتغير الجملة وكيف يعمل كل عنصر داخلها.', 'هذه أفضل منطقة لإضافة ألغاز وتحديات لعبية أقوى.'], en: ['Here grammar becomes a skill of constructing and transforming sentences, not mere definitions.', 'The learner sees how sentences change and how each part functions.', 'This is the best area for stronger puzzle mechanics.'] }, quiz: [{ q: { ar: 'كيف يصبح النحو هنا؟', en: 'How does grammar feel here?' }, o: { ar: ['مهارة تركيب', 'تعريفات فقط', 'حفظ فقط', 'شيئًا جامدًا'], en: ['A construction skill', 'Definitions only', 'Memory only', 'Something rigid'] }, a: 0 }, { q: { ar: 'أفضل إضافة مستقبلية هنا؟', en: 'Best future upgrade here?' }, o: { ar: ['ألغاز وتحديات', 'تقليل التفاعل', 'حذف الأمثلة', 'إخفاء الجمل'], en: ['Puzzles and challenges', 'Less interaction', 'Remove examples', 'Hide sentences'] }, a: 0 }], reading: [['تمارين نحوية', 'تطبيق'], ['تحليل الجملة العربية', 'توسيع']], endorse: ['مدرب لغة', 'برنامج لغوي', 'نادي قرائي'] }] }
+        };
+        const LEVELS = ['beginner', 'intermediate', 'advanced'];
+        const ACHIEVEMENTS = [{ id: 'first', icon: '🌟', name: { ar: 'أول خطوة', en: 'First Step' }, check: g => Object.values(g.completed).reduce((a, b) => a + b.length, 0) >= 1 }, { id: 'perfect', icon: '🏆', name: { ar: 'نتيجة مثالية', en: 'Perfect Score' }, check: (g, ctx) => ctx.perfect }, { id: 'paths', icon: '🧭', name: { ar: 'مكتشف المسارات', en: 'Path Explorer' }, check: g => Object.keys(g.pathSeen).length >= 2 }, { id: 'gems', icon: '💎', name: { ar: 'جامع الجواهر', en: 'Gem Collector' }, check: g => g.gems >= 3 }];
+        const COPY = { ar: { heroKicker: 'رحلة الضوء', logo: 'نور', heroSub: 'مسارات تعلّم أعمق وأكثر لعبية', mission: 'اختر مسارًا، حدّد مستواك، تقدّم على خريطة خاصة بكل موضوع، وافتح محتوى أعمق مع تتبع شامل للتقدّم ومراجع مقترحة للتوسّع.', start: '▶ اختر المسار', demo: '★ عرض الإنجازات', pathsTitle: 'اختر مسار التعلّم', pathsSub: 'ابدأ من المبتدئ حتى لو كنت متقدمًا. هذا يعطيك تسلسلًا أوضح ويقوي التجربة. ويمكنك رفع المستوى مباشرة متى شئت.', level: 'المستوى', mapLabel: 'الخريطة', mapTitle: 'اختر المرحلة التالية', panelTitle: 'المهمة الحالية', panelCopy: 'أكمل المرحلة الحالية للحصول على XP وفتح المرحلة التالية.', panelToggle: 'إظهار المهمة', chapterOf: (i, t) => `المرحلة ${i} من ${t}`, rewards: ['⭐ حتى 3 نجوم', '💎 جوهرة إضافية', '🔥 سلسلة إجابات'], skip: 'تخطي', next: 'التالي', startQuiz: 'ابدأ الاختبار ⚡', quizLabel: 'اختبار المعرفة', correct: ['✨ ممتاز!', '🌟 إجابة صحيحة!', '💫 رائع!', '✅ أحسنت!'], wrong: '❌ استمر بالتعلّم!', perfectReady: 'مكافأة المثالي', quick: 'مكافأة السرعة', goal: 'الهدف', bonus: 'المكافأة', streakLabel: 'السلسلة', resultTitles: ['واصل التعلّم', 'أحسنت', 'ممتاز جدًا'], correctOut: (n, t) => `${n} / ${t} صحيحة`, map: 'الخريطة', retry: 'إعادة', nextStage: 'المرحلة التالية', gem: 'جوهرة', streak: 'سلسلة', rank: 'رتبة', available: 'متاح', complete: 'مكتمل', locked: 'مغلق', achievement: 'إنجاز جديد', levelUp: 'ترقية مستوى', popupDesc: 'اقرأ المحتوى، انتقل بين المراحل، ثم أجب بسرعة وبدقة لتحصل على XP أعلى وتفتح محتوى أعمق.', begin: '▶ ابدأ المرحلة', replay: '🔄 إعادة المرحلة', story: 'محتوى', quiz: 'اختبار', reward: 'جائزة', deepFocus: 'محور المرحلة', deepGoal: 'هدف التقدّم', deepBooks: 'للتوسّع', readingTitle: 'قراءات أعمق', readingCopy: 'مراجع مقترحة داخل التطبيق لإكمال الرحلة بشكل أعمق.', endorseTitle: 'تزكيات ومدخلات', endorseCopy: 'أسماء ومدارس معرفية يمكن ربطها لاحقًا بمراجع موثقة ومحتوى موسع.', beginner: 'مبتدئ', intermediate: 'متوسط', advanced: 'متقدم', recommendedBeginner: 'ننصحك بالبدء من المبتدئ حتى لو كنت متقدمًا أو باحثًا؛ ستستفيد من ترتيب التجربة.' }, en: { heroKicker: 'Journey of Light', logo: 'NOOR', heroSub: 'Deeper learning paths, more game-like', mission: 'Choose a path, set your level, progress through a custom map, and unlock deeper content with full progress tracking and suggested references.', start: '▶ Choose a Path', demo: '★ View Achievements', pathsTitle: 'Choose a Learning Path', pathsSub: 'Start from beginner even if you are advanced. It creates better sequencing and a stronger experience. You can raise your level anytime.', level: 'Level', mapLabel: 'Map', mapTitle: 'Choose the next stage', panelTitle: 'Current Quest', panelCopy: 'Finish the active stage to earn XP and unlock the next one.', panelToggle: 'Show Quest', chapterOf: (i, t) => `Stage ${i} of ${t}`, rewards: ['⭐ Up to 3 stars', '💎 Bonus gem', '🔥 Answer streak'], skip: 'Skip', next: 'Next', startQuiz: 'Start Quiz ⚡', quizLabel: 'Knowledge Check', correct: ['✨ Correct!', '🌟 Excellent!', '💫 Great!', '✅ Nice!'], wrong: '❌ Keep learning!', perfectReady: 'Perfect Bonus', quick: 'Quick Bonus', goal: 'Goal', bonus: 'Bonus', streakLabel: 'Streak', resultTitles: ['Keep Going', 'Well Done', 'Excellent'], correctOut: (n, t) => `${n} / ${t} correct`, map: 'Map', retry: 'Retry', nextStage: 'Next Stage', gem: 'Gem', streak: 'Streak', rank: 'Rank', available: 'Available', complete: 'Complete', locked: 'Locked', achievement: 'Achievement Unlocked', levelUp: 'Level Up', popupDesc: 'Read the content, move through the stages, then answer quickly and accurately to gain more XP and unlock deeper material.', begin: '▶ Begin Stage', replay: '🔄 Replay Stage', story: 'Content', quiz: 'Quiz', reward: 'Reward', deepFocus: 'Stage Focus', deepGoal: 'Progress Goal', deepBooks: 'Go Deeper', readingTitle: 'Deep Reading', readingCopy: 'Suggested references inside the app for a deeper journey.', endorseTitle: 'Endorsements and Guidance', endorseCopy: 'Names and knowledge tracks that can later connect to verified references and expanded content.', beginner: 'Beginner', intermediate: 'Intermediate', advanced: 'Advanced', recommendedBeginner: 'We recommend starting from beginner even if you are advanced or a scholar; it improves sequence and experience.' } };
+        const G = { lang: 'ar', xp: 0, gems: 0, streak: 0, combo: 0, bestCombo: 0, stars: {}, completed: {}, unlocked: {}, achievements: [], sound: true, path: 'prophet', pathSeen: {}, levelStart: 'beginner', get totalStars() { return Object.values(this.stars).reduce((a, b) => a + Object.values(b || {}).reduce((x, y) => x + y, 0), 0) }, get level() { return Math.floor(this.xp / 100) + 1 }, get levelXP() { return this.xp % 100 }, get rank() { return 'R' + Math.min(9, Math.floor(this.xp / 120) + 1) } };
+        let currentScreen = 'title', historyStack = [], activeStage = null, storyIndex = 0, typingTimer = null, typingDone = false, quizIndex = 0, quizScore = 0, answerLocked = false, questionStart = 0, lastResult = null;
+        const $ = s => document.querySelector(s), byId = id => document.getElementById(id), t = () => COPY[G.lang], isAR = () => G.lang === 'ar', activePath = () => PATHS[G.path], activeStages = () => activePath().stages;
+        function ensureState() { Object.keys(PATHS).forEach(pid => { if (!G.completed[pid]) G.completed[pid] = []; if (!G.unlocked[pid]) G.unlocked[pid] = 1; if (!G.stars[pid]) G.stars[pid] = {}; }); }
+        function save() { localStorage.setItem('noor-quest-paths', JSON.stringify({ lang: G.lang, xp: G.xp, gems: G.gems, streak: G.streak, combo: G.combo, bestCombo: G.bestCombo, stars: G.stars, completed: G.completed, unlocked: G.unlocked, achievements: G.achievements, sound: G.sound, path: G.path, pathSeen: G.pathSeen, levelStart: G.levelStart })) }
+        function load() { try { const raw = localStorage.getItem('noor-quest-paths'); if (!raw) return; Object.assign(G, JSON.parse(raw) || {}); } catch (e) { } }
+        function screen(id, push = true) { if (push && currentScreen !== id) historyStack.push(currentScreen); document.querySelectorAll('.screen').forEach(el => el.classList.remove('on')); byId(id).classList.add('on'); currentScreen = id; byId('backWrap').classList.toggle('hidden', id === 'title' || historyStack.length === 0) }
+        function back() { if (!historyStack.length) return; const prev = historyStack.pop(); if (prev === 'map') renderMap(); if (prev === 'paths') renderPaths(); screen(prev, false) }
+        function setLang(lang) { G.lang = lang; document.documentElement.lang = lang; document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr'; document.documentElement.classList.toggle('en', lang === 'en'); byId('lang-ar').classList.toggle('active', lang === 'ar'); byId('lang-en').classList.toggle('active', lang === 'en'); refreshText(); if (currentScreen === 'paths') renderPaths(); if (currentScreen === 'map') renderMap(); if (currentScreen === 'story' && activeStage) { renderStoryHeader(); renderEraStrip(); renderReferences() } if (currentScreen === 'quiz' && activeStage) renderQuiz(); if (currentScreen === 'result' && lastResult) renderResult(lastResult); save() }
+        function levelName(key) { return t()[key] }
+        function refreshText() { byId('hero-kicker').textContent = t().heroKicker; byId('hero-logo').textContent = t().logo; byId('hero-sub').textContent = t().heroSub; byId('mission-copy').textContent = t().mission; byId('start-btn').textContent = t().start; byId('demo-btn').textContent = t().demo; byId('paths-title').textContent = t().pathsTitle; byId('paths-sub').textContent = t().pathsSub; byId('level-label').textContent = t().level; byId('map-label').textContent = t().mapLabel; byId('map-title').textContent = activePath().name[G.lang]; byId('panel-title').textContent = t().panelTitle; byId('panel-copy').textContent = t().panelCopy; byId('panel-toggle-label').textContent = t().panelToggle; byId('deep-focus-label').textContent = t().deepFocus; byId('deep-goal-label').textContent = t().deepGoal; byId('deep-books-label').textContent = t().deepBooks; byId('reading-title').textContent = t().readingTitle; byId('reading-copy').textContent = t().readingCopy; byId('endorse-title').textContent = t().endorseTitle; byId('endorse-copy').textContent = t().endorseCopy; byId('story-skip').textContent = t().skip; byId('quiz-label').textContent = t().quizLabel; byId('loot-gems-label').textContent = t().gem; byId('loot-streak-label').textContent = t().streak; byId('loot-rank-label').textContent = t().rank; byId('map-btn').textContent = t().map; byId('retry-btn').textContent = t().retry; byId('next-stage-btn').textContent = t().nextStage; byId('back-btn').textContent = isAR() ? '← رجوع' : '← Back'; byId('mini-goal-label').textContent = t().goal; byId('mini-bonus-label').textContent = t().bonus; byId('mini-streak-label').textContent = t().streakLabel;['reward-1', 'reward-2', 'reward-3'].forEach((id, i) => byId(id).textContent = t().rewards[i]); updateHUD() }
+        function updateHUD() { ensureState(); byId('level-value').textContent = G.level; byId('xp-fill').style.width = G.levelXP + '%'; byId('xp-text').textContent = G.xp + ' XP'; byId('stat-stars').textContent = G.totalStars; byId('stat-gems').textContent = G.gems; byId('stat-streak').textContent = G.streak; byId('stat-ach').textContent = G.achievements.length; byId('panel-rank').textContent = G.rank; const qp = byId('quest-progress'); qp.innerHTML = ''; activeStages().forEach(st => { const d = document.createElement('div'); d.className = 'mini-dot'; d.innerHTML = `<span style="width:${G.completed[G.path].includes(st.id) ? '100%' : st.id < G.unlocked[G.path] ? '55%' : '0%'}"></span>`; qp.appendChild(d) }); byId('booster-combo').textContent = (isAR() ? 'سلسلة: ' : 'Combo: ') + G.combo; byId('booster-perfect').textContent = t().perfectReady; byId('booster-speed').textContent = t().quick; byId('mini-goal-value').textContent = activeStage ? `${Math.min(quizIndex + 1, activeStage.quiz.length)}/${activeStage.quiz.length}` : `${G.completed[G.path].length}/${activeStages().length}`; byId('mini-bonus-value').textContent = '+' + (G.combo >= 2 ? 10 : 0) + ' XP'; byId('mini-streak-value').textContent = G.streak; byId('sound-toggle').textContent = (G.sound ? '🔊 ' : '🔈 ') + 'SFX'; byId('sound-toggle').classList.toggle('active', G.sound); const nxt = activeStages().find(s => s.id === G.unlocked[G.path]) || activeStages()[0]; byId('deep-focus-value').textContent = nxt.focus[G.lang]; byId('deep-goal-value').textContent = nxt.goal[G.lang]; const deep = byId('deep-books-list'); deep.innerHTML = ''; (nxt.reading || activePath().refs).slice(0, 3).forEach(r => { const item = document.createElement('div'); item.className = 'book-item'; item.innerHTML = `<div class="b1">${r[0]}</div><div class="b2">${r[1]}</div>`; deep.appendChild(item) }) }
+        function showPaths() { renderPaths(); screen('paths') } function startJourney() { showPaths() }
+        function renderPaths() { const lp = byId('level-picker'); lp.innerHTML = ''; LEVELS.forEach(l => { const b = document.createElement('button'); b.className = 'level-pill' + (G.levelStart === l ? ' active' : ''); b.textContent = levelName(l); b.onclick = () => { G.levelStart = l; renderPaths(); save() }; lp.appendChild(b) }); const grid = byId('path-grid'); grid.innerHTML = ''; Object.values(PATHS).forEach(path => { const done = (G.completed[path.id] || []).length, total = path.stages.length, p = Math.round(done / total * 100); const card = document.createElement('div'); card.className = 'path-card glass'; card.innerHTML = `<div class="path-top"><div><div class="path-name">${path.name[G.lang]}</div><div class="path-desc">${path.desc[G.lang]}</div></div><div class="path-badge">${path.icon}</div></div><div class="path-meta"><div class="meta-pill">${path.stages.length} ${isAR() ? 'مراحل' : 'Stages'}</div><div class="meta-pill">${levelName(G.levelStart)}</div><div class="meta-pill">${done}/${total}</div></div><div class="path-progress"><span style="width:${p}%"></span></div><div class="path-desc">${t().recommendedBeginner}</div>`; card.onclick = () => selectPath(path.id); grid.appendChild(card) }) }
+        function selectPath(id) { G.path = id; G.pathSeen[id] = true; updateUnlockedByLevel(); renderMap(); screen('map'); save() }
+        function updateUnlockedByLevel() { const path = activePath(), len = path.stages.length; let base = 1; if (G.levelStart === 'intermediate') base = Math.min(2, len); if (G.levelStart === 'advanced') base = Math.min(3, len); G.unlocked[G.path] = Math.max(G.unlocked[G.path] || 1, base) }
+        function openPopup(st) { const done = G.completed[G.path].includes(st.id), starCount = G.stars[G.path][st.id] || 0, pc = byId('popup-card'); pc.innerHTML = `<button class="close" id="close-popup">✕</button><div class="popup-head"><div class="popup-ico">${st.icon}</div><div class="popup-kicker">${t().chapterOf(st.id, activeStages().length)}</div><div class="popup-title">${st.title[G.lang]}</div></div><div style="display:flex;justify-content:center;gap:6px;margin:10px 0 4px">${[0, 1, 2].map(i => `<span style="font-size:22px;opacity:${i < starCount ? 1 : .18}">⭐</span>`).join('')}</div><div class="popup-desc">${t().popupDesc}</div><div class="popup-grid"><div class="popup-mini"><div class="i">📖</div><div class="t">${t().story}</div></div><div class="popup-mini"><div class="i">⚡</div><div class="t">${t().quiz}</div></div><div class="popup-mini"><div class="i">🏆</div><div class="t">${t().reward}</div></div><div class="popup-mini"><div class="i">${done ? '🔄' : '🎯'}</div><div class="t">${done ? t().replay : t().begin}</div></div></div><button class="popup-btn" id="begin-stage">${done ? t().replay : t().begin}</button>`; byId('popup').classList.add('on'); byId('close-popup').onclick = closePopup; byId('begin-stage').onclick = () => beginStage(st.id) }
+        function closePopup(e) { if (!e || e.target === byId('popup') || e.target.id === 'close-popup') byId('popup').classList.remove('on') }
+        function beginStage(id) { activeStage = activeStages().find(s => s.id === id); storyIndex = 0; typingDone = false; clearInterval(typingTimer); closePopup(); renderStoryHeader(); renderEraStrip(); renderStoryDots(); renderReferences(); showStoryParagraph(0); screen('story') }
+        function renderStoryHeader() { byId('story-chapter').textContent = t().chapterOf(activeStage.id, activeStages().length); byId('story-icon').textContent = activeStage.icon; byId('story-title').textContent = activeStage.title[G.lang] }
+        function renderEraStrip() { const strip = byId('era-strip'); strip.innerHTML = ''; const eras = activePath().id === 'prophet' ? [{ k: 'makkah', icon: '🏜️', label: { ar: 'مرحلة مكة', en: 'Makkah Era' } }, { k: 'revelation', icon: '🕯️', label: { ar: 'بدء الوحي', en: 'Revelation' } }, { k: 'madinah', icon: '🕌', label: { ar: 'مرحلة المدينة', en: 'Madinah Era' } }] : [{ k: 'foundation', icon: '🧭', label: { ar: 'التمهيد', en: 'Foundation' } }, { k: 'middle', icon: '📘', label: { ar: 'البناء', en: 'Build' } }, { k: 'deep', icon: '✨', label: { ar: 'التعمّق', en: 'Deepen' } }]; eras.forEach(er => { const c = document.createElement('div'); const active = (activePath().id === 'prophet' ? (activeStage.era === er.k || (activeStage.era === 'makkah' && er.k === 'makkah')) : (['intro', 'core', 'sentence'].includes(activeStage.era) && er.k === 'foundation' || ['beliefs', 'pillars', 'i3rab'].includes(activeStage.era) && er.k === 'middle' || ['reflection', 'ethics', 'patterns'].includes(activeStage.era) && er.k === 'deep')); c.className = 'era-card' + (active ? ' active' : ''); c.innerHTML = `<div class="e1">${er.icon}</div><div class="e2">${er.label[G.lang]}</div><div class="e3">${active ? activeStage.eraTheme[G.lang] : (isAR() ? 'مرحلة مقفلة بصريًا' : 'Visual era')}</div>`; strip.appendChild(c) }) }
+        function renderStoryDots() { const wrap = byId('story-dots'); wrap.innerHTML = ''; activeStage.story[G.lang].forEach((_, i) => { const s = document.createElement('span'); if (i === storyIndex) s.classList.add('active'); wrap.appendChild(s) }) }
+        function updateStoryDots() { [...byId('story-dots').children].forEach((el, i) => el.classList.toggle('active', i === storyIndex)) }
+        function renderReferences() { const reading = byId('reading-list'), endorse = byId('endorse-list'); reading.innerHTML = ''; endorse.innerHTML = ''; (activeStage.reading || activePath().refs).forEach(r => { const item = document.createElement('div'); item.className = 'book-item'; item.innerHTML = `<div class="b1">${r[0]}</div><div class="b2">${r[1]}</div>`; reading.appendChild(item) }); (activeStage.endorse || activePath().endorsers).forEach(n => { const item = document.createElement('div'); item.className = 'book-item'; item.innerHTML = `<div class="b1">${n}</div><div class="b2">${isAR() ? 'مقترح للتوسّع لاحقًا' : 'Future expansion slot'}</div>`; endorse.appendChild(item) }) }
+        function typeText(text, el) { clearInterval(typingTimer); el.textContent = ''; let i = 0; const step = isAR() ? 20 : 14; typingDone = false; typingTimer = setInterval(() => { i++; el.textContent = text.slice(0, i); if (i >= text.length) { clearInterval(typingTimer); typingDone = true } }, step) }
+        function showStoryParagraph(index) { const arr = activeStage.story[G.lang]; if (index >= arr.length) { beginQuiz(); return; } storyIndex = index; updateStoryDots(); byId('story-next').textContent = index === arr.length - 1 ? t().startQuiz : t().next; typeText(arr[index], byId('story-text')) }
+        function storyNext() { if (!typingDone) { clearInterval(typingTimer); byId('story-text').textContent = activeStage.story[G.lang][storyIndex]; typingDone = true; return; } showStoryParagraph(storyIndex + 1) } function storySkip() { clearInterval(typingTimer); beginQuiz() }
+        function beginQuiz() { quizIndex = 0; quizScore = 0; G.combo = 0; renderQuiz(); screen('quiz') }
+        function renderQuiz() { const q = activeStage.quiz[quizIndex]; byId('quiz-count').textContent = `${quizIndex + 1} / ${activeStage.quiz.length}`; byId('quiz-progress').style.width = ((quizIndex + 1) / activeStage.quiz.length * 100) + '%'; byId('question-text').textContent = q.q[G.lang]; byId('feedback').textContent = ''; byId('feedback').className = 'feedback'; const grid = byId('answer-grid'); grid.innerHTML = ''; const keys = isAR() ? ['أ', 'ب', 'ج', 'د'] : ['A', 'B', 'C', 'D']; q.o[G.lang].forEach((opt, i) => { const el = document.createElement('button'); el.className = 'answer'; el.innerHTML = `<div class="answer-key">${keys[i]}</div><div class="answer-text">${opt}</div>`; el.onclick = () => pickAnswer(i, q.a); grid.appendChild(el) }); byId('combo').classList.toggle('on', G.combo >= 2); byId('combo').textContent = `🔥 ${G.combo}× Combo`; byId('booster-perfect').classList.toggle('active', quizScore === quizIndex && quizIndex > 0); byId('booster-speed').classList.remove('active'); updateHUD(); answerLocked = false; questionStart = performance.now() }
+        function pickAnswer(selected, correct) { if (answerLocked) return; answerLocked = true; const answers = [...byId('answer-grid').children], fast = performance.now() - questionStart < 4500, ok = selected === correct; if (ok) { quizScore++; G.combo++; G.bestCombo = Math.max(G.bestCombo, G.combo) } else G.combo = 0; answers.forEach((el, i) => { el.classList.add('locked'); if (i === correct) el.classList.add('correct'); else if (i === selected && !ok) el.classList.add('wrong'); else if (i !== selected) el.classList.add('dim') }); const fb = byId('feedback'); if (ok) { fb.textContent = t().correct[quizScore % t().correct.length]; fb.classList.add('ok'); addFXBurst(activePath().color); floatXP('+' + (fast ? 20 : 15) + ' XP'); byId('booster-speed').classList.toggle('active', fast); beep(680, .05, 'triangle') } else { fb.textContent = t().wrong; fb.classList.add('no'); beep(180, .08, 'sawtooth') } setTimeout(() => { if (quizIndex < activeStage.quiz.length - 1) { quizIndex++; renderQuiz() } else finishQuiz() }, 1300) }
+        function finishQuiz() { const total = activeStage.quiz.length, perfect = quizScore === total, stars = perfect ? 3 : quizScore >= 1 ? 2 : 1, speedBonus = G.combo >= 2 ? 10 : 0, perfectBonus = perfect ? 20 : 0, xpGain = stars * 20 + 15 + speedBonus + perfectBonus, gemGain = stars >= 2 ? 1 : 0, oldLevel = G.level; if (!G.completed[G.path].includes(activeStage.id)) G.completed[G.path].push(activeStage.id); G.stars[G.path][activeStage.id] = Math.max(G.stars[G.path][activeStage.id] || 0, stars); G.xp += xpGain; G.gems += gemGain; G.streak = perfect ? G.streak + 1 : 0; G.unlocked[G.path] = Math.min(activeStages().length, Math.max(G.unlocked[G.path], activeStage.id + 1)); lastResult = { stars, xpGain, gemGain, total, correct: quizScore, perfect }; renderResult(lastResult); screen('result'); historyStack = []; save(); if (G.level > oldLevel) showToast('⬆️', t().levelUp, (isAR() ? 'وصلت إلى المستوى ' : 'Reached level ') + G.level); setTimeout(() => checkAchievements(lastResult), 700); if (stars >= 2) confetti() }
+        function renderResult(data) { const titles = t().resultTitles; byId('result-emoji').textContent = data.stars === 3 ? '🏆' : data.stars === 2 ? '🥇' : '💪'; byId('result-title').textContent = titles[data.stars - 1]; byId('result-sub').textContent = t().correctOut(data.correct, data.total); const wrap = byId('result-stars'); wrap.innerHTML = ''; for (let i = 0; i < 3; i++) { const s = document.createElement('span'); s.textContent = '⭐'; wrap.appendChild(s); setTimeout(() => s.classList.toggle('on', i < data.stars), 280 + i * 180) } byId('loot-xp').textContent = '+' + data.xpGain; byId('loot-gems').textContent = '+' + data.gemGain; byId('loot-streak').textContent = G.streak; byId('loot-rank').textContent = G.rank; byId('next-stage-btn').disabled = activeStage.id >= activeStages().length; updateHUD() }
+        function nextStage() { if (activeStage.id >= activeStages().length) { renderMap(); screen('map', false); return; } beginStage(activeStage.id + 1) } function retryStage() { beginStage(activeStage.id) } function backToMap() { renderMap(); screen('map', false) }
+        function checkAchievements(ctx) { ACHIEVEMENTS.forEach(a => { if (G.achievements.includes(a.id)) return; const ok = a.check.length === 1 ? a.check(G) : a.check(G, ctx); if (ok) { G.achievements.push(a.id); showAchievement(a.icon, t().achievement, a.name[G.lang]); save() } }); updateHUD() }
+        function renderMap() {
+            updateHUD(); byId('map-title').textContent = activePath().name[G.lang]; const svg = byId('mapSvg'); svg.innerHTML = ''; const NS = 'http://www.w3.org/2000/svg', el = t => document.createElementNS(NS, t), set = (n, a) => { for (const k in a) n.setAttribute(k, a[k]); return n }; const defs = el('defs'); const sky = el('linearGradient'); set(sky, { id: 'sky', x1: '0', y1: '0', x2: '0', y2: '1' }); sky.innerHTML = '<stop offset="0%" stop-color="#061026"/><stop offset="55%" stop-color="#091226"/><stop offset="100%" stop-color="#11100b"/>'; defs.appendChild(sky); const glow = el('filter'); glow.id = 'gl'; glow.innerHTML = '<feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>'; defs.appendChild(glow); svg.appendChild(defs); svg.appendChild(set(el('rect'), { x: 0, y: 0, width: 1200, height: 640, fill: 'url(#sky)' })); for (let i = 0; i < 70; i++)svg.appendChild(set(el('circle'), { cx: Math.random() * 1200, cy: Math.random() * 260, r: Math.random() * 1.8 + .4, fill: 'rgba(255,255,255,' + (Math.random() * .42 + .08) + ')' })); const terrain = ['M0,405 C80,370 190,385 290,352 C390,319 510,352 615,320 C720,288 850,328 970,294 C1070,266 1140,283 1200,270 L1200,640 L0,640 Z', 'M0,468 C90,440 180,455 300,420 C420,385 520,416 640,390 C760,364 900,406 1040,374 C1110,357 1160,365 1200,354 L1200,640 L0,640 Z', 'M0,540 C90,512 180,527 270,505 C360,483 450,505 540,480 C630,455 720,478 810,452 C900,426 990,446 1080,422 C1130,408 1175,410 1200,402 L1200,640 L0,640 Z'];['#0c1527', '#111117', '#1b1008'].forEach((fill, i) => svg.appendChild(set(el('path'), { d: terrain[i], fill }))); const sts = activeStages(); for (let i = 0; i < sts.length - 1; i++) { const a = sts[i], b = sts[i + 1], done = G.completed[G.path].includes(a.id), avail = a.id <= G.unlocked[G.path], c1x = (a.x + b.x) / 2, c2x = (a.x + b.x) / 2; const d = `M${a.x},${a.y} C${c1x},${a.y - 80} ${c2x},${b.y + 80} ${b.x},${b.y}`; svg.appendChild(set(el('path'), { d, fill: 'none', stroke: 'rgba(0,0,0,.52)', 'stroke-width': 13, 'stroke-linecap': 'round' })); svg.appendChild(set(el('path'), { d, fill: 'none', stroke: done ? 'rgba(212,168,67,.7)' : avail ? 'rgba(120,90,18,.4)' : 'rgba(40,42,70,.35)', 'stroke-width': done ? 5 : 4, 'stroke-dasharray': done ? '' : '10,10', 'stroke-linecap': 'round' })); if (done) svg.appendChild(set(el('path'), { d, fill: 'none', stroke: 'rgba(252,235,140,.5)', 'stroke-width': 2.1, 'stroke-linecap': 'round' })); }
+            sts.forEach(st => { const done = G.completed[G.path].includes(st.id), locked = st.id > G.unlocked[G.path], active = st.id === G.unlocked[G.path] && !done, g = el('g'); set(g, { transform: `translate(${st.x},${st.y})` }); if (!locked) { g.style.cursor = 'pointer'; g.addEventListener('click', () => openPopup(st)); g.addEventListener('mouseenter', e => showTip(st, e)); g.addEventListener('mouseleave', hideTip) } if (active) { [46, 62, 78].forEach((r, j) => { const c = el('circle'); set(c, { cx: 0, cy: 0, r, fill: 'none', stroke: activePath().color, 'stroke-width': j === 0 ? 1.6 : .9, opacity: .55 - j * .12 }); g.appendChild(c); const anim = el('animate'); set(anim, { attributeName: 'opacity', values: '0.7;0.08;0.7', dur: (1.9 + j * .35) + 's', repeatCount: 'indefinite' }); c.appendChild(anim) }) } const shadow = el('circle'); set(shadow, { cx: 2, cy: 4, r: 30, fill: 'rgba(0,0,0,.55)' }); g.appendChild(shadow); const base = el('circle'); set(base, { cx: 0, cy: 0, r: 28, fill: locked ? 'rgba(10,12,24,.96)' : done ? 'rgba(9,24,16,.95)' : 'rgba(10,14,28,.95)', stroke: locked ? 'rgba(60,45,90,.45)' : done ? '#10b981' : activePath().color, 'stroke-width': done ? 2.8 : 3 }); if (active) base.setAttribute('filter', 'url(#gl)'); g.appendChild(base); const icon = el('text'); set(icon, { x: 0, y: 9, 'text-anchor': 'middle', 'font-size': locked ? 16 : 22 }); icon.textContent = locked ? '🔒' : st.icon; g.appendChild(icon); const badge = el('circle'); set(badge, { cx: -23, cy: -23, r: 11, fill: locked ? 'rgba(70,58,112,.4)' : activePath().color }); g.appendChild(badge); const badgeText = el('text'); set(badgeText, { x: -23, y: -19, 'text-anchor': 'middle', 'font-size': 9, fill: '#071019', 'font-weight': 'bold' }); badgeText.textContent = st.id; g.appendChild(badgeText); if (done) { const doneB = el('circle'); set(doneB, { cx: 23, cy: -23, r: 12, fill: 'rgba(8,24,14,.95)', stroke: '#10b981', 'stroke-width': 1.5 }); g.appendChild(doneB); const doneT = el('text'); set(doneT, { x: 23, y: -18, 'text-anchor': 'middle', 'font-size': 11, fill: '#52b788', 'font-weight': 'bold' }); doneT.textContent = '✓'; g.appendChild(doneT) } const name = el('text'); set(name, { x: 0, y: 52, 'text-anchor': 'middle', 'font-size': 10, 'font-weight': 800, fill: locked ? 'rgba(110,96,145,.52)' : active ? activePath().color : 'rgba(255,255,255,.92)' }); name.textContent = st.title[G.lang]; g.appendChild(name); svg.appendChild(g) })
+        }
+        function showTip(st, e) { byId('tt-state').textContent = st.id > G.unlocked[G.path] ? t().locked : G.completed[G.path].includes(st.id) ? t().complete : t().available; byId('tt-name').textContent = st.title[G.lang]; byId('tt-meta').textContent = `${st.eraLabel[G.lang]} • ⭐ ${G.stars[G.path][st.id] || 0}`; const tt = byId('tooltip'); tt.style.left = (e.clientX + 12) + 'px'; tt.style.top = (e.clientY - 52) + 'px'; tt.classList.add('on') } function hideTip() { byId('tooltip').classList.remove('on') }
+        function showToast(icon, head, text) { byId('toast-i').textContent = icon; byId('toast-t1').textContent = head; byId('toast-t2').textContent = text; const e = byId('toast'); e.classList.add('on'); setTimeout(() => e.classList.remove('on'), 2600) }
+        function showAchievement(icon, head, text) { byId('achievement-i').textContent = icon; byId('achievement-t1').textContent = head; byId('achievement-t2').textContent = text; const e = byId('achievement'); e.classList.add('on'); setTimeout(() => e.classList.remove('on'), 3200) }
+        function demoAchievements() { showAchievement('🏅', t().achievement, isAR() ? 'هذه مجرد معاينة' : 'This is a preview') }
+        function floatXP(text) { const div = document.createElement('div'); div.style.cssText = 'position:fixed;z-index:4000;left:50%;top:56%;transform:translate(-50%,0);font-size:24px;font-weight:900;color:var(--gold);text-shadow:0 0 18px rgba(212,168,67,.4);pointer-events:none;transition:all 1s ease;'; div.textContent = text; document.body.appendChild(div); requestAnimationFrame(() => { div.style.transform = 'translate(-50%,-90px)'; div.style.opacity = '0' }); setTimeout(() => div.remove(), 1000) }
+        function addFXBurst(color) { const canvas = byId('fx'), ctx = canvas.getContext('2d'), parts = [...Array(20)].map(() => ({ x: canvas.width / 2, y: canvas.height * .55, vx: (Math.random() - .5) * 8, vy: (Math.random() - .5) * 8, size: Math.random() * 5 + 2, life: 1 })); const start = performance.now(); function frame(now) { ctx.clearRect(0, 0, canvas.width, canvas.height); parts.forEach(p => { p.x += p.vx; p.y += p.vy; p.vy += .04; p.life -= .025; ctx.globalAlpha = Math.max(0, p.life); ctx.fillStyle = color; ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill() }); ctx.globalAlpha = 1; if (now - start < 500) requestAnimationFrame(frame); else ctx.clearRect(0, 0, canvas.width, canvas.height) } requestAnimationFrame(frame) }
+        function confetti() { for (let i = 0; i < 52; i++) { const c = document.createElement('div'), colors = ['#d4a843', '#f5d96a', '#52b788', '#9b59b6', '#ff6b6b', '#60a5fa']; c.style.cssText = `position:fixed;z-index:3500;left:${8 + Math.random() * 84}%;top:-20px;width:${6 + Math.random() * 8}px;height:${6 + Math.random() * 8}px;background:${colors[Math.floor(Math.random() * colors.length)]};border-radius:${Math.random() > .5 ? '50%' : '2px'};pointer-events:none;opacity:.9;transition:transform ${1.8 + Math.random() * 1.2}s ease, opacity ${1.8 + Math.random() * 1.2}s ease;`; document.body.appendChild(c); requestAnimationFrame(() => { c.style.transform = `translate(${Math.random() * 140 - 70}px, ${innerHeight + 80}px) rotate(${Math.random() * 720}deg)`; c.style.opacity = '0' }); setTimeout(() => c.remove(), 3200) } }
+        function resizeCanvases() { byId('bg').width = innerWidth; byId('bg').height = innerHeight; byId('fx').width = innerWidth; byId('fx').height = innerHeight }
+        const bgState = { stars: [] }; function initBG() { resizeCanvases(); bgState.stars = [...Array(Math.min(280, Math.floor(innerWidth * .18)))].map(() => ({ x: Math.random() * innerWidth, y: Math.random() * innerHeight * .65, r: Math.random() * 1.6 + .2, a: Math.random() * .55 + .06, da: (Math.random() * .01 + .003) * (Math.random() > .5 ? 1 : -1) })) }
+        function drawBG() { const c = byId('bg'), x = c.getContext('2d'); x.clearRect(0, 0, c.width, c.height); const g = x.createLinearGradient(0, 0, 0, c.height); g.addColorStop(0, '#081326'); g.addColorStop(.55, '#050b18'); g.addColorStop(1, '#120d08'); x.fillStyle = g; x.fillRect(0, 0, c.width, c.height); bgState.stars.forEach(s => { s.a += s.da; if (s.a < .06 || s.a > .6) s.da *= -1; x.globalAlpha = s.a; x.fillStyle = '#fff'; x.beginPath(); x.arc(s.x, s.y, s.r, 0, Math.PI * 2); x.fill() }); x.globalAlpha = 1; x.fillStyle = 'rgba(245,224,128,.04)'; x.beginPath(); x.arc(c.width * .82, c.height * .14, 52, 0, Math.PI * 2); x.fill(); x.fillStyle = '#fdf3d0'; x.beginPath(); x.arc(c.width * .82, c.height * .14, 32, 0, Math.PI * 2); x.fill(); x.fillStyle = '#081326'; x.beginPath(); x.arc(c.width * .835, c.height * .125, 29, 0, Math.PI * 2); x.fill(); const dunes = [{ y: c.height * .64, amp: 26, col: '#0b1322' }, { y: c.height * .75, amp: 32, col: '#101016' }, { y: c.height * .86, amp: 36, col: '#1a0f08' }]; dunes.forEach((d, k) => { x.beginPath(); x.moveTo(0, d.y); for (let px = 0; px <= c.width; px += 40) { x.quadraticCurveTo(px + 20, d.y + Math.sin((px / 110) + (performance.now() / 2200) + (k * 1.3)) * d.amp, px + 40, d.y + Math.sin(((px + 40) / 110) + (performance.now() / 2200) + (k * 1.3)) * d.amp) } x.lineTo(c.width, c.height); x.lineTo(0, c.height); x.closePath(); x.fillStyle = d.col; x.fill() }); requestAnimationFrame(drawBG) }
+        let audioCtx; function beep(freq = .0, duration = .05, type = 'sine') { if (!G.sound) return; try { audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)(); const o = audioCtx.createOscillator(), g = audioCtx.createGain(); o.type = type; o.frequency.value = freq; g.gain.value = .03; o.connect(g); g.connect(audioCtx.destination); o.start(); g.gain.exponentialRampToValueAtTime(.0001, audioCtx.currentTime + duration); o.stop(audioCtx.currentTime + duration) } catch (e) { } }
+        function bind() { byId('lang-ar').onclick = () => setLang('ar'); byId('lang-en').onclick = () => setLang('en'); byId('start-btn').onclick = startJourney; byId('demo-btn').onclick = demoAchievements; byId('panel-toggle').onclick = () => byId('quest-panel').classList.toggle('hidden-panel'); byId('back-btn').onclick = back; byId('story-next').onclick = storyNext; byId('story-skip').onclick = storySkip; byId('next-stage-btn').onclick = nextStage; byId('map-btn').onclick = backToMap; byId('retry-btn').onclick = retryStage; byId('popup').onclick = closePopup; byId('sound-toggle').onclick = () => { G.sound = !G.sound; updateHUD(); save() }; addEventListener('resize', () => { resizeCanvases(); initBG(); if (currentScreen === 'map') renderMap() }) }
+        load(); ensureState(); initBG(); drawBG(); bind(); refreshText(); setLang(G.lang);
+    </script>
+</body>
+
+</html>

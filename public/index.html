@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
+    <title>نبراس — Nibras Quest Paths</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Amiri:wght@400;700&family=Nunito:wght@400;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+
+<body>
+    <canvas id="bg"></canvas><canvas id="fx"></canvas>
+    <div class="top-controls">
+        <div class="langbar"><button id="lang-ar" class="active">عربي</button><button id="lang-en">EN</button></div>
+        <div style="display:flex;gap:8px">
+            <div class="soundbtn"><button id="sound-toggle" class="active">🔊 SFX</button></div>
+            <div class="backbtn hidden" id="backWrap"><button id="back-btn">← رجوع</button></div>
+        </div>
+    </div>
+    <section id="title" class="screen on">
+        <div class="hero">
+            <div class="moon-wrap">
+                <div class="moon-core"></div>
+                <div class="moon-cut"></div>
+            </div>
+            <div class="kicker" id="hero-kicker">Journey of Light</div>
+            <div class="logo" id="hero-logo">نبراس</div>
+            <div class="subtitle" id="hero-sub">مسارات تعلّم أعمق وأكثر لعبية</div>
+            <div class="chip-row">
+                <div class="chip" id="chip-1">🧭 مسارات مختلفة</div>
+                <div class="chip" id="chip-2">🎚️ مستويات بدء</div>
+                <div class="chip" id="chip-3">📚 مراجع وتزكية</div>
+                <div class="chip" id="chip-4">🗺️ خرائط عصر ومراحل</div>
+            </div>
+            <div class="mission-card" id="mission-copy">اختر مسارًا، حدّد مستواك، تقدّم على خريطة خاصة بكل موضوع، وافتح
+                محتوى أعمق مع تتبع شامل للتقدّم ومراجع مقترحة للتوسّع.</div>
+            <div class="cta-wrap"><button class="cta" id="start-btn">▶ اختر المسار</button><button class="ghost"
+                    id="demo-btn">★ عرض الإنجازات</button></div>
+        </div>
+    </section>
+    <section id="paths" class="screen">
+        <div class="path-shell">
+            <div class="path-head">
+                <div>
+                    <div class="path-title" id="paths-title">اختر مسار التعلّم</div>
+                    <div class="path-sub" id="paths-sub">ابدأ من المبتدئ حتى لو كنت متقدمًا. هذا يعطيك تسلسلًا أوضح
+                        ويقوي التجربة. ويمكنك رفع المستوى مباشرة متى شئت.</div>
+                </div>
+            </div>
+            <div class="path-controls glass">
+                <div class="path-controls-copy" id="path-control-copy">ضبط نقطة البداية ثم اختر أسلوب التقدّم.</div>
+                <div class="level-picker" id="level-picker"></div>
+            </div>
+            <div class="paths-dashboard" id="paths-dashboard"></div>
+            <div class="path-filters" id="path-filters"></div>
+            <div class="path-grid" id="path-grid"></div>
+        </div>
+    </section>
+    <section id="map" class="screen">
+        <div class="map-hud">
+            <div class="hud-left glass hud-card">
+                <div>
+                    <div class="label" id="level-label">المستوى</div>
+                    <div class="value" id="level-value">1</div>
+                </div>
+                <div>
+                    <div class="xp-bar">
+                        <div class="xp-fill" id="xp-fill"></div>
+                    </div>
+                    <div style="font-size:12px;color:var(--muted);margin-top:6px" id="xp-text">0 XP</div>
+                </div>
+            </div>
+            <div class="hud-center glass hud-card">
+                <div class="label" id="map-label">الخريطة</div>
+                <div class="value" id="map-title">اختر المرحلة التالية</div>
+            </div>
+            <div class="hud-right glass hud-card">
+                <div class="stat">⭐ <span id="stat-stars">0</span></div>
+                <div class="stat">💎 <span id="stat-gems">0</span></div>
+                <div class="stat">🔥 <span id="stat-streak">0</span></div>
+                <div class="stat">🏅 <span id="stat-ach">0</span></div>
+            </div>
+        </div>
+        <div class="map-wrap"><svg id="mapSvg" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid meet"></svg>
+            <div class="tooltip" id="tooltip">
+                <div class="tt-state" id="tt-state"></div>
+                <div class="tt-name" id="tt-name"></div>
+                <div class="tt-meta" id="tt-meta"></div>
+            </div><button class="panel-toggle" id="panel-toggle"><span>🎯</span><span class="mini"
+                    id="panel-toggle-label">Quest</span></button>
+            <div class="side-panel glass hidden-panel" id="quest-panel">
+                <div class="quest-head">
+                    <div class="quest-title" id="panel-title">المهمة الحالية</div>
+                    <div class="stat">⚔️ <span id="panel-rank">R1</span></div>
+                </div>
+                <div class="quest-sub" id="panel-copy">أكمل المرحلة الحالية للحصول على XP وفتح المرحلة التالية.</div>
+                <div class="quest-progress" id="quest-progress"></div>
+                <div class="deep-grid">
+                    <div class="deep-card">
+                        <div class="dt" id="deep-focus-label">محور المرحلة</div>
+                        <div class="dv" id="deep-focus-value">—</div>
+                    </div>
+                    <div class="deep-card">
+                        <div class="dt" id="deep-goal-label">هدف التقدّم</div>
+                        <div class="dv" id="deep-goal-value">—</div>
+                    </div>
+                    <div class="deep-card" style="grid-column:1/-1">
+                        <div class="dt" id="deep-books-label">للتوسّع</div>
+                        <div class="deep-list" id="deep-books-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="story" class="screen">
+        <div class="story-shell">
+            <div class="story-card glass">
+                <div class="story-top">
+                    <div class="chapter" id="story-chapter"></div>
+                    <div class="icon" id="story-icon"></div>
+                    <div class="title" id="story-title"></div>
+                    <div class="story-date" id="story-date"></div>
+                    <div class="story-divider"></div>
+                </div>
+                <div class="era-strip" id="era-strip"></div>
+                <div class="story-body">
+                    <div class="story-text" id="story-text"></div>
+                </div>
+                <div class="story-dots" id="story-dots"></div>
+                <div class="story-rewards">
+                    <div class="reward-pill" id="reward-1">⭐ حتى 3 نجوم</div>
+                    <div class="reward-pill" id="reward-2">💎 جوهرة إضافية</div>
+                    <div class="reward-pill" id="reward-3">🔥 سلسلة إجابات</div>
+                </div>
+                <div class="reference-board">
+                    <div class="ref-card">
+                        <div class="ref-head">
+                            <div class="ref-title" id="reading-title">قراءات أعمق</div>
+                        </div>
+                        <div class="ref-copy" id="reading-copy">مراجع مقترحة داخل التطبيق لإكمال الرحلة بشكل أعمق.</div>
+                        <div class="reading-list" id="reading-list"></div>
+                    </div>
+                    <div class="ref-card">
+                        <div class="ref-head">
+                            <div class="ref-title" id="endorse-title">تزكيات ومدخلات</div>
+                        </div>
+                        <div class="ref-copy" id="endorse-copy">أسماء ومدارس معرفية يمكن ربطها لاحقًا بمراجع موثقة
+                            ومحتوى موسع.</div>
+                        <div class="endorse-list" id="endorse-list"></div>
+                    </div>
+                </div>
+                <div class="story-nav"><button class="story-skip" id="story-skip">تخطي</button><button
+                        class="story-next" id="story-next">التالي</button></div>
+            </div>
+        </div>
+    </section>
+    <section id="quiz" class="screen">
+        <div class="quiz-shell">
+            <div class="quiz-top glass">
+                <div class="quiz-label" id="quiz-label">اختبار المعرفة</div>
+                <div class="combo" id="combo">🔥 2× Combo</div>
+                <div class="quiz-count" id="quiz-count">1 / 2</div>
+            </div>
+            <div class="progress glass"><span id="quiz-progress"></span></div>
+            <div class="booster-bar">
+                <div class="booster" id="booster-combo">Combo: 0</div>
+                <div class="booster" id="booster-perfect">Perfect Bonus</div>
+                <div class="booster" id="booster-speed">Quick Bonus</div>
+            </div>
+            <div class="mission-row">
+                <div class="mission-card-mini">
+                    <div class="mi">🎯</div>
+                    <div class="mt" id="mini-goal-label">Goal</div>
+                    <div class="mv" id="mini-goal-value">2/2</div>
+                </div>
+                <div class="mission-card-mini">
+                    <div class="mi">⚡</div>
+                    <div class="mt" id="mini-bonus-label">Bonus</div>
+                    <div class="mv" id="mini-bonus-value">+0 XP</div>
+                </div>
+                <div class="mission-card-mini">
+                    <div class="mi">🔥</div>
+                    <div class="mt" id="mini-streak-label">Streak</div>
+                    <div class="mv" id="mini-streak-value">0</div>
+                </div>
+            </div>
+            <div class="question-card glass">
+                <div class="question-text" id="question-text"></div>
+            </div>
+            <div class="answer-grid" id="answer-grid"></div>
+            <div class="feedback" id="feedback"></div>
+        </div>
+    </section>
+    <section id="result" class="screen">
+        <div class="result-card glass">
+            <div class="result-emoji" id="result-emoji">🏆</div>
+            <div class="result-title" id="result-title">ممتاز</div>
+            <div class="result-sub" id="result-sub">2 / 2 صحيحة</div>
+            <div class="stars" id="result-stars"></div>
+            <div class="loot-grid">
+                <div class="loot">
+                    <div class="n" id="loot-xp">+0</div>
+                    <div class="l">XP</div>
+                </div>
+                <div class="loot">
+                    <div class="n" id="loot-gems">+0</div>
+                    <div class="l" id="loot-gems-label">Gem</div>
+                </div>
+                <div class="loot">
+                    <div class="n" id="loot-streak">0</div>
+                    <div class="l" id="loot-streak-label">Streak</div>
+                </div>
+                <div class="loot">
+                    <div class="n" id="loot-rank">R1</div>
+                    <div class="l" id="loot-rank-label">Rank</div>
+                </div>
+            </div>
+            <div class="result-actions"><button class="primary" id="next-stage-btn">الفصل التالي</button><button
+                    class="secondary" id="map-btn">الخريطة</button><button class="secondary"
+                    id="retry-btn">إعادة</button></div>
+        </div>
+    </section>
+    <div class="popup" id="popup">
+        <div class="popup-card glass" id="popup-card"></div>
+    </div>
+    <div class="toast" id="toast">
+        <div class="i" id="toast-i">⚡</div>
+        <div>
+            <div class="t1" id="toast-t1">LEVEL UP</div>
+            <div class="t2" id="toast-t2">+100 XP</div>
+        </div>
+    </div>
+    <div class="achievement" id="achievement">
+        <div class="i" id="achievement-i">🏅</div>
+        <div>
+            <div class="t1" id="achievement-t1">Achievement</div>
+            <div class="t2" id="achievement-t2">First Step</div>
+        </div>
+    </div>
+    <script defer src="/assets/js/data.js"></script>
+    <script defer src="/assets/js/core.js"></script>
+    <script defer src="/assets/js/journey.js"></script>
+    <script defer src="/assets/js/effects.js"></script>
+    <script defer src="/assets/js/app.js"></script>
+</body>
+</html>
