@@ -824,7 +824,7 @@
         }
 
         #story {
-            justify-content: space-between
+            justify-content: flex-start
         }
 
         .story-shell {
@@ -832,281 +832,120 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            padding: 86px 20px 20px;
-            overflow: auto
+            padding: 72px 20px 20px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            gap: 14px
         }
 
-        .story-card {
-            margin: 0 auto;
+        /* ── header ── */
+        .story-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            border-radius: 20px;
             max-width: 1100px;
             width: 100%;
-            padding: 24px;
-            border-radius: 28px;
-            position: relative;
-            overflow: visible
+            margin: 0 auto
         }
+        .story-header-left { display: flex; flex-direction: column; gap: 3px }
+        .story-header .chapter { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--dim); font-weight: 800 }
+        .story-header .title { font-family: var(--fd); font-size: 26px }
+        html.en .story-header .title { font-family: var(--fe) }
+        .story-header .story-date { font-size: 11px; color: var(--gold); font-weight: 700 }
+        .story-header-right .icon { font-size: 42px; filter: drop-shadow(0 0 14px rgba(212,168,67,.22)) }
 
-        .story-top {
-            text-align: center;
-            margin-bottom: 18px
-        }
+        /* ── era strip ── */
+        .era-strip { display: flex; gap: 8px; max-width: 1100px; width: 100%; margin: 0 auto; overflow-x: auto; padding-bottom: 2px }
+        .era-card { flex: 1; min-width: 110px; padding: 10px; border-radius: 16px; background: rgba(255,255,255,.04); border: 1px solid var(--line); text-align: center }
+        .era-card.active { border-color: rgba(212,168,67,.42); background: rgba(212,168,67,.08) }
+        .era-card .e1 { font-size: 22px }
+        .era-card .e2 { font-size: 11px; font-weight: 800; margin-top: 4px }
+        .era-card .e3 { font-size: 10px; color: var(--muted); margin-top: 2px }
 
-        .story-top .chapter {
-            font-size: 10px;
-            letter-spacing: .18em;
-            text-transform: uppercase;
-            color: var(--dim);
-            font-weight: 800
-        }
+        /* ── horizontal timeline ── */
+        .story-timeline-wrap { max-width: 1100px; width: 100%; margin: 0 auto }
+        .story-timeline { overflow-x: auto; overflow-y: visible; padding: 12px 0; scroll-behavior: smooth; -webkit-overflow-scrolling: touch }
+        .story-timeline::-webkit-scrollbar { height: 3px }
+        .story-timeline::-webkit-scrollbar-track { background: rgba(255,255,255,.03); border-radius: 999px }
+        .story-timeline::-webkit-scrollbar-thumb { background: rgba(212,168,67,.25); border-radius: 999px }
 
-        .story-top .icon {
-            font-size: 52px;
-            filter: drop-shadow(0 0 18px rgba(212, 168, 67, .22))
-        }
+        .timeline-track { display: flex; align-items: flex-start; min-width: max-content; padding: 0 20px; position: relative }
+        .timeline-track::before { content: ''; position: absolute; top: 20px; left: 20px; right: 20px; height: 2px; background: rgba(255,255,255,.06); border-radius: 999px; z-index: 0 }
 
-        .story-top .title {
-            font-family: var(--fd);
-            font-size: 34px;
-            margin-top: 6px
-        }
+        .timeline-event { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; min-width: 130px; cursor: pointer; transition: transform .2s; padding: 0 4px }
+        .timeline-event:hover { transform: translateY(-3px) }
 
-        .story-date {
-            margin-top: 10px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            border-radius: 999px;
-            padding: 8px 12px;
-            background: rgba(255, 255, 255, .05);
-            border: 1px solid var(--line);
-            color: var(--gold-2);
-            font-size: 12px;
-            font-weight: 800
-        }
+        .timeline-event-node { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-size: 16px; font-weight: 900; border: 2px solid rgba(255,255,255,.1); background: rgba(2,8,20,.9); color: var(--muted); transition: .2s }
+        .timeline-event.done .timeline-event-node { border-color: rgba(16,185,129,.5); background: rgba(16,185,129,.12); color: #34d399 }
+        .timeline-event.active .timeline-event-node { border-color: var(--gold); background: rgba(245,217,106,.1); color: var(--gold); box-shadow: 0 0 18px rgba(245,217,106,.2) }
 
-        html.en .story-top .title {
-            font-family: var(--fe)
-        }
+        .timeline-event.special .timeline-event-node { width: 48px; height: 48px; font-size: 20px; border-color: rgba(212,168,67,.5); background: rgba(212,168,67,.1) }
+        .timeline-event.special.active .timeline-event-node { box-shadow: 0 0 24px rgba(212,168,67,.35) }
 
-        .story-divider {
-            width: 220px;
-            height: 1px;
-            margin: 10px auto 0;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent)
-        }
+        .timeline-event-label { margin-top: 8px; text-align: center; max-width: 120px }
+        .timeline-event-title { font-size: 11px; font-weight: 800; line-height: 1.35; color: var(--text) }
+        .timeline-event.active .timeline-event-title { color: var(--gold) }
+        .timeline-event-date { font-size: 9px; color: var(--muted); margin-top: 2px; font-weight: 700 }
 
-        .era-strip {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-            margin: 16px 0
-        }
+        .timeline-event-badge { display: none; margin-top: 4px; font-size: 8px; font-weight: 900; padding: 2px 7px; border-radius: 999px; text-transform: uppercase; letter-spacing: .06em }
+        .timeline-event.special .timeline-event-badge { display: inline-block; background: rgba(212,168,67,.12); border: 1px solid rgba(212,168,67,.35); color: var(--gold) }
+        .timeline-event.done .timeline-event-badge { display: inline-block; background: rgba(16,185,129,.08); border: 1px solid rgba(16,185,129,.25); color: #34d399 }
 
-        .era-card {
-            padding: 12px;
-            border-radius: 18px;
-            background: rgba(255, 255, 255, .04);
-            border: 1px solid var(--line);
-            text-align: center
-        }
+        .timeline-connector { flex: 0 0 20px; display: flex; align-items: center; margin-top: -30px; z-index: 0 }
+        .timeline-connector-line { width: 100%; height: 2px; border-radius: 999px; background: rgba(255,255,255,.06); overflow: hidden }
+        .timeline-connector-line span { display: block; height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, #34d399, var(--gold)); transition: width .35s }
+        .timeline-connector.filled .timeline-connector-line span { width: 100% }
 
-        .era-card.active {
-            border-color: rgba(212, 168, 67, .42);
-            background: rgba(212, 168, 67, .08)
-        }
+        /* ── story content card ── */
+        .story-event-content { max-width: 1100px; width: 100%; margin: 0 auto; border-radius: 20px; padding: 0; overflow: hidden; border: 1px solid rgba(255,255,255,.08); background: rgba(2,8,20,.6) }
 
-        .era-card .e1 {
-            font-size: 24px
-        }
+        .story-content-main { padding: 22px 26px; font-size: 18px; line-height: 1.95; font-weight: 600; color: var(--text) }
+        .story-content-main p { margin: 0 }
 
-        .era-card .e2 {
-            font-size: 12px;
-            font-weight: 800;
-            margin-top: 5px
-        }
+        .story-content-sections { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 1px solid rgba(255,255,255,.06) }
+        .story-section { padding: 14px 20px; border-inline-end: 1px solid rgba(255,255,255,.06) }
+        .story-section:last-child { border-inline-end: none }
+        .story-section-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; color: var(--gold); margin-bottom: 6px }
+        .story-section-text { font-size: 13px; line-height: 1.7; color: var(--muted) }
 
-        .era-card .e3 {
-            font-size: 11px;
-            color: var(--muted);
-            margin-top: 3px
-        }
+        .story-gate-q { padding: 14px 26px; border-top: 1px solid rgba(255,255,255,.06); display: flex; align-items: center; gap: 10px }
+        .story-gate-q .gate-icon { font-size: 18px; flex-shrink: 0 }
+        .story-gate-q .gate-text { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.5 }
 
-        .story-body {
-            min-height: 190px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px 10px 2px
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(8px) }
+            to { opacity: 1; transform: translateY(0) }
         }
+        .story-event-content { animation: fadeSlideIn .3s ease }
 
-        .story-text {
-            max-width: 860px;
-            width: 100%;
-            text-align: center;
-            font-size: 20px;
-            line-height: 2.05;
-            color: var(--text);
-            transition: .35s
-        }
+        /* ── dots / rewards / nav ── */
+        .story-dots { display: flex; justify-content: center; gap: 8px; padding: 2px 0 6px }
+        .story-dots span { height: 5px; width: 24px; border-radius: 999px; background: rgba(255,255,255,.08); transition: .2s }
+        .story-dots span.active { width: 40px; background: var(--gold) }
 
-        .story-scene-shell {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            border: 1px solid rgba(255, 255, 255, .08);
-            border-radius: 22px;
-            padding: 16px;
-            background: rgba(2, 8, 20, .56)
-        }
+        .story-rewards { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; max-width: 1100px; width: 100%; margin: 0 auto }
+        .reward-pill { padding: 7px 11px; border-radius: 999px; background: rgba(255,255,255,.04); border: 1px solid var(--line); font-size: 11px; color: var(--muted); font-weight: 700 }
 
-        .story-scene-head {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap
-        }
+        .story-nav { display: flex; gap: 10px; max-width: 1100px; width: 100%; margin: 0 auto }
+        .story-nav button { border: none; border-radius: 16px; padding: 14px 18px; cursor: pointer; font-weight: 800 }
+        .story-skip { background: rgba(255,255,255,.05); color: var(--text); border: 1px solid var(--line) }
+        .story-next { flex: 1; background: linear-gradient(135deg, var(--gold), var(--gold-3)); color: #071019 }
 
-        .scene-chip {
-            border-radius: 999px;
-            padding: 7px 12px;
-            font-size: 11px;
-            font-weight: 800;
-            background: rgba(255, 255, 255, .05);
-            border: 1px solid var(--line);
-            color: var(--gold)
-        }
-
-        .story-scene-line {
-            font-size: 22px;
-            line-height: 1.95;
-            font-weight: 800
-        }
-
-        .story-scene-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px
-        }
-
-        .scene-block {
-            border-radius: 14px;
-            padding: 10px 11px;
-            text-align: start;
-            background: rgba(255, 255, 255, .04);
-            border: 1px solid rgba(255, 255, 255, .08)
-        }
-
-        .scene-block .k {
-            font-size: 10px;
-            letter-spacing: .11em;
-            text-transform: uppercase;
-            color: var(--dim);
-            font-weight: 800
-        }
-
-        .scene-block .v {
-            margin-top: 6px;
-            font-size: 13px;
-            line-height: 1.7;
-            color: var(--text)
-        }
-
-        .scene-block-wide {
-            grid-column: 1/-1
-        }
-
-        .story-dots {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            padding: 8px 0 12px
-        }
-
-        .story-dots span {
-            height: 6px;
-            width: 26px;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, .1);
-            transition: .22s
-        }
-
-        .story-dots span.active {
-            width: 42px;
-            background: var(--gold)
-        }
-
-        .story-rewards {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 2px
-        }
-
-        .reward-pill {
-            padding: 8px 12px;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, .04);
-            border: 1px solid var(--line);
-            font-size: 12px;
-            color: var(--muted);
-            font-weight: 700
-        }
-
-        .story-nav {
-            display: flex;
-            gap: 10px;
-            margin-top: 16px;
-            position: sticky;
-            bottom: 8px;
-            z-index: 6;
-            padding: 10px 0 2px;
-            background: linear-gradient(180deg, rgba(7, 13, 26, 0), rgba(7, 13, 26, .9) 35%, rgba(7, 13, 26, .96))
-        }
-
-        .story-nav button {
-            border: none;
-            border-radius: 16px;
-            padding: 14px 18px;
-            cursor: pointer;
-            font-weight: 800
-        }
-
-        .story-skip {
-            background: rgba(255, 255, 255, .05);
-            color: var(--text);
-            border: 1px solid var(--line)
-        }
-
-        .story-next {
-            flex: 1;
-            background: linear-gradient(135deg, var(--gold), var(--gold-3));
-            color: #071019
-        }
-
-        #story .story-card[data-theme="origin"] {
-            background:
-                linear-gradient(165deg, rgba(88, 161, 255, .17), rgba(7, 13, 26, .88) 44%),
-                rgba(7, 13, 26, .9)
-        }
-
-        #story .story-card[data-theme="rise"] {
-            background:
-                linear-gradient(165deg, rgba(170, 105, 255, .16), rgba(7, 13, 26, .88) 46%),
-                rgba(7, 13, 26, .9)
-        }
-
-        #story .story-card[data-theme="legacy"] {
-            background:
-                linear-gradient(165deg, rgba(16, 185, 129, .16), rgba(7, 13, 26, .88) 46%),
-                rgba(7, 13, 26, .9)
-        }
+        /* ── theme tints ── */
+        #story .story-shell[data-theme="origin"] .story-event-content { background: linear-gradient(165deg, rgba(88,161,255,.08), transparent 40%), rgba(2,8,20,.6) }
+        #story .story-shell[data-theme="rise"] .story-event-content { background: linear-gradient(165deg, rgba(170,105,255,.07), transparent 40%), rgba(2,8,20,.6) }
+        #story .story-shell[data-theme="legacy"] .story-event-content { background: linear-gradient(165deg, rgba(16,185,129,.07), transparent 40%), rgba(2,8,20,.6) }
 
         .reference-board {
-            margin-top: 16px;
+            margin-top: 0;
             display: grid;
             grid-template-columns: 1.2fr .8fr;
-            gap: 12px
+            gap: 12px;
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto
         }
 
         .ref-card {
@@ -1583,7 +1422,9 @@
         .achievement {
             position: fixed;
             left: 50%;
-            transform: translateX(-50%) translateY(-140px);
+            right: auto;
+            transform: translate(-50%, -8px) scale(.96);
+            opacity: 0;
             z-index: 3000;
             padding: 14px 18px;
             border-radius: 18px;
@@ -1593,12 +1434,13 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            transition: transform .42s cubic-bezier(.34, 1.56, .64, 1)
+            transition: transform .28s ease, opacity .22s ease
         }
 
         .toast.on,
         .achievement.on {
-            transform: translateX(-50%) translateY(0)
+            transform: translate(-50%, 0) scale(1);
+            opacity: 1
         }
 
         .toast {
@@ -1651,6 +1493,10 @@
             .hud-right {
                 justify-content: center
             }
+
+            .timeline-event {
+                min-width: 140px
+            }
         }
 
         @media (max-width: 680px) {
@@ -1666,16 +1512,18 @@
                 grid-template-columns: 1fr
             }
 
-            .story-text {
-                font-size: 18px
+            .story-content-main { font-size: 16px; padding: 18px 20px }
+            .story-content-sections { grid-template-columns: 1fr }
+            .story-section { border-inline-end: none; border-bottom: 1px solid rgba(255,255,255,.06) }
+            .story-section:last-child { border-bottom: none }
+
+            .timeline-event { min-width: 110px }
+            .timeline-event-node { width: 36px; height: 36px; font-size: 14px }
+            .timeline-event.special .timeline-event-node { width: 42px; height: 42px
             }
 
-            .story-scene-grid {
-                grid-template-columns: 1fr
-            }
-
-            .story-scene-line {
-                font-size: 19px
+            .story-header .title {
+                font-size: 22px
             }
 
             .question-text {

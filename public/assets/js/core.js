@@ -49,11 +49,37 @@ const $ = (s) => document.querySelector(s),
   activeStages = () => activePath().stages;
 const STORAGE_KEY = "nibras-quest-paths";
 const LEGACY_STORAGE_KEY = "noor-quest-paths";
+function normalizeCompleted(pathId) {
+  const len = PATHS[pathId].stages.length;
+  const cleaned = [...new Set((G.completed[pathId] || [])
+    .map((v) => Number(v))
+    .filter((v) => Number.isFinite(v) && v >= 1 && v <= len))].sort(
+    (a, b) => a - b,
+  );
+  G.completed[pathId] = cleaned;
+}
+function isStageCompleted(pathId, stageId) {
+  return (G.completed[pathId] || []).includes(Number(stageId));
+}
+function markStageCompleted(pathId, stageId) {
+  const id = Number(stageId);
+  if (!Number.isFinite(id)) return;
+  if (!G.completed[pathId]) G.completed[pathId] = [];
+  if (!isStageCompleted(pathId, id)) G.completed[pathId].push(id);
+  normalizeCompleted(pathId);
+}
 function ensureState() {
   Object.keys(PATHS).forEach((pid) => {
     if (!G.completed[pid]) G.completed[pid] = [];
     if (!G.unlocked[pid]) G.unlocked[pid] = 1;
     if (!G.stars[pid]) G.stars[pid] = {};
+    normalizeCompleted(pid);
+    const len = PATHS[pid].stages.length;
+    const unlocked = Number(G.unlocked[pid]);
+    G.unlocked[pid] = Number.isFinite(unlocked)
+      ? Math.min(len + 1, Math.max(1, Math.floor(unlocked)))
+      : 1;
+    if (G.completed[pid].length >= len) G.unlocked[pid] = len + 1;
   });
 }
 function save() {
@@ -187,7 +213,7 @@ function updateHUD() {
   activeStages().forEach((st) => {
     const d = document.createElement("div");
     d.className = "mini-dot";
-    d.innerHTML = `<span style="width:${G.completed[G.path].includes(st.id) ? "100%" : st.id < G.unlocked[G.path] ? "55%" : "0%"}"></span>`;
+    d.innerHTML = `<span style="width:${isStageCompleted(G.path, st.id) || st.id < G.unlocked[G.path] ? "100%" : "0%"}"></span>`;
     qp.appendChild(d);
   });
   byId("booster-combo").textContent =
@@ -202,8 +228,8 @@ function updateHUD() {
   byId("sound-toggle").textContent = (G.sound ? "🔊 " : "🔈 ") + "SFX";
   byId("sound-toggle").classList.toggle("active", G.sound);
   const nxt =
-    activeStages().find((s) => s.id === G.unlocked[G.path]) ||
-    activeStages()[0];
+    activeStages().find((s) => !isStageCompleted(G.path, s.id)) ||
+    activeStages()[activeStages().length - 1];
   byId("deep-focus-value").textContent = nxt.focus[G.lang];
   byId("deep-goal-value").textContent = nxt.goal[G.lang];
   const deep = byId("deep-books-list");

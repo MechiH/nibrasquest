@@ -807,7 +807,7 @@
         }
 
         #story {
-            justify-content: space-between
+            justify-content: flex-start
         }
 
         .story-shell {
@@ -816,25 +816,29 @@
             display: flex;
             flex-direction: column;
             padding: 86px 20px 20px;
-            overflow: auto
+            overflow-y: auto;
+            overflow-x: hidden;
+            gap: 16px
         }
 
-        .story-card {
-            margin: auto;
+        .story-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-radius: 22px;
             max-width: 1100px;
             width: 100%;
-            padding: 24px;
-            border-radius: 28px;
-            position: relative;
-            overflow: hidden
+            margin: 0 auto
         }
 
-        .story-top {
-            text-align: center;
-            margin-bottom: 18px
+        .story-header-left {
+            display: flex;
+            flex-direction: column;
+            gap: 4px
         }
 
-        .story-top .chapter {
+        .story-header .chapter {
             font-size: 10px;
             letter-spacing: .18em;
             text-transform: uppercase;
@@ -842,36 +846,39 @@
             font-weight: 800
         }
 
-        .story-top .icon {
-            font-size: 52px;
-            filter: drop-shadow(0 0 18px rgba(212, 168, 67, .22))
-        }
-
-        .story-top .title {
+        .story-header .title {
             font-family: var(--fd);
-            font-size: 34px;
-            margin-top: 6px
+            font-size: 28px
         }
 
-        html.en .story-top .title {
+        html.en .story-header .title {
             font-family: var(--fe)
         }
 
-        .story-divider {
-            width: 220px;
-            height: 1px;
-            margin: 10px auto 0;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent)
+        .story-header .story-date {
+            font-size: 12px;
+            color: var(--gold);
+            font-weight: 700
+        }
+
+        .story-header-right .icon {
+            font-size: 48px;
+            filter: drop-shadow(0 0 18px rgba(212, 168, 67, .22))
         }
 
         .era-strip {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
+            display: flex;
             gap: 10px;
-            margin: 16px 0
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+            overflow-x: auto;
+            padding-bottom: 4px
         }
 
         .era-card {
+            flex: 1;
+            min-width: 120px;
             padding: 12px;
             border-radius: 18px;
             background: rgba(255, 255, 255, .04);
@@ -884,44 +891,227 @@
             background: rgba(212, 168, 67, .08)
         }
 
-        .era-card .e1 {
-            font-size: 24px
+        .era-card .e1 { font-size: 24px }
+        .era-card .e2 { font-size: 12px; font-weight: 800; margin-top: 5px }
+        .era-card .e3 { font-size: 11px; color: var(--muted); margin-top: 3px }
+
+        .story-timeline-wrap {
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+            position: relative
         }
 
-        .era-card .e2 {
+        .story-timeline {
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 16px 0 20px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch
+        }
+
+        .story-timeline::-webkit-scrollbar { height: 4px }
+        .story-timeline::-webkit-scrollbar-track { background: rgba(255,255,255,.04); border-radius: 999px }
+        .story-timeline::-webkit-scrollbar-thumb { background: rgba(212,168,67,.3); border-radius: 999px }
+
+        .timeline-track {
+            display: flex;
+            gap: 0;
+            position: relative;
+            min-width: max-content;
+            padding: 0 24px;
+            align-items: center
+        }
+
+        .timeline-track::before {
+            content: '';
+            position: absolute;
+            top: 22px;
+            left: 24px;
+            right: 24px;
+            height: 3px;
+            background: linear-gradient(90deg, rgba(212,168,67,.15), rgba(88,161,255,.15));
+            border-radius: 999px;
+            z-index: 0
+        }
+
+        .timeline-event {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 160px;
+            cursor: pointer;
+            transition: transform .22s ease;
+            padding: 0 6px
+        }
+
+        .timeline-event:hover { transform: translateY(-4px) }
+
+        .timeline-event-node {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 18px;
+            font-weight: 900;
+            border: 3px solid rgba(255,255,255,.12);
+            background: rgba(2,8,20,.85);
+            color: var(--muted);
+            transition: .25s border-color, .25s background, .25s color, .25s box-shadow
+        }
+
+        .timeline-event.done .timeline-event-node {
+            border-color: rgba(16,185,129,.6);
+            background: rgba(16,185,129,.15);
+            color: #34d399
+        }
+
+        .timeline-event.active .timeline-event-node {
+            border-color: rgba(245,217,106,.7);
+            background: rgba(245,217,106,.12);
+            color: var(--gold);
+            box-shadow: 0 0 24px rgba(245,217,106,.25);
+            animation: pulse-node 2s ease-in-out infinite
+        }
+
+        @keyframes pulse-node {
+            0%, 100% { box-shadow: 0 0 24px rgba(245,217,106,.25) }
+            50% { box-shadow: 0 0 36px rgba(245,217,106,.4) }
+        }
+
+        .timeline-event.special .timeline-event-node {
+            width: 52px;
+            height: 52px;
+            font-size: 22px;
+            border-color: rgba(212,168,67,.6);
+            background: linear-gradient(135deg, rgba(212,168,67,.15), rgba(245,217,106,.08));
+            box-shadow: 0 0 20px rgba(212,168,67,.2)
+        }
+
+        .timeline-event.special.active .timeline-event-node {
+            animation: pulse-special 2s ease-in-out infinite;
+            box-shadow: 0 0 30px rgba(212,168,67,.4)
+        }
+
+        @keyframes pulse-special {
+            0%, 100% { box-shadow: 0 0 30px rgba(212,168,67,.4) }
+            50% { box-shadow: 0 0 48px rgba(212,168,67,.6) }
+        }
+
+        .timeline-event-label {
+            margin-top: 10px;
+            text-align: center;
+            max-width: 150px
+        }
+
+        .timeline-event-title {
             font-size: 12px;
             font-weight: 800;
-            margin-top: 5px
+            line-height: 1.4;
+            color: var(--text);
+            transition: .22s color
         }
 
-        .era-card .e3 {
-            font-size: 11px;
+        .timeline-event.active .timeline-event-title { color: var(--gold) }
+
+        .timeline-event-date {
+            font-size: 10px;
             color: var(--muted);
-            margin-top: 3px
+            margin-top: 3px;
+            font-weight: 700
         }
 
-        .story-body {
-            min-height: 190px;
+        .timeline-event-badge {
+            display: none;
+            margin-top: 6px;
+            font-size: 9px;
+            font-weight: 900;
+            padding: 3px 8px;
+            border-radius: 999px;
+            text-transform: uppercase;
+            letter-spacing: .08em
+        }
+
+        .timeline-event.special .timeline-event-badge {
+            display: inline-block;
+            background: linear-gradient(90deg, rgba(212,168,67,.2), rgba(245,217,106,.12));
+            border: 1px solid rgba(212,168,67,.4);
+            color: var(--gold)
+        }
+
+        .timeline-event.done .timeline-event-badge {
+            display: inline-block;
+            background: rgba(16,185,129,.1);
+            border: 1px solid rgba(16,185,129,.3);
+            color: #34d399
+        }
+
+        .timeline-connector {
+            flex: 0 0 32px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 10px 10px 2px
+            position: relative;
+            z-index: 0;
+            margin-top: -40px
         }
 
-        .story-text {
-            max-width: 860px;
-            text-align: center;
-            font-size: 20px;
-            line-height: 2.05;
-            color: var(--text);
-            transition: .35s
+        .timeline-connector-line {
+            width: 100%;
+            height: 3px;
+            border-radius: 999px;
+            background: rgba(255,255,255,.08);
+            overflow: hidden
+        }
+
+        .timeline-connector-line span {
+            display: block;
+            height: 100%;
+            width: 0;
+            border-radius: inherit;
+            background: linear-gradient(90deg, rgba(16,185,129,.5), rgba(245,217,106,.5));
+            transition: width .4s ease
+        }
+
+        .timeline-connector.filled .timeline-connector-line span { width: 100% }
+
+        .story-event-content {
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+            border-radius: 22px;
+            padding: 24px 28px;
+            position: relative;
+            overflow: visible;
+            min-height: 180px;
+            border: 1px solid rgba(255,255,255,.08);
+            background:
+                radial-gradient(140% 140% at 50% -40%, rgba(255,255,255,.1), rgba(255,255,255,0) 48%),
+                rgba(2,8,20,.64)
+        }
+
+        .story-event-body {
+            font-size: 17px;
+            line-height: 1.9;
+            font-weight: 650;
+            white-space: pre-line;
+            text-wrap: pretty;
+            animation: fadeSlideIn .35s ease
+        }
+
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateX(20px) }
+            to { opacity: 1; transform: translateX(0) }
         }
 
         .story-dots {
             display: flex;
             justify-content: center;
             gap: 8px;
-            padding: 8px 0 12px
+            padding: 4px 0 8px
         }
 
         .story-dots span {
@@ -942,7 +1132,9 @@
             justify-content: center;
             gap: 10px;
             flex-wrap: wrap;
-            margin-top: 2px
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto
         }
 
         .reward-pill {
@@ -958,7 +1150,9 @@
         .story-nav {
             display: flex;
             gap: 10px;
-            margin-top: 16px
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto
         }
 
         .story-nav button {
@@ -982,7 +1176,7 @@
         }
 
         .reference-board {
-            margin-top: 16px;
+            margin-top: 0;
             display: grid;
             grid-template-columns: 1.2fr .8fr;
             gap: 12px
@@ -1545,8 +1739,9 @@
                 grid-template-columns: 1fr
             }
 
-            .story-text {
-                font-size: 18px
+            .story-event-body {
+                font-size: 16px;
+                line-height: 1.8
             }
 
             .question-text {
@@ -1673,43 +1868,58 @@
     </section>
     <section id="story" class="screen">
         <div class="story-shell">
-            <div class="story-card glass">
-                <div class="story-top">
+            <!-- Fixed header -->
+            <div class="story-header glass">
+                <div class="story-header-left">
                     <div class="chapter" id="story-chapter"></div>
-                    <div class="icon" id="story-icon"></div>
                     <div class="title" id="story-title"></div>
-                    <div class="story-divider"></div>
+                    <div class="story-date" id="story-date"></div>
                 </div>
-                <div class="era-strip" id="era-strip"></div>
-                <div class="story-body">
-                    <div class="story-text" id="story-text"></div>
+                <div class="story-header-right">
+                    <div class="icon" id="story-icon"></div>
                 </div>
-                <div class="story-dots" id="story-dots"></div>
-                <div class="story-rewards">
-                    <div class="reward-pill" id="reward-1">⭐ حتى 3 نجوم</div>
-                    <div class="reward-pill" id="reward-2">💎 جوهرة إضافية</div>
-                    <div class="reward-pill" id="reward-3">🔥 سلسلة إجابات</div>
-                </div>
-                <div class="reference-board">
-                    <div class="ref-card">
-                        <div class="ref-head">
-                            <div class="ref-title" id="reading-title">قراءات أعمق</div>
-                        </div>
-                        <div class="ref-copy" id="reading-copy">مراجع مقترحة داخل التطبيق لإكمال الرحلة بشكل أعمق.</div>
-                        <div class="reading-list" id="reading-list"></div>
-                    </div>
-                    <div class="ref-card">
-                        <div class="ref-head">
-                            <div class="ref-title" id="endorse-title">تزكيات ومدخلات</div>
-                        </div>
-                        <div class="ref-copy" id="endorse-copy">أسماء ومدارس معرفية يمكن ربطها لاحقًا بمراجع موثقة
-                            ومحتوى موسع.</div>
-                        <div class="endorse-list" id="endorse-list"></div>
-                    </div>
-                </div>
-                <div class="story-nav"><button class="story-skip" id="story-skip">تخطي</button><button
-                        class="story-next" id="story-next">التالي</button></div>
             </div>
+            <!-- Era strip -->
+            <div class="era-strip" id="era-strip"></div>
+            <!-- Horizontal timeline -->
+            <div class="story-timeline-wrap">
+                <div class="story-timeline" id="story-timeline">
+                    <div class="timeline-track" id="timeline-track"></div>
+                </div>
+            </div>
+            <!-- Active event content -->
+            <div class="story-event-content glass" id="story-event-content">
+                <div class="story-event-body" id="story-event-body"></div>
+            </div>
+            <!-- Story dots -->
+            <div class="story-dots" id="story-dots"></div>
+            <!-- Rewards -->
+            <div class="story-rewards">
+                <div class="reward-pill" id="reward-1">⭐ حتى 3 نجوم</div>
+                <div class="reward-pill" id="reward-2">💎 جوهرة إضافية</div>
+                <div class="reward-pill" id="reward-3">🔥 سلسلة إجابات</div>
+            </div>
+            <!-- References -->
+            <div class="reference-board">
+                <div class="ref-card">
+                    <div class="ref-head">
+                        <div class="ref-title" id="reading-title">قراءات أعمق</div>
+                    </div>
+                    <div class="ref-copy" id="reading-copy">مراجع مقترحة داخل التطبيق لإكمال الرحلة بشكل أعمق.</div>
+                    <div class="reading-list" id="reading-list"></div>
+                </div>
+                <div class="ref-card">
+                    <div class="ref-head">
+                        <div class="ref-title" id="endorse-title">تزكيات ومدخلات</div>
+                    </div>
+                    <div class="ref-copy" id="endorse-copy">أسماء ومدارس معرفية يمكن ربطها لاحقًا بمراجع موثقة
+                        ومحتوى موسع.</div>
+                    <div class="endorse-list" id="endorse-list"></div>
+                </div>
+            </div>
+            <!-- Nav -->
+            <div class="story-nav"><button class="story-skip" id="story-skip">تخطي</button><button
+                    class="story-next" id="story-next">التالي</button></div>
         </div>
     </section>
     <section id="quiz" class="screen">
@@ -1809,6 +2019,9 @@
         let currentScreen = 'title', historyStack = [], activeStage = null, storyIndex = 0, typingTimer = null, typingDone = false, quizIndex = 0, quizScore = 0, answerLocked = false, questionStart = 0, lastResult = null;
         const $ = s => document.querySelector(s), byId = id => document.getElementById(id), t = () => COPY[G.lang], isAR = () => G.lang === 'ar', activePath = () => PATHS[G.path], activeStages = () => activePath().stages;
         function ensureState() { Object.keys(PATHS).forEach(pid => { if (!G.completed[pid]) G.completed[pid] = []; if (!G.unlocked[pid]) G.unlocked[pid] = 1; if (!G.stars[pid]) G.stars[pid] = {}; }); }
+        const STAGE_TIMELINE_INLINE = { prophet: { 1: { ar: 'قبل 610م', en: 'Before 610 CE' }, 2: { ar: '570م', en: '570 CE' }, 3: { ar: '610م', en: '610 CE' }, 4: { ar: '622 - 632م', en: '622-632 CE' } }, principles: { 1: { ar: 'اليوم 1', en: 'Day 1' }, 2: { ar: 'اليوم 7', en: 'Day 7' }, 3: { ar: 'اليوم 14', en: 'Day 14' } }, faith: { 1: { ar: 'الأسبوع 1', en: 'Week 1' }, 2: { ar: 'الأسبوع 2', en: 'Week 2' }, 3: { ar: 'الأسبوع 3', en: 'Week 3' } }, grammar: { 1: { ar: 'المستوى 1', en: 'Level 1' }, 2: { ar: 'المستوى 2', en: 'Level 2' }, 3: { ar: 'المستوى 3', en: 'Level 3' } } };
+        function stageDateLabel(st) { return STAGE_TIMELINE_INLINE[activePath().id]?.[st.id]?.[G.lang] || (isAR() ? 'المرحلة ' + st.id : 'Stage ' + st.id) }
+        function stageThemeKey(st) { if (['makkah','core','intro','sentence','foundation'].includes(st.era)) return 'origin'; if (['revelation','pillars','beliefs','i3rab','middle'].includes(st.era)) return 'rise'; return 'legacy' }
         function save() { localStorage.setItem('noor-quest-paths', JSON.stringify({ lang: G.lang, xp: G.xp, gems: G.gems, streak: G.streak, combo: G.combo, bestCombo: G.bestCombo, stars: G.stars, completed: G.completed, unlocked: G.unlocked, achievements: G.achievements, sound: G.sound, path: G.path, pathSeen: G.pathSeen, levelStart: G.levelStart })) }
         function load() { try { const raw = localStorage.getItem('noor-quest-paths'); if (!raw) return; Object.assign(G, JSON.parse(raw) || {}); } catch (e) { } }
         function screen(id, push = true) { if (push && currentScreen !== id) historyStack.push(currentScreen); document.querySelectorAll('.screen').forEach(el => el.classList.remove('on')); byId(id).classList.add('on'); currentScreen = id; byId('backWrap').classList.toggle('hidden', id === 'title' || historyStack.length === 0) }
@@ -1823,15 +2036,20 @@
         function updateUnlockedByLevel() { const path = activePath(), len = path.stages.length; let base = 1; if (G.levelStart === 'intermediate') base = Math.min(2, len); if (G.levelStart === 'advanced') base = Math.min(3, len); G.unlocked[G.path] = Math.max(G.unlocked[G.path] || 1, base) }
         function openPopup(st) { const done = G.completed[G.path].includes(st.id), starCount = G.stars[G.path][st.id] || 0, pc = byId('popup-card'); pc.innerHTML = `<button class="close" id="close-popup">✕</button><div class="popup-head"><div class="popup-ico">${st.icon}</div><div class="popup-kicker">${t().chapterOf(st.id, activeStages().length)}</div><div class="popup-title">${st.title[G.lang]}</div></div><div style="display:flex;justify-content:center;gap:6px;margin:10px 0 4px">${[0, 1, 2].map(i => `<span style="font-size:22px;opacity:${i < starCount ? 1 : .18}">⭐</span>`).join('')}</div><div class="popup-desc">${t().popupDesc}</div><div class="popup-grid"><div class="popup-mini"><div class="i">📖</div><div class="t">${t().story}</div></div><div class="popup-mini"><div class="i">⚡</div><div class="t">${t().quiz}</div></div><div class="popup-mini"><div class="i">🏆</div><div class="t">${t().reward}</div></div><div class="popup-mini"><div class="i">${done ? '🔄' : '🎯'}</div><div class="t">${done ? t().replay : t().begin}</div></div></div><button class="popup-btn" id="begin-stage">${done ? t().replay : t().begin}</button>`; byId('popup').classList.add('on'); byId('close-popup').onclick = closePopup; byId('begin-stage').onclick = () => beginStage(st.id) }
         function closePopup(e) { if (!e || e.target === byId('popup') || e.target.id === 'close-popup') byId('popup').classList.remove('on') }
-        function beginStage(id) { activeStage = activeStages().find(s => s.id === id); storyIndex = 0; typingDone = false; clearInterval(typingTimer); closePopup(); renderStoryHeader(); renderEraStrip(); renderStoryDots(); renderReferences(); showStoryParagraph(0); screen('story') }
-        function renderStoryHeader() { byId('story-chapter').textContent = t().chapterOf(activeStage.id, activeStages().length); byId('story-icon').textContent = activeStage.icon; byId('story-title').textContent = activeStage.title[G.lang] }
+        function beginStage(id) { activeStage = activeStages().find(s => s.id === id); storyIndex = 0; typingDone = false; clearInterval(typingTimer); closePopup(); try { applyStoryTheme() } catch(e) { console.error('applyStoryTheme:', e) } try { renderStoryHeader() } catch(e) { console.error('renderStoryHeader:', e) } try { renderEraStrip() } catch(e) { console.error('renderEraStrip:', e) } try { renderStoryDots() } catch(e) { console.error('renderStoryDots:', e) } try { renderReferences() } catch(e) { console.error('renderReferences:', e) } try { showStoryParagraph(0) } catch(e) { console.error('showStoryParagraph:', e) } screen('story') }
+        function applyStoryTheme() { const shell = document.querySelector('#story .story-shell'); if (!shell || !activeStage) return; const k = stageThemeKey ? stageThemeKey(activeStage) : 'origin'; shell.setAttribute('data-theme', k) }
+        function renderStoryHeader() { byId('story-chapter').textContent = t().chapterOf(activeStage.id, activeStages().length); byId('story-icon').textContent = activeStage.icon; byId('story-title').textContent = activeStage.title[G.lang]; const dateEl = byId('story-date'); if (dateEl && typeof stageDateLabel === 'function') dateEl.textContent = stageDateLabel(activeStage) }
         function renderEraStrip() { const strip = byId('era-strip'); strip.innerHTML = ''; const eras = activePath().id === 'prophet' ? [{ k: 'makkah', icon: '🏜️', label: { ar: 'مرحلة مكة', en: 'Makkah Era' } }, { k: 'revelation', icon: '🕯️', label: { ar: 'بدء الوحي', en: 'Revelation' } }, { k: 'madinah', icon: '🕌', label: { ar: 'مرحلة المدينة', en: 'Madinah Era' } }] : [{ k: 'foundation', icon: '🧭', label: { ar: 'التمهيد', en: 'Foundation' } }, { k: 'middle', icon: '📘', label: { ar: 'البناء', en: 'Build' } }, { k: 'deep', icon: '✨', label: { ar: 'التعمّق', en: 'Deepen' } }]; eras.forEach(er => { const c = document.createElement('div'); const active = (activePath().id === 'prophet' ? (activeStage.era === er.k || (activeStage.era === 'makkah' && er.k === 'makkah')) : (['intro', 'core', 'sentence'].includes(activeStage.era) && er.k === 'foundation' || ['beliefs', 'pillars', 'i3rab'].includes(activeStage.era) && er.k === 'middle' || ['reflection', 'ethics', 'patterns'].includes(activeStage.era) && er.k === 'deep')); c.className = 'era-card' + (active ? ' active' : ''); c.innerHTML = `<div class="e1">${er.icon}</div><div class="e2">${er.label[G.lang]}</div><div class="e3">${active ? activeStage.eraTheme[G.lang] : (isAR() ? 'مرحلة مقفلة بصريًا' : 'Visual era')}</div>`; strip.appendChild(c) }) }
         function renderStoryDots() { const wrap = byId('story-dots'); wrap.innerHTML = ''; activeStage.story[G.lang].forEach((_, i) => { const s = document.createElement('span'); if (i === storyIndex) s.classList.add('active'); wrap.appendChild(s) }) }
         function updateStoryDots() { [...byId('story-dots').children].forEach((el, i) => el.classList.toggle('active', i === storyIndex)) }
         function renderReferences() { const reading = byId('reading-list'), endorse = byId('endorse-list'); reading.innerHTML = ''; endorse.innerHTML = ''; (activeStage.reading || activePath().refs).forEach(r => { const item = document.createElement('div'); item.className = 'book-item'; item.innerHTML = `<div class="b1">${r[0]}</div><div class="b2">${r[1]}</div>`; reading.appendChild(item) }); (activeStage.endorse || activePath().endorsers).forEach(n => { const item = document.createElement('div'); item.className = 'book-item'; item.innerHTML = `<div class="b1">${n}</div><div class="b2">${isAR() ? 'مقترح للتوسّع لاحقًا' : 'Future expansion slot'}</div>`; endorse.appendChild(item) }) }
         function typeText(text, el) { clearInterval(typingTimer); el.textContent = ''; let i = 0; const step = isAR() ? 20 : 14; typingDone = false; typingTimer = setInterval(() => { i++; el.textContent = text.slice(0, i); if (i >= text.length) { clearInterval(typingTimer); typingDone = true } }, step) }
-        function showStoryParagraph(index) { const arr = activeStage.story[G.lang]; if (index >= arr.length) { beginQuiz(); return; } storyIndex = index; updateStoryDots(); byId('story-next').textContent = index === arr.length - 1 ? t().startQuiz : t().next; typeText(arr[index], byId('story-text')) }
-        function storyNext() { if (!typingDone) { clearInterval(typingTimer); byId('story-text').textContent = activeStage.story[G.lang][storyIndex]; typingDone = true; return; } showStoryParagraph(storyIndex + 1) } function storySkip() { clearInterval(typingTimer); beginQuiz() }
+        function isSpecialEvent(idx, total) { return idx === 0 || idx === total - 1 || idx === Math.floor(total / 2) }
+        function eventIcon(idx, total) { if (idx === 0) return '\u{1F305}'; if (idx === total - 1) return '\u{1F3C1}'; if (idx === Math.floor(total / 2)) return '\u26A1'; return String(idx + 1) }
+        function eventBadgeText(idx, total) { if (idx === 0) return isAR() ? 'البداية' : 'Origin'; if (idx === total - 1) return isAR() ? 'الخاتمة' : 'Finale'; if (idx === Math.floor(total / 2)) return isAR() ? 'حدث محوري' : 'Key Event'; return '' }
+        function sceneStepTitleInline(line) { const w = line.replace(/[.,،:؛!?]/g,' ').trim().split(/\s+/).filter(Boolean); const s = w.slice(0,5).join(' '); return w.length > 5 ? s + '…' : s }
+        function showStoryParagraph(index) { const arr = activeStage.story[G.lang]; if (index >= arr.length) { beginQuiz(); return; } storyIndex = index; updateStoryDots(); byId('story-next').textContent = index === arr.length - 1 ? t().startQuiz : t().next; const track = byId('timeline-track'); track.innerHTML = ''; arr.forEach((line, i) => { const state = i < index ? 'done' : i === index ? 'active' : 'next'; const special = isSpecialEvent(i, arr.length); const ev = document.createElement('div'); ev.className = 'timeline-event ' + state + (special ? ' special' : ''); ev.dataset.scene = i; const nodeContent = special ? eventIcon(i, arr.length) : String(i + 1); const badge = eventBadgeText(i, arr.length); const doneLabel = isAR() ? 'مكتمل' : 'Done'; ev.innerHTML = '<div class="timeline-event-node">' + nodeContent + '</div><div class="timeline-event-label"><div class="timeline-event-title">' + sceneStepTitleInline(line) + '</div><div class="timeline-event-date">' + (typeof stageDateLabel === 'function' ? stageDateLabel(activeStage) : '') + ' \u2022 +' + (15 + i * 5) + ' XP</div>' + (badge ? '<div class="timeline-event-badge">' + (state === 'done' ? doneLabel : badge) + '</div>' : state === 'done' ? '<div class="timeline-event-badge">' + doneLabel + '</div>' : '') + '</div>'; ev.onclick = () => { showStoryParagraph(i) }; track.appendChild(ev); if (i < arr.length - 1) { const conn = document.createElement('div'); conn.className = 'timeline-connector' + (i < index ? ' filled' : ''); conn.innerHTML = '<div class="timeline-connector-line"><span></span></div>'; track.appendChild(conn) } }); const activeEl = track.querySelector('.timeline-event.active'); if (activeEl) setTimeout(() => activeEl.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' }), 50); const body = byId('story-event-body'); body.style.animation = 'none'; body.offsetHeight; body.style.animation = ''; typeText(arr[index], body) }
+        function storyNext() { if (!typingDone) { clearInterval(typingTimer); byId('story-event-body').textContent = activeStage.story[G.lang][storyIndex]; typingDone = true; return; } showStoryParagraph(storyIndex + 1) } function storySkip() { clearInterval(typingTimer); beginQuiz() }
         function beginQuiz() { quizIndex = 0; quizScore = 0; G.combo = 0; renderQuiz(); screen('quiz') }
         function renderQuiz() { const q = activeStage.quiz[quizIndex]; byId('quiz-count').textContent = `${quizIndex + 1} / ${activeStage.quiz.length}`; byId('quiz-progress').style.width = ((quizIndex + 1) / activeStage.quiz.length * 100) + '%'; byId('question-text').textContent = q.q[G.lang]; byId('feedback').textContent = ''; byId('feedback').className = 'feedback'; const grid = byId('answer-grid'); grid.innerHTML = ''; const keys = isAR() ? ['أ', 'ب', 'ج', 'د'] : ['A', 'B', 'C', 'D']; q.o[G.lang].forEach((opt, i) => { const el = document.createElement('button'); el.className = 'answer'; el.innerHTML = `<div class="answer-key">${keys[i]}</div><div class="answer-text">${opt}</div>`; el.onclick = () => pickAnswer(i, q.a); grid.appendChild(el) }); byId('combo').classList.toggle('on', G.combo >= 2); byId('combo').textContent = `🔥 ${G.combo}× Combo`; byId('booster-perfect').classList.toggle('active', quizScore === quizIndex && quizIndex > 0); byId('booster-speed').classList.remove('active'); updateHUD(); answerLocked = false; questionStart = performance.now() }
         function pickAnswer(selected, correct) { if (answerLocked) return; answerLocked = true; const answers = [...byId('answer-grid').children], fast = performance.now() - questionStart < 4500, ok = selected === correct; if (ok) { quizScore++; G.combo++; G.bestCombo = Math.max(G.bestCombo, G.combo) } else G.combo = 0; answers.forEach((el, i) => { el.classList.add('locked'); if (i === correct) el.classList.add('correct'); else if (i === selected && !ok) el.classList.add('wrong'); else if (i !== selected) el.classList.add('dim') }); const fb = byId('feedback'); if (ok) { fb.textContent = t().correct[quizScore % t().correct.length]; fb.classList.add('ok'); addFXBurst(activePath().color); floatXP('+' + (fast ? 20 : 15) + ' XP'); byId('booster-speed').classList.toggle('active', fast); beep(680, .05, 'triangle') } else { fb.textContent = t().wrong; fb.classList.add('no'); beep(180, .08, 'sawtooth') } setTimeout(() => { if (quizIndex < activeStage.quiz.length - 1) { quizIndex++; renderQuiz() } else finishQuiz() }, 1300) }

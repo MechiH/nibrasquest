@@ -20,7 +20,7 @@ function renderMap() {
   for (let i = 0; i < sts.length - 1; i++) {
     const a = sts[i],
       b = sts[i + 1],
-      done = G.completed[G.path].includes(a.id),
+      done = isStageCompleted(G.path, a.id),
       avail = a.id <= G.unlocked[G.path],
       c1x = (a.x + b.x) / 2,
       c2x = (a.x + b.x) / 2;
@@ -60,7 +60,7 @@ function renderMap() {
       );
   }
   sts.forEach((st) => {
-    const done = G.completed[G.path].includes(st.id),
+    const done = isStageCompleted(G.path, st.id),
       locked = st.id > G.unlocked[G.path],
       active = st.id === G.unlocked[G.path] && !done,
       g = el("g");
@@ -189,7 +189,7 @@ function showTip(st, e) {
   byId("tt-state").textContent =
     st.id > G.unlocked[G.path]
       ? t().locked
-      : G.completed[G.path].includes(st.id)
+      : isStageCompleted(G.path, st.id)
         ? t().complete
         : t().available;
   byId("tt-name").textContent = st.title[G.lang];

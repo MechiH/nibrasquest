@@ -44,9 +44,164 @@ function stageThemeKey(st) {
   return "legacy";
 }
 function applyStoryTheme() {
-  const card = document.querySelector("#story .story-card");
-  if (!card || !activeStage) return;
-  card.setAttribute("data-theme", stageThemeKey(activeStage));
+  const shell = document.querySelector("#story .story-shell");
+  if (!shell || !activeStage) return;
+  shell.setAttribute("data-theme", stageThemeKey(activeStage));
+}
+function sceneQuestion(index) {
+  return activeStage.quiz[index]?.q[G.lang] ||
+    activeStage.quiz[activeStage.quiz.length - 1].q[G.lang];
+}
+function sceneLore(index) {
+  const refs = activeStage.reading || activePath().refs || [];
+  const entry = refs[index % Math.max(1, refs.length)] || [
+    isAR() ? "مرجع المرحلة" : "Stage Reference",
+    isAR() ? "توسعة معرفية مرتبطة بالمشهد الحالي." : "Context extension for this scene.",
+  ];
+  if (isAR()) {
+    return [
+      `مرجع المشهد: ${entry[0]}.`,
+      `زاوية التحليل: ${entry[1]}.`,
+      `المحور المعرفي: ${activeStage.focus[G.lang]}.`,
+      `إطار المرحلة: ${activeStage.eraLabel[G.lang]} (${stageDateLabel(activeStage)}).`,
+      `لماذا يهم الآن: يربط الحدث بسياقه قبل سؤال البوابة.`,
+      "نقطة مراجعة: حدّد السبب التاريخي ثم أثره التربوي في سطرين.",
+    ].join("\n");
+  }
+  return [
+    `Scene source: ${entry[0]}.`,
+    `Analysis lens: ${entry[1]}.`,
+    `Knowledge axis: ${activeStage.focus[G.lang]}.`,
+    `Stage frame: ${activeStage.eraLabel[G.lang]} (${stageDateLabel(activeStage)}).`,
+    "Why this matters now: it anchors the event before the gate question.",
+    "Review point: identify one cause and one educational impact in two lines.",
+  ].join("\n");
+}
+function sceneMission(index) {
+  const q = sceneQuestion(index);
+  if (isAR()) {
+    return [
+      "1. لخّص الفكرة المركزية في سطر واحد واضح.",
+      "2. التقط كلمة مفتاح تقود معنى المشهد.",
+      `3. أجب عن سؤال البوابة: ${q}`,
+      "4. اربط الدرس بموقف عملي من واقعك أو فريقك.",
+      "5. اختر قرارًا واحدًا ستطبّقه قبل الانتقال للمحطة التالية.",
+      "6. راجع الخطأ الشائع في هذا المشهد وتجاوزه قبل الضغط على التالي.",
+    ].join("\n");
+  }
+  return [
+    "1. Summarize the core idea in one clear line.",
+    "2. Capture one keyword that drives this checkpoint.",
+    `3. Answer the gate question: ${q}`,
+    "4. Connect the lesson to one practical case from real life or team work.",
+    "5. Commit to one action before moving to the next checkpoint.",
+    "6. Identify and avoid the common misunderstanding in this checkpoint.",
+  ].join("\n");
+}
+function sceneReward(index, total) {
+  const xp = 15 + index * 5;
+  const finalStep = index === total - 1;
+  const gem = index === total - 1 ? 1 : 0;
+  if (isAR()) {
+    return [
+      `+${xp} XP أساسي عند إكمال هذه المحطة.`,
+      "⭐ فرصة نجمة إضافية عند دقة كاملة.",
+      "🔥 الحفاظ على السلسلة يضاعف أثر التقدّم في المرحلة.",
+      `💎 احتمالية الجوهرة: ${gem ? "مضمونة عند الإتقان" : "تزداد كلما ثبت الأداء"}.`,
+      `🎖️ وسام المرحلة: ${activeStage.title[G.lang]} / ${activeStage.eraTheme[G.lang]}.`,
+      finalStep
+        ? "🏁 بعد هذه المحطة يُفتح اختبار المرحلة الكامل."
+        : "🔓 بعد هذه المحطة تُفتح المحطة التالية مباشرة.",
+      "📦 مكسب طويل المدى: فتح محتوى أعمق في لوحة القراءات.",
+    ].join("\n");
+  }
+  return [
+    `+${xp} base XP for clearing this checkpoint.`,
+    "⭐ Extra star chance with full accuracy.",
+    "🔥 Keeping your streak increases progression impact.",
+    `💎 Gem chance: ${gem ? "guaranteed on mastery" : "increases with stable performance"}.`,
+    `🎖️ Stage badge: ${activeStage.title[G.lang]} / ${activeStage.eraTheme[G.lang]}.`,
+    finalStep
+      ? "🏁 Completing this checkpoint unlocks the full stage quiz."
+      : "🔓 Completing this checkpoint unlocks the next checkpoint.",
+    "📦 Long-term gain: deeper content opens in the reading board.",
+  ].join("\n");
+}
+function sceneArcLine(index, total) {
+  if (isAR()) {
+    if (index === 0)
+      return "هذه بداية القوس السردي؛ ركّز على الصورة الكبرى قبل التفاصيل.";
+    if (index === total - 1)
+      return "هذه محطة الإغلاق؛ ثبّت الفكرة حتى تدخل الاختبار بثبات.";
+    return "هذه محطة الربط؛ حوّل الفهم النظري إلى قرار عملي واضح.";
+  }
+  if (index === 0)
+    return "This opens the narrative arc; focus on the big picture first.";
+  if (index === total - 1)
+    return "This closes the arc; lock the concept before the quiz.";
+  return "This is a bridge checkpoint; convert theory into practical judgment.";
+}
+function sceneSignal(index) {
+  if (isAR()) {
+    return [
+      "إشارة لعبور أسرع: حدّد السبب والنتيجة داخل القصة.",
+      "ضع كلمة مفتاح واحدة تلخّص المشهد.",
+      "راجع السؤال المحوري قبل الضغط على التالي.",
+    ][index % 3];
+  }
+  return [
+    "Fast-pass hint: identify cause and consequence inside the scene.",
+    "Set one keyword that captures this checkpoint.",
+    "Review the gate question before hitting next.",
+  ][index % 3];
+}
+function sceneStepTitle(line) {
+  const words = line.replace(/[.,،:؛!?]/g, " ").trim().split(/\s+/).filter(Boolean);
+  const short = words.slice(0, 5).join(" ");
+  return words.length > 5 ? `${short}…` : short;
+}
+function sceneNarrative(base, index, total) {
+  const checkpoint = `${t().storyCheckpoint} ${index + 1}/${total}`;
+  const gateQuestion = sceneQuestion(index);
+  const nextTitle =
+    activeStage.story[G.lang][index + 1] != null
+      ? sceneStepTitle(activeStage.story[G.lang][index + 1])
+      : null;
+  const prophetMode = activePath().id === "prophet";
+  if (isAR()) {
+    const summary = prophetMode
+      ? `ملخص ما جرى في حقبة السيرة: ${base}`
+      : `ملخص ما جرى في هذه المحطة: ${base}`;
+    const shortAnalysis = prophetMode
+      ? `تحليل قصير: هذا الحدث يخدم محور "${activeStage.focus[G.lang]}" ويقود لهدف "${activeStage.goal[G.lang]}". ${sceneArcLine(index, total)}`
+      : `تحليل قصير: هذه المحطة تبني فهم "${activeStage.focus[G.lang]}" لتحقيق "${activeStage.goal[G.lang]}". ${sceneArcLine(index, total)}`;
+    return [
+      `${checkpoint} • ${stageDateLabel(activeStage)}`,
+      summary,
+      shortAnalysis,
+      `سؤال التحقق: ${gateQuestion}`,
+      nextTitle
+        ? `إذا اتضحت الصورة عندك الآن، فالمحطة القادمة ستكون: ${nextTitle}، وهناك ستنتقل القصة من الفهم العام إلى قرار أدق داخل نفس المسار.`
+        : "هذه آخر محطة في القوس السردي؛ بعد تثبيت الفكرة الكبرى ستدخل الاختبار وأنت تمتلك صورة متماسكة لا مجرد عناوين متفرقة.",
+      `إشارة تثبيت أخيرة: ${sceneSignal(index).replace("إشارة لعبور أسرع: ", "")}`,
+    ].join("\n\n");
+  }
+  const summary = prophetMode
+    ? `What happened in this Prophet-era checkpoint: ${base}`
+    : `What happened in this checkpoint: ${base}`;
+  const shortAnalysis = prophetMode
+    ? `Short analysis: this event serves "${activeStage.focus[G.lang]}" and advances "${activeStage.goal[G.lang]}". ${sceneArcLine(index, total)}`
+    : `Short analysis: this checkpoint develops "${activeStage.focus[G.lang]}" to reach "${activeStage.goal[G.lang]}". ${sceneArcLine(index, total)}`;
+  return [
+    `${checkpoint} • ${stageDateLabel(activeStage)}`,
+    summary,
+    shortAnalysis,
+    `Verification question: ${gateQuestion}`,
+    nextTitle
+      ? `If this checkpoint is clear, the next scene will be: ${nextTitle}, where the narrative moves from broad understanding to sharper judgment.`
+      : "This is the closing checkpoint of the arc. Lock the core idea now so the quiz feels like continuation, not recall.",
+    `Final lock-in cue: ${sceneSignal(index).replace("Fast-pass hint: ", "")}`,
+  ].join("\n\n");
 }
 function renderPaths() {
   ensureState();
@@ -219,7 +374,7 @@ function updateUnlockedByLevel() {
   G.unlocked[G.path] = Math.max(G.unlocked[G.path] || 1, base);
 }
 function openPopup(st) {
-  const done = G.completed[G.path].includes(st.id),
+  const done = isStageCompleted(G.path, st.id),
     starCount = G.stars[G.path][st.id] || 0,
     pc = byId("popup-card");
   pc.innerHTML = `<button class="close" id="close-popup">✕</button><div class="popup-head"><div class="popup-ico">${st.icon}</div><div class="popup-kicker">${t().chapterOf(st.id, activeStages().length)}</div><div class="popup-title">${st.title[G.lang]}</div></div><div style="display:flex;justify-content:center;gap:6px;margin:10px 0 4px">${[0, 1, 2].map((i) => `<span style="font-size:22px;opacity:${i < starCount ? 1 : 0.18}">⭐</span>`).join("")}</div><div class="popup-desc">${t().popupDesc}</div><div class="popup-grid"><div class="popup-mini"><div class="i">📖</div><div class="t">${t().story}</div></div><div class="popup-mini"><div class="i">⚡</div><div class="t">${t().quiz}</div></div><div class="popup-mini"><div class="i">🏆</div><div class="t">${t().reward}</div></div><div class="popup-mini"><div class="i">${done ? "🔄" : "🎯"}</div><div class="t">${done ? t().replay : t().begin}</div></div></div><button class="popup-btn" id="begin-stage">${done ? t().replay : t().begin}</button>`;
@@ -327,32 +482,34 @@ function renderReferences() {
     item.innerHTML = `<div class="b1">${r[0]}</div><div class="b2">${r[1]}</div>`;
     reading.appendChild(item);
   });
-  const logItems = [
-    [isAR() ? "📅 التاريخ" : "📅 Date", stageDateLabel(activeStage)],
-    [isAR() ? "🎯 الهدف الرئيسي" : "🎯 Main Objective", activeStage.goal[G.lang]],
-    [isAR() ? "🧭 محور المرحلة" : "🧭 Stage Focus", activeStage.focus[G.lang]],
-  ];
-  logItems.forEach((n) => {
+  activeStage.story[G.lang].forEach((line, i) => {
+    const shortLine = line.length > 84 ? `${line.slice(0, 84)}…` : line;
     const item = document.createElement("div");
     item.className = "book-item";
-    item.innerHTML = `<div class="b1">${n[0]}</div><div class="b2">${n[1]}</div>`;
+    item.innerHTML = `<div class="b1">${t().storyCheckpoint} ${i + 1} • ${stageDateLabel(activeStage)}</div><div class="b2">${shortLine}</div>`;
     endorse.appendChild(item);
   });
 }
 function typeText(text, el) {
   clearInterval(typingTimer);
-  el.textContent = "";
-  let i = 0;
-  const step = isAR() ? 20 : 14;
+  el.textContent = text;
   typingDone = false;
-  typingTimer = setInterval(() => {
-    i++;
-    el.textContent = text.slice(0, i);
-    if (i >= text.length) {
-      clearInterval(typingTimer);
-      typingDone = true;
-    }
-  }, step);
+  typingDone = true;
+}
+function isSpecialEvent(index, total) {
+  return index === 0 || index === total - 1 || index === Math.floor(total / 2);
+}
+function eventIcon(index, total) {
+  if (index === 0) return "🌅";
+  if (index === total - 1) return "🏁";
+  if (index === Math.floor(total / 2)) return "⚡";
+  return String(index + 1);
+}
+function eventBadgeText(index, total) {
+  if (index === 0) return isAR() ? "البداية" : "Origin";
+  if (index === total - 1) return isAR() ? "الخاتمة" : "Finale";
+  if (index === Math.floor(total / 2)) return isAR() ? "حدث محوري" : "Key Event";
+  return "";
 }
 function showStoryParagraph(index) {
   const arr = activeStage.story[G.lang];
@@ -364,20 +521,58 @@ function showStoryParagraph(index) {
   updateStoryDots();
   byId("story-next").textContent =
     index === arr.length - 1 ? t().startQuiz : t().next;
-  const challenge =
-    activeStage.quiz[index]?.q[G.lang] ||
-    activeStage.quiz[activeStage.quiz.length - 1].q[G.lang];
-  byId("story-text").innerHTML = `<div class="story-scene-shell"><div class="story-scene-head"><span class="scene-chip">${t().storyScene} ${index + 1}</span><span class="scene-chip">${stageDateLabel(activeStage)}</span></div><div class="story-scene-line" id="story-line"></div><div class="story-scene-grid"><div class="scene-block"><div class="k">${t().storyFocusLabel}</div><div class="v">${activeStage.focus[G.lang]}</div></div><div class="scene-block"><div class="k">${t().storyGoalLabel}</div><div class="v">${activeStage.goal[G.lang]}</div></div><div class="scene-block scene-block-wide"><div class="k">${t().storyChallengeLabel}</div><div class="v">${challenge}</div></div></div></div>`;
-  typeText(arr[index], byId("story-line"));
+
+  /* ── timeline ── */
+  const track = byId("timeline-track");
+  track.innerHTML = "";
+  arr.forEach((line, i) => {
+    const state = i < index ? "done" : i === index ? "active" : "next";
+    const special = isSpecialEvent(i, arr.length);
+    const ev = document.createElement("div");
+    ev.className = `timeline-event ${state}${special ? " special" : ""}`;
+    const nodeContent = special ? eventIcon(i, arr.length) : String(i + 1);
+    const badge = eventBadgeText(i, arr.length);
+    const doneLabel = isAR() ? "✓" : "✓";
+    ev.innerHTML = `<div class="timeline-event-node">${nodeContent}</div><div class="timeline-event-label"><div class="timeline-event-title">${sceneStepTitle(line)}</div><div class="timeline-event-date">${stageDateLabel(activeStage)} • +${15 + i * 5} XP</div>${badge ? `<div class="timeline-event-badge">${state === "done" ? doneLabel : badge}</div>` : ""}</div>`;
+    ev.onclick = () => showStoryParagraph(i);
+    track.appendChild(ev);
+    if (i < arr.length - 1) {
+      const conn = document.createElement("div");
+      conn.className = `timeline-connector${i < index ? " filled" : ""}`;
+      conn.innerHTML = `<div class="timeline-connector-line"><span></span></div>`;
+      track.appendChild(conn);
+    }
+  });
+  const activeEl = track.querySelector(".timeline-event.active");
+  if (activeEl) {
+    setTimeout(() => activeEl.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" }), 60);
+  }
+
+  /* ── content card ── */
+  const card = byId("story-event-content");
+  card.style.animation = "none";
+  card.offsetHeight;
+  card.style.animation = "";
+
+  const storyText = arr[index];
+  const checkpoint = `${t().storyCheckpoint} ${index + 1}/${arr.length}`;
+  const gateQ = sceneQuestion(index);
+  const analysisLabel = isAR() ? "التحليل" : "Analysis";
+  const hintLabel = isAR() ? "إشارة" : "Hint";
+  const analysis = isAR()
+    ? `هذه المحطة تبني فهم "${activeStage.focus[G.lang]}" لتحقيق "${activeStage.goal[G.lang]}". ${sceneArcLine(index, arr.length)}`
+    : `This checkpoint develops "${activeStage.focus[G.lang]}" to reach "${activeStage.goal[G.lang]}". ${sceneArcLine(index, arr.length)}`;
+  const hint = sceneSignal(index);
+
+  card.innerHTML =
+    `<div class="story-content-main"><p>${storyText}</p></div>` +
+    `<div class="story-content-sections">` +
+      `<div class="story-section"><div class="story-section-label">${analysisLabel}</div><div class="story-section-text">${analysis}</div></div>` +
+      `<div class="story-section"><div class="story-section-label">${hintLabel}</div><div class="story-section-text">${hint}</div></div>` +
+    `</div>` +
+    `<div class="story-gate-q"><span class="gate-icon">❓</span><span class="gate-text">${gateQ}</span></div>`;
 }
 function storyNext() {
-  if (!typingDone) {
-    clearInterval(typingTimer);
-    const line = byId("story-line");
-    if (line) line.textContent = activeStage.story[G.lang][storyIndex];
-    typingDone = true;
-    return;
-  }
   showStoryParagraph(storyIndex + 1);
 }
 function storySkip() {
@@ -467,8 +662,7 @@ function finishQuiz() {
     xpGain = stars * 20 + 15 + speedBonus + perfectBonus,
     gemGain = stars >= 2 ? 1 : 0,
     oldLevel = G.level;
-  if (!G.completed[G.path].includes(activeStage.id))
-    G.completed[G.path].push(activeStage.id);
+  markStageCompleted(G.path, activeStage.id);
   G.stars[G.path][activeStage.id] = Math.max(
     G.stars[G.path][activeStage.id] || 0,
     stars,
@@ -477,9 +671,11 @@ function finishQuiz() {
   G.gems += gemGain;
   G.streak = perfect ? G.streak + 1 : 0;
   G.unlocked[G.path] = Math.min(
-    activeStages().length,
+    activeStages().length + 1,
     Math.max(G.unlocked[G.path], activeStage.id + 1),
   );
+  if (G.completed[G.path].length >= activeStages().length)
+    G.unlocked[G.path] = activeStages().length + 1;
   lastResult = { stars, xpGain, gemGain, total, correct: quizScore, perfect };
   renderResult(lastResult);
   screen("result");
