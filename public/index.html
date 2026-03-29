@@ -13,6 +13,7 @@
 
 <body>
     <canvas id="bg"></canvas><canvas id="fx"></canvas>
+    <div class="era-overlay" id="era-overlay"></div>
     <div class="top-controls">
         <div class="langbar"><button id="lang-ar" class="active">عربي</button><button id="lang-en">EN</button></div>
         <div style="display:flex;gap:8px">
@@ -28,16 +29,16 @@
             </div>
             <div class="kicker" id="hero-kicker">Journey of Light</div>
             <div class="logo" id="hero-logo">نبراس</div>
-            <div class="subtitle" id="hero-sub">مسارات تعلّم أعمق وأكثر لعبية</div>
+            <div class="subtitle" id="hero-sub">السيرة النبوية كما لم تعرفها من قبل</div>
             <div class="chip-row">
-                <div class="chip" id="chip-1">🧭 مسارات مختلفة</div>
-                <div class="chip" id="chip-2">🎚️ مستويات بدء</div>
-                <div class="chip" id="chip-3">📚 مراجع وتزكية</div>
-                <div class="chip" id="chip-4">🗺️ خرائط عصر ومراحل</div>
+                <div class="chip" id="chip-1">🌙 السيرة النبوية</div>
+                <div class="chip" id="chip-2">📖 مبني على كتاب الشفا</div>
+                <div class="chip" id="chip-3">✅ تعلّم وتحقق بالخطوات</div>
+                <div class="chip" id="chip-4">🗺️ 8 مراحل من الولادة إلى الخلود</div>
             </div>
-            <div class="mission-card" id="mission-copy">اختر مسارًا، حدّد مستواك، تقدّم على خريطة خاصة بكل موضوع، وافتح
-                محتوى أعمق مع تتبع شامل للتقدّم ومراجع مقترحة للتوسّع.</div>
-            <div class="cta-wrap"><button class="cta" id="start-btn">▶ اختر المسار</button><button class="ghost"
+            <div class="mission-card" id="mission-copy">رحلة كاملة عبر حياة النبي ﷺ من ظلمات الجاهلية حتى الإرث الخالد
+                — مبنية على كتاب الشفا للقاضي عياض.</div>
+            <div class="cta-wrap"><button class="cta" id="start-btn">▶ ابدأ الرحلة</button><button class="ghost"
                     id="demo-btn">★ عرض الإنجازات</button></div>
         </div>
     </section>
@@ -45,13 +46,12 @@
         <div class="path-shell">
             <div class="path-head">
                 <div>
-                    <div class="path-title" id="paths-title">اختر مسار التعلّم</div>
-                    <div class="path-sub" id="paths-sub">ابدأ من المبتدئ حتى لو كنت متقدمًا. هذا يعطيك تسلسلًا أوضح
-                        ويقوي التجربة. ويمكنك رفع المستوى مباشرة متى شئت.</div>
+                    <div class="path-title" id="paths-title">المسارات التعليمية</div>
+                    <div class="path-sub" id="paths-sub">ابدأ رحلة السيرة النبوية — مسارات أخرى قادمة قريبًا.</div>
                 </div>
             </div>
             <div class="path-controls glass">
-                <div class="path-controls-copy" id="path-control-copy">ضبط نقطة البداية ثم اختر أسلوب التقدّم.</div>
+                <div class="path-controls-copy" id="path-control-copy">اضبط مستوى البداية.</div>
                 <div class="level-picker" id="level-picker"></div>
             </div>
             <div class="paths-dashboard" id="paths-dashboard"></div>
@@ -145,15 +145,14 @@
                     <div class="ref-head">
                         <div class="ref-title" id="reading-title">قراءات أعمق</div>
                     </div>
-                    <div class="ref-copy" id="reading-copy">مراجع مقترحة داخل التطبيق لإكمال الرحلة بشكل أعمق.</div>
+                    <div class="ref-copy" id="reading-copy">مراجع مقترحة لإكمال الرحلة بشكل أعمق.</div>
                     <div class="reading-list" id="reading-list"></div>
                 </div>
                 <div class="ref-card">
                     <div class="ref-head">
-                        <div class="ref-title" id="endorse-title">تزكيات ومدخلات</div>
+                        <div class="ref-title" id="endorse-title">محطات الرحلة</div>
                     </div>
-                    <div class="ref-copy" id="endorse-copy">أسماء ومدارس معرفية يمكن ربطها لاحقًا بمراجع موثقة
-                        ومحتوى موسع.</div>
+                    <div class="ref-copy" id="endorse-copy">خطوات المرحلة ومحتواها.</div>
                     <div class="endorse-list" id="endorse-list"></div>
                 </div>
             </div>
@@ -222,7 +221,7 @@
                     <div class="l" id="loot-rank-label">Rank</div>
                 </div>
             </div>
-            <div class="result-actions"><button class="primary" id="next-stage-btn">الفصل التالي</button><button
+            <div class="result-actions"><button class="primary" id="next-stage-btn">المرحلة التالية</button><button
                     class="secondary" id="map-btn">الخريطة</button><button class="secondary"
                     id="retry-btn">إعادة</button></div>
         </div>

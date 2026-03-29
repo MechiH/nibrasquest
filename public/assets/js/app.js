@@ -1,3 +1,15 @@
+async function initApp() {
+  load();
+  await loadPathData();
+  G.path = "prophet";
+  ensureState();
+  initBG();
+  drawBG();
+  bind();
+  refreshText();
+  setLang(G.lang);
+  document.body.classList.add("loaded");
+}
 function bind() {
   byId("lang-ar").onclick = () => setLang("ar");
   byId("lang-en").onclick = () => setLang("en");
@@ -14,6 +26,7 @@ function bind() {
   byId("popup").onclick = closePopup;
   byId("sound-toggle").onclick = () => {
     G.sound = !G.sound;
+    getAudioCtx(); /* unlock AudioContext on first user gesture */
     updateHUD();
     save();
   };
@@ -23,10 +36,4 @@ function bind() {
     if (currentScreen === "map") renderMap();
   });
 }
-load();
-ensureState();
-initBG();
-drawBG();
-bind();
-refreshText();
-setLang(G.lang);
+initApp();

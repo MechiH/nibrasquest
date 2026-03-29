@@ -1,0 +1,1024 @@
+{
+  "id": "prophet",
+  "icon": "🌙",
+  "color": "#d4a843",
+  "name": { "ar": "السيرة النبوية", "en": "The Prophet's Life ﷺ" },
+  "desc": {
+    "ar": "رحلة كاملة عبر حياة النبي ﷺ من ظلمات الجاهلية حتى الإرث الخالد — مبنية على كتاب الشفا للقاضي عياض.",
+    "en": "A complete journey through the life of the Prophet ﷺ from pre-Islamic darkness to eternal legacy — based on Ash-Shifa by Qadi 'Iyad."
+  },
+  "source": {
+    "ar": "كتاب الشفا بتعريف حقوق المصطفى — القاضي عياض",
+    "en": "Ash-Shifa — Qadi 'Iyad ibn Musa al-Yahsubi"
+  },
+  "refs": [
+    ["الشفا للقاضي عياض", "المرجع الأساسي لهذا المسار"],
+    ["الرحيق المختوم", "سيرة مرتبة للمراحل"],
+    ["فقه السيرة", "فهم الحدث والدروس"]
+  ],
+  "endorsers": ["مدرسو السيرة", "برامج المساجد", "حلقات الشباب"],
+  "stages": [
+    {
+      "id": 1,
+      "icon": "🏜️",
+      "x": 100,
+      "y": 520,
+      "era": "jahiliyyah",
+      "eraIcon": "🏜️",
+      "eraColor": "#8B6914",
+      "eraGradient": ["#1a0f00", "#2d1a00", "#0d0d0d"],
+      "eraLabel": { "ar": "ما قبل البعثة", "en": "Pre-Revelation Era" },
+      "eraTheme": { "ar": "الجاهلية والتمهيد", "en": "Jahiliyyah & Preparation" },
+      "title": { "ar": "العالم قبل النور", "en": "The World Before the Light" },
+      "focus": { "ar": "بيئة الجزيرة العربية وحاجتها للرسالة", "en": "Arabia's landscape and the need for a message" },
+      "goal": { "ar": "فهم الظلام الذي جاء النور ليبدده", "en": "Understand the darkness the light came to dispel" },
+      "steps": [
+        {
+          "title": { "ar": "جزيرة العرب: الأرض والقبائل", "en": "Arabia: The Land and Its Tribes" },
+          "narrative": {
+            "ar": "كانت الجزيرة العربية قبل البعثة أرضًا قاسية المناخ، لكنها غنية بالقيم القبلية والشعر والفصاحة. تحكمها العصبيات والولاءات، ويعيش أهلها بين تجارة وحروب وتقاليد متوارثة. كانت مكة مركزها الروحي بفضل الكعبة التي بناها إبراهيم عليه السلام، لكن العبادة فيها تحولت إلى أصنام وأوثان. كان المجتمع يحمل بذور النبل كالكرم والوفاء والشجاعة، لكنه يرزح تحت ظلم الجاهلية من وأد البنات والظلم الاجتماعي.",
+            "en": "Arabia before revelation was a land of harsh climate yet rich in tribal values, poetry, and eloquence. It was governed by tribal loyalties and alliances, its people living between trade, wars, and inherited customs. Makkah was its spiritual center thanks to the Ka'bah built by Ibrahim, but worship there had devolved into idol-worship. Society carried seeds of nobility — generosity, loyalty, and courage — yet suffered under the injustice of Jahiliyyah: the burying of infant daughters and rampant social oppression."
+          },
+          "keyPoints": {
+            "ar": [
+              "مكة كانت مركز الجزيرة الروحي بسبب الكعبة التي بناها إبراهيم عليه السلام",
+              "المجتمع الجاهلي جمع بين قيم نبيلة كالكرم والشجاعة وبين ظلم كوأد البنات",
+              "الفصاحة والشعر كانا أعظم ما يفتخر به العرب",
+              "القبائل تحكمها العصبية والولاءات لا الحق والعدل"
+            ],
+            "en": [
+              "Makkah was Arabia's spiritual center because of the Ka'bah built by Ibrahim",
+              "Jahili society mixed noble values like generosity with injustices like female infanticide",
+              "Eloquence and poetry were the Arabs' greatest source of pride",
+              "Tribal loyalty, not justice, governed society"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "النسب الشريف: نور في سلسلة الأنبياء", "en": "The Noble Lineage: Light in the Chain of Prophets" },
+          "narrative": {
+            "ar": "ذكر القاضي عياض في الشفا أن نسب النبي ﷺ هو أشرف الأنساب وأطهرها. قال ﷺ: «إن الله اصطفى كنانة من ولد إسماعيل، واصطفى قريشًا من كنانة، واصطفى من قريش بني هاشم، واصطفاني من بني هاشم». وروى ابن عباس أن روح النبي ﷺ كانت نورًا بين يدي الله قبل خلق آدم بألفي عام، وأن الله نقله من أصلاب طاهرة إلى أرحام طاهرة حتى أخرجه من أبويه، لم يجتمع أبواه قط على سفاح.",
+            "en": "Qadi 'Iyad relates in the Shifa that the Prophet's lineage is the noblest and purest. The Prophet ﷺ said: 'Allah chose Kinana from the children of Isma'il, chose Quraysh from Kinana, chose Banu Hashim from Quraysh, and chose me from Banu Hashim.' Ibn 'Abbas reported that the spirit of the Prophet ﷺ was a light in the hands of Allah two thousand years before He created Adam, and that Allah transferred him from pure loins to pure wombs until He brought him forth from his parents — none of whom were ever joined in fornication."
+          },
+          "keyPoints": {
+            "ar": [
+              "نسب النبي ﷺ مصطفى في كل طبقة: إسماعيل → كنانة → قريش → بني هاشم",
+              "روح النبي ﷺ كانت نورًا بين يدي الله قبل خلق آدم بألفي عام (رواية ابن عباس)",
+              "انتقل نوره في أصلاب طاهرة وأرحام طاهرة — لم يجتمع أبواه على سفاح",
+              "اختيار الله له يعكس أن الرسالة لم تكن عشوائية بل مخططة منذ الأزل"
+            ],
+            "en": [
+              "The Prophet's lineage was chosen at every level: Isma'il → Kinana → Quraysh → Banu Hashim",
+              "His spirit was a light before Allah 2000 years before Adam's creation (Ibn 'Abbas)",
+              "He was transferred through pure loins and pure wombs — no fornication in his ancestry",
+              "Allah's selection shows the message was divinely planned from eternity"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "حاجة العالم إلى التغيير", "en": "The World's Need for Change" },
+          "narrative": {
+            "ar": "لم تكن الجاهلية مجرد فترة زمنية، بل كانت حالة إنسانية: غياب الميزان الأخلاقي الثابت، واستعباد الضعيف، وتقديس العادات فوق الحق. الإمبراطوريات الكبرى — الروم والفرس — كانت تتصارع في فساد وترف، والديانات السماوية السابقة حُرّفت عن مسارها. كان العالم كله ينتظر نبيًا جديدًا ذكرته البشارات في التوراة والإنجيل، نبيًا يعيد الميزان ويحيي فطرة إبراهيم. هذا السياق يجعل الرسالة المحمدية ليست حدثًا محليًا بل تحولًا كونيًا.",
+            "en": "Jahiliyyah was not merely a historical period — it was a human condition: the absence of a stable moral compass, the enslavement of the weak, and the worship of custom over truth. The great empires — Rome and Persia — were locked in conflict amid corruption and excess, and previous divine religions had been distorted from their path. The entire world awaited a new prophet foretold in the Torah and the Gospel — one who would restore balance and revive the way of Ibrahim. This context makes the Muhammadan message not a local event but a cosmic transformation."
+          },
+          "keyPoints": {
+            "ar": [
+              "الجاهلية حالة إنسانية (غياب ميزان أخلاقي) وليست مجرد حقبة تاريخية",
+              "الإمبراطوريات الكبرى (الروم والفرس) كانت في انحدار أخلاقي وصراع",
+              "الديانات السابقة (التوراة والإنجيل) كانت قد حُرّفت عن أصلها",
+              "بشارات الأنبياء السابقين أشارت إلى قدوم نبي جديد يعيد الميزان"
+            ],
+            "en": [
+              "Jahiliyyah was a human condition (absence of moral compass), not just a historical era",
+              "The Roman and Persian empires were in moral decline and conflict",
+              "Previous scriptures (Torah and Gospel) had been distorted from their origin",
+              "Earlier prophets' glad tidings pointed to a coming prophet who would restore balance"
+            ]
+          }
+        }
+      ],
+      "quiz": [
+        {
+          "q": { "ar": "لماذا كانت مكة مركز الجزيرة الروحي؟", "en": "Why was Makkah Arabia's spiritual center?" },
+          "o": {
+            "ar": ["بسبب الكعبة التي بناها إبراهيم عليه السلام", "بسبب قوتها العسكرية", "بسبب ثرواتها المادية", "بسبب مناخها المعتدل"],
+            "en": ["Because of the Ka'bah built by Ibrahim", "Because of its military power", "Because of its material wealth", "Because of its mild climate"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "ماذا قال النبي ﷺ عن اصطفاء نسبه؟", "en": "What did the Prophet ﷺ say about his lineage's selection?" },
+          "o": {
+            "ar": ["أن الله اصطفاه في كل طبقة من إسماعيل إلى بني هاشم", "أنه اختار نفسه", "أن قريشًا اختارته", "أن نسبه لا أهمية له"],
+            "en": ["Allah chose him at every level from Isma'il to Banu Hashim", "He chose himself", "Quraysh chose him", "His lineage was unimportant"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "لماذا تعتبر الرسالة المحمدية تحولًا كونيًا لا حدثًا محليًا؟", "en": "Why is the Muhammadan message a cosmic transformation, not a local event?" },
+          "o": {
+            "ar": ["لأن العالم كله كان في حاجة إليها وبشّر بها الأنبياء السابقون", "لأنها جاءت في مكة فقط", "لأنها خاصة بالعرب فقط", "لأنها لم تغير شيئًا"],
+            "en": ["The whole world needed it and previous prophets foretold it", "It only came to Makkah", "It was only for Arabs", "It changed nothing"]
+          },
+          "a": 0
+        }
+      ],
+      "reading": [
+        ["الشفا — الباب الأول: فصل النسب", "المرجع الأساسي"],
+        ["الرحيق المختوم — الجزيرة قبل البعثة", "سياق تاريخي"]
+      ],
+      "endorse": ["معلم سيرة", "حلقة شباب", "برنامج تأسيسي"]
+    },
+    {
+      "id": 2,
+      "icon": "⭐",
+      "x": 250,
+      "y": 420,
+      "era": "birth",
+      "eraIcon": "⭐",
+      "eraColor": "#DAA520",
+      "eraGradient": ["#1a1200", "#2d2000", "#0f0a00"],
+      "eraLabel": { "ar": "المولد والنشأة", "en": "Birth & Childhood" },
+      "eraTheme": { "ar": "العناية الربانية المبكرة", "en": "Early Divine Care" },
+      "title": { "ar": "المولد والعلامات الأولى", "en": "The Birth and First Signs" },
+      "focus": { "ar": "ولادته ﷺ وعلامات التهيئة الربانية", "en": "His birth ﷺ and signs of divine preparation" },
+      "goal": { "ar": "إدراك أن الله هيّأ نبيه من أول لحظة", "en": "Realize Allah prepared His Prophet from the very first moment" },
+      "steps": [
+        {
+          "title": { "ar": "عام الفيل: الحماية الإلهية", "en": "The Year of the Elephant: Divine Protection" },
+          "narrative": {
+            "ar": "في العام الذي حاول فيه أبرهة الحبشي هدم الكعبة بجيش الفيلة، أرسل الله طيرًا أبابيل ترميهم بحجارة من سجيل، فجعلهم كعصف مأكول. في هذا العام بالذات وُلد محمد ﷺ — كأن الله أراد أن يكون ميلاده في عام أظهر فيه حمايته للبيت الحرام، إيذانًا بأن صاحب هذا البيت الحقيقي قد جاء. ذكر القاضي عياض في الشفا أن ولادته أحاطت بها علامات عجيبة رواها الثقات.",
+            "en": "In the year Abraha the Abyssinian tried to destroy the Ka'bah with an army of elephants, Allah sent birds in flocks (Ababil) that pelted them with stones of baked clay, leaving them like consumed stalks. In this very year Muhammad ﷺ was born — as if Allah meant his birth to coincide with the year He displayed His protection of the Sacred House, signaling that its true custodian had arrived. Qadi 'Iyad mentions in the Shifa that his birth was accompanied by wondrous signs reported by trustworthy narrators."
+          },
+          "keyPoints": {
+            "ar": [
+              "وُلد النبي ﷺ في عام الفيل — العام الذي حمى الله فيه الكعبة من جيش أبرهة",
+              "إرسال الطير الأبابيل كان إعلانًا إلهيًا بحماية البيت قبيل ميلاد خادمه الأعظم",
+              "ذكر القاضي عياض أن ولادته أحاطت بها علامات خارقة رواها الثقات",
+              "التزامن بين حماية الكعبة وميلاده ليس صدفة بل تدبير إلهي"
+            ],
+            "en": [
+              "The Prophet ﷺ was born in the Year of the Elephant — when Allah protected the Ka'bah from Abraha's army",
+              "The birds of Ababil were a divine proclamation protecting the House before the birth of its greatest servant",
+              "Qadi 'Iyad notes his birth was surrounded by extraordinary signs from trustworthy sources",
+              "The coincidence of the Ka'bah's protection and his birth was divine planning, not chance"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "اليتم المبكر: صناعة الرحمة", "en": "Early Orphanhood: Forging Mercy" },
+          "narrative": {
+            "ar": "فقد النبي ﷺ أباه عبد الله قبل ولادته، ثم فقد أمه آمنة وهو ابن ست سنوات، ثم جده عبد المطلب وهو ابن ثمان. تولى رعايته عمه أبو طالب. هذا اليتم المبكر لم يكن عبثًا — بل كان تهيئة ربانية صنعت في قلبه رحمة عميقة بالضعفاء والمكسورين. قال الله تعالى: ﴿أَلَمْ يَجِدْكَ يَتِيمًا فَآوَى﴾. ذكر القاضي عياض أن كل ابتلاء في طفولته كان بابًا لتكوين صفات القيادة النبوية: الرحمة والثبات والاستقلال.",
+            "en": "The Prophet ﷺ lost his father Abdullah before birth, then his mother Amina at age six, then his grandfather Abdul-Muttalib at age eight. His uncle Abu Talib took over his care. This early orphanhood was not purposeless — it was divine preparation that planted deep mercy for the weak and broken in his heart. Allah said: 'Did He not find you an orphan and give you shelter?' (93:6). Qadi 'Iyad notes that every trial in his childhood was a gateway to forming the qualities of prophetic leadership: mercy, steadfastness, and self-reliance."
+          },
+          "keyPoints": {
+            "ar": [
+              "فقد أباه قبل الولادة، وأمه في السادسة، وجده في الثامنة — يتم متكرر",
+              "اليتم صنع فيه رحمة عميقة وثباتًا واستقلالًا",
+              "﴿أَلَمْ يَجِدْكَ يَتِيمًا فَآوَى﴾ — الله هو من آواه ورعاه",
+              "تولى عمه أبو طالب رعايته وحمايته بعد وفاة جده"
+            ],
+            "en": [
+              "Lost his father before birth, mother at 6, grandfather at 8 — repeated orphanhood",
+              "Orphanhood forged deep mercy, steadfastness, and self-reliance in him",
+              "'Did He not find you an orphan and give you shelter?' (93:6) — Allah Himself sheltered him",
+              "His uncle Abu Talib took over his care and protection after his grandfather's death"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "حادثة شق الصدر: التطهير الإلهي", "en": "The Splitting of the Chest: Divine Purification" },
+          "narrative": {
+            "ar": "أثناء رضاعته عند حليمة السعدية في بادية بني سعد، وقعت حادثة شق الصدر: جاء ملكان فشقا صدره واستخرجا قلبه وغسلاه بماء زمزم ثم أعاداه. هذه الحادثة التي رواها مسلم في صحيحه كانت تطهيرًا إلهيًا مبكرًا — إزالة لحظ الشيطان من قلبه. ذكر القاضي عياض أن الله حمى نبيه من الشيطان منذ البداية: «إن الشيطان لم يكن له عليه سبيل قط». هذه الحماية الكاملة كانت إعدادًا لقلب سيحمل الوحي.",
+            "en": "During his nursing with Halima al-Sa'diyya in the desert of Banu Sa'd, the splitting of the chest occurred: two angels came, opened his chest, extracted his heart, washed it with Zamzam water, then restored it. This incident, narrated by Muslim in his Sahih, was an early divine purification — removing Satan's portion from his heart. Qadi 'Iyad mentions that Allah protected His Prophet from Satan from the very beginning: 'Satan never had any way over him.' This complete protection was preparation for a heart that would carry divine revelation."
+          },
+          "keyPoints": {
+            "ar": [
+              "حادثة شق الصدر وقعت في بادية بني سعد أثناء رضاعته عند حليمة السعدية",
+              "الملكان غسلا قلبه بماء زمزم وأزالا حظ الشيطان منه — رواه مسلم",
+              "القاضي عياض: الشيطان لم يكن له على النبي ﷺ سبيل قط",
+              "التطهير المبكر كان إعدادًا لقلب سيستقبل الوحي الإلهي"
+            ],
+            "en": [
+              "The chest-splitting happened in Banu Sa'd's desert during his nursing with Halima",
+              "Two angels washed his heart with Zamzam and removed Satan's portion — narrated by Muslim",
+              "Qadi 'Iyad: Satan never had any way over the Prophet ﷺ",
+              "This early purification prepared a heart that would receive divine revelation"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "علامات النبوة في الطفولة", "en": "Signs of Prophethood in Childhood" },
+          "narrative": {
+            "ar": "أحاطت بطفولته ﷺ علامات كثيرة ذكرها القاضي عياض: الغمامة التي كانت تظلله من الشمس، وبركته على أهل حليمة حيث أخصبت أرضهم وكثر خيرهم بعد قدومه، وقصة الراهب بحيرى الذي رأى فيه علامات النبي المنتظر حين سافر مع عمه إلى الشام وعمره اثنا عشر عامًا. كل هذه العلامات كانت تمهيدًا يبني في وعي المحيطين به أن هذا الطفل ليس كغيره — هو المختار الذي بشّرت به الكتب السابقة.",
+            "en": "His childhood ﷺ was surrounded by many signs mentioned by Qadi 'Iyad: the cloud that shaded him from the sun, the blessings upon Halima's household whose land became fertile and provisions increased after his arrival, and the story of the monk Bahira who recognized the signs of the awaited Prophet when the boy traveled with his uncle to Syria at age twelve. All these signs were a prelude building awareness among those around him that this child was unlike others — he was the chosen one foretold by previous scriptures."
+          },
+          "keyPoints": {
+            "ar": [
+              "الغمامة كانت تظلله من الشمس — علامة ربانية ظاهرة",
+              "أهل حليمة أُبركوا ببركته: أخصبت أرضهم وكثر خيرهم",
+              "الراهب بحيرى تعرّف على علامات النبوة فيه وهو ابن 12 عامًا",
+              "العلامات كانت تمهيدًا لبناء وعي المحيطين بأنه المختار المبشَّر به"
+            ],
+            "en": [
+              "A cloud shaded him from the sun — a visible divine sign",
+              "Halima's family was blessed by his presence: their land became fertile and provisions increased",
+              "The monk Bahira recognized signs of prophethood in him at age 12",
+              "These signs built awareness among people that he was the foretold chosen one"
+            ]
+          }
+        }
+      ],
+      "quiz": [
+        {
+          "q": { "ar": "ماذا صنع اليتم المبكر في شخصية النبي ﷺ؟", "en": "What did early orphanhood forge in the Prophet's character?" },
+          "o": {
+            "ar": ["الرحمة والثبات والاستقلال", "الغضب والانتقام", "العزلة عن الناس", "حب السلطة والمال"],
+            "en": ["Mercy, steadfastness, and self-reliance", "Anger and revenge", "Isolation from people", "Love of power and wealth"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "ما الحكمة من حادثة شق الصدر؟", "en": "What was the wisdom behind the splitting of the chest?" },
+          "o": {
+            "ar": ["تطهير القلب وإزالة حظ الشيطان استعدادًا للوحي", "اختبار جسدي فقط", "معاقبة على خطأ", "لا حكمة محددة"],
+            "en": ["Purifying the heart and removing Satan's portion in preparation for revelation", "A physical test only", "Punishment for an error", "No specific wisdom"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "من الراهب الذي تعرّف على علامات النبوة في الطفل محمد ﷺ؟", "en": "Which monk recognized the signs of prophethood in young Muhammad ﷺ?" },
+          "o": {
+            "ar": ["بحيرى", "ورقة بن نوفل", "سلمان الفارسي", "عداس"],
+            "en": ["Bahira", "Waraqa ibn Nawfal", "Salman al-Farsi", "Addas"]
+          },
+          "a": 0
+        }
+      ],
+      "reading": [
+        ["الشفا — علامات النبوة قبل البعثة", "المرجع الأساسي"],
+        ["شمائل النبي — البعد الشخصي", "تفاصيل إضافية"]
+      ],
+      "endorse": ["خطباء الجمعة", "مركز السيرة", "مرشد أسري"]
+    },
+    {
+      "id": 3,
+      "icon": "💎",
+      "x": 420,
+      "y": 500,
+      "era": "character",
+      "eraIcon": "💎",
+      "eraColor": "#C0A060",
+      "eraGradient": ["#0d0a04", "#1a1408", "#0a0804"],
+      "eraLabel": { "ar": "الأخلاق قبل البعثة", "en": "Character Before Prophethood" },
+      "eraTheme": { "ar": "الأمين والصادق", "en": "The Trustworthy and Truthful" },
+      "title": { "ar": "خُلق لا يُشبه البشر", "en": "A Character Unlike Any Other" },
+      "focus": { "ar": "صفاته ﷺ الخَلقية والخُلقية قبل البعثة", "en": "His physical and moral qualities before prophethood" },
+      "goal": { "ar": "فهم لماذا كان ﷺ مؤهلًا لحمل الرسالة", "en": "Understand why he ﷺ was qualified to carry the message" },
+      "steps": [
+        {
+          "title": { "ar": "الصادق الأمين: قبل الوحي بعقود", "en": "The Trustworthy: Decades Before Revelation" },
+          "narrative": {
+            "ar": "ذكر القاضي عياض أن النبي ﷺ لُقّب بالصادق الأمين قبل البعثة بسنوات طويلة. قال ابن إسحاق: «سُمي الأمين لما جمع الله فيه من الصفات الحميدة». حتى أعداؤه اعترفوا بذلك — حين سأل هرقل أبا سفيان عن محمد، قال أبو سفيان وهو يومها عدوه: «ما جرّبنا عليه كذبًا قط». اختارته قريش حَكمًا في وضع الحجر الأسود حين اختلفوا، لأنه أول داخل عليهم وهم يثقون به دون استثناء. هذه السمعة لم تُصنع بجهد تسويقي بل بعقود من السلوك الثابت.",
+            "en": "Qadi 'Iyad mentions that the Prophet ﷺ was called 'The Truthful, The Trustworthy' (Al-Sadiq Al-Amin) years before prophethood. Ibn Ishaq said: 'He was called the Trustworthy because of the sound qualities Allah had concentrated in him.' Even his enemies admitted this — when Heraclius asked Abu Sufyan about Muhammad, Abu Sufyan, who was then his enemy, said: 'We never found him lying.' Quraysh chose him to arbitrate the placement of the Black Stone when they disagreed, because he was the first to enter and they trusted him without exception. This reputation was not manufactured by effort but built through decades of consistent conduct."
+          },
+          "keyPoints": {
+            "ar": [
+              "لُقب بالصادق الأمين قبل البعثة — سمعة بنتها عقود من السلوك الثابت",
+              "أبو سفيان (وهو عدوه) شهد أمام هرقل: «ما جرّبنا عليه كذبًا قط»",
+              "اختارته قريش حَكمًا في أزمة الحجر الأسود لثقتهم المطلقة به",
+              "ابن إسحاق: سُمي الأمين لما جمع الله فيه من الصفات الحميدة"
+            ],
+            "en": [
+              "Called 'The Truthful, The Trustworthy' before prophethood — built by decades of consistent conduct",
+              "Abu Sufyan (his enemy) testified before Heraclius: 'We never found him lying'",
+              "Quraysh chose him to arbitrate the Black Stone crisis due to absolute trust in him",
+              "Ibn Ishaq: He was called the Trustworthy because of the sound qualities Allah placed in him"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "الهيئة الجسدية: جمال لا مثيل له", "en": "Physical Appearance: Unmatched Beauty" },
+          "narrative": {
+            "ar": "وصف القاضي عياض هيئته ﷺ نقلًا عن حديث الحسن بن علي عن هند بن أبي هالة: كان أجمل الناس وأبهاهم من بعيد وأحلاهم وأحسنهم من قريب. وجهه كالقمر ليلة البدر. كان ربعة من القوم لا بالطويل البائن ولا بالقصير. عظيم الهامة، رجِل الشعر. أزهر اللون. واسع الجبين. إذا سُرّ استنار وجهه كأنه قطعة قمر. كانت هيبته تملأ القلب — قالت قيلة إنها لما رأته ارتعدت من الهيبة فقال: «يا مسكينة عليكِ بالسكينة».",
+            "en": "Qadi 'Iyad describes his appearance ﷺ from the hadith of al-Hasan ibn Ali from Hind ibn Abi Hala: He was the most handsome of people and the most radiant from afar, the sweetest and finest from close up. His face was like the full moon. He was of medium height, neither excessively tall nor short. He had a large head, smooth hair, a luminous complexion, and a wide forehead. When pleased, his face lit up as if it were a piece of the moon. His awe filled hearts — Qayla reported that when she first saw him she trembled with awe, so he said: 'Poor girl, you must be calm.'"
+          },
+          "keyPoints": {
+            "ar": [
+              "وجهه ﷺ كالقمر ليلة البدر — يستنير عند السرور كأنه قطعة قمر",
+              "ربعة من القوم (معتدل القامة)، عظيم الهامة، أزهر اللون",
+              "هيبته تملأ القلب — قيلة ارتعدت لما رأته من شدة الهيبة",
+              "أجمل الناس من بعيد وأحلاهم من قريب (حديث هند بن أبي هالة)"
+            ],
+            "en": [
+              "His face ﷺ was like the full moon — it lit up when he was pleased",
+              "Medium height, large head, luminous complexion",
+              "His awe filled hearts — Qayla trembled when she first saw him",
+              "The most handsome from afar and the sweetest from close up (Hind ibn Abi Hala's hadith)"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "الحلم والعفو والشجاعة", "en": "Forbearance, Pardon, and Courage" },
+          "narrative": {
+            "ar": "أفرد القاضي عياض فصولًا كاملة لأخلاقه ﷺ قبل البعثة وبعدها. كان أحلم الناس — يوم أُحد كُسرت رباعيته وشُجّ وجهه فقال أصحابه: لو دعوت عليهم. فقال: «إني لم أُبعث لعّانًا ولكن بُعثت داعيًا ورحمة. اللهم اهدِ قومي فإنهم لا يعلمون». وكان أشجع الناس — قال علي: «كنا إذا حمي البأس واشتد الخوف اتقينا برسول الله ﷺ». ما ضرب خادمًا ولا امرأة قط، ولم ينتقم لنفسه إلا أن تُنتهك حرمات الله.",
+            "en": "Qadi 'Iyad dedicates entire chapters to his character ﷺ. He was the most forbearing of people — on the day of Uhud when his tooth was broken and face wounded, his companions said: 'If only you would curse them.' He replied: 'I was not sent to curse but as a caller and mercy. O Allah, guide my people for they do not know.' He was the bravest — Ali said: 'When battle raged and fear intensified, we sought shelter behind the Messenger of Allah ﷺ.' He never struck a servant or woman, and never took revenge for himself unless the sacred limits of Allah were violated."
+          },
+          "keyPoints": {
+            "ar": [
+              "يوم أُحد كُسرت رباعيته فقال: «اللهم اهدِ قومي فإنهم لا يعلمون»",
+              "علي بن أبي طالب: «كنا إذا اشتد الخوف اتقينا برسول الله ﷺ»",
+              "لم يضرب خادمًا ولا امرأة قط — لم ينتقم لنفسه أبدًا",
+              "لم يُبعث لعّانًا بل داعيًا ورحمة — حتى مع من آذاه"
+            ],
+            "en": [
+              "At Uhud with his tooth broken he prayed: 'O Allah, guide my people for they do not know'",
+              "Ali ibn Abi Talib: 'When fear intensified, we sought shelter behind the Messenger ﷺ'",
+              "He never struck a servant or woman — never took personal revenge",
+              "He was not sent to curse but as a caller and mercy — even to those who harmed him"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "الكرم والتواضع والزهد", "en": "Generosity, Humility, and Asceticism" },
+          "narrative": {
+            "ar": "كان ﷺ أجود الناس — ما سُئل شيئًا قط فقال لا. جاءه رجل فأعطاه غنمًا بين جبلين، فرجع إلى قومه وقال: أسلموا فإن محمدًا يعطي عطاء من لا يخشى الفقر. وكان أشد الناس تواضعًا — يقول: «أنا عبد، آكل كما يأكل العبد وأجلس كما يجلس العبد». يركب الحمار ويُردف خلفه، ويعود المريض ويمشي في حاجة الأرملة والمسكين. وكان أزهد الناس في الدنيا — مات ودرعه مرهونة عند يهودي في نفقة أهله. ما شبعت عائشة من خبز البر ثلاثة أيام متتالية حتى توفي.",
+            "en": "He ﷺ was the most generous — he was never asked for anything and said no. A man came and he gave him sheep filling a valley between two mountains; the man returned to his tribe saying: 'Become Muslim, for Muhammad gives like one who does not fear poverty.' He was the most humble — he said: 'I am a slave; I eat as a slave eats and sit as a slave sits.' He rode donkeys, visited the sick, and walked to serve widows and the poor. He was the most ascetic regarding this world — he died with his armor pawned to a Jew to provide for his family. A'isha said he never had his fill of bread for three consecutive days until he passed away."
+          },
+          "keyPoints": {
+            "ar": [
+              "ما سُئل شيئًا قط فقال لا — أعطى رجلًا غنمًا بين جبلين",
+              "قال: «أنا عبد، آكل كما يأكل العبد» — يركب الحمار ويعود المريض",
+              "مات ودرعه مرهونة عند يهودي — أزهد الناس في الدنيا",
+              "ما شبعت عائشة من خبز ثلاثة أيام حتى توفي ﷺ"
+            ],
+            "en": [
+              "Never asked for anything and said no — gave a man sheep filling a valley",
+              "Said: 'I am a slave, I eat as a slave eats' — rode donkeys and visited the sick",
+              "Died with his armor pawned to a Jew — the most ascetic regarding this world",
+              "A'isha never had her fill of bread for three days until he ﷺ passed away"
+            ]
+          }
+        }
+      ],
+      "quiz": [
+        {
+          "q": { "ar": "ماذا شهد أبو سفيان (عدوه) عن النبي ﷺ أمام هرقل؟", "en": "What did Abu Sufyan (his enemy) testify about the Prophet ﷺ before Heraclius?" },
+          "o": {
+            "ar": ["ما جرّبنا عليه كذبًا قط", "هو رجل عادي", "هو ساحر", "لا أعرفه"],
+            "en": ["We never found him lying", "He is an ordinary man", "He is a sorcerer", "I don't know him"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "ماذا قال ﷺ يوم أُحد حين كُسرت رباعيته؟", "en": "What did the Prophet ﷺ say at Uhud when his tooth was broken?" },
+          "o": {
+            "ar": ["اللهم اهدِ قومي فإنهم لا يعلمون", "اللهم أهلكهم", "سأنتقم منهم", "لا شيء"],
+            "en": ["O Allah, guide my people for they do not know", "O Allah, destroy them", "I will take revenge", "Nothing"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "كيف مات النبي ﷺ من حيث المال والزهد؟", "en": "How did the Prophet ﷺ die in terms of wealth and asceticism?" },
+          "o": {
+            "ar": ["ودرعه مرهونة عند يهودي في نفقة أهله", "غنيًا بالذهب والفضة", "تاركًا ثروة لأهله", "دون أن يملك شيئًا أصلًا"],
+            "en": ["With his armor pawned to a Jew to provide for his family", "Rich in gold and silver", "Leaving wealth for his family", "Without ever owning anything"]
+          },
+          "a": 0
+        }
+      ],
+      "reading": [
+        ["الشفا — الباب الأول: الفصل الثاني (صفاته)", "المرجع الأساسي"],
+        ["الشمائل المحمدية — الترمذي", "تفاصيل هيئته ﷺ"]
+      ],
+      "endorse": ["معلم سيرة", "حلقة مسجد", "نادي شبابي"]
+    },
+    {
+      "id": 4,
+      "icon": "🕯️",
+      "x": 570,
+      "y": 380,
+      "era": "revelation",
+      "eraIcon": "🕯️",
+      "eraColor": "#E8D44D",
+      "eraGradient": ["#0a0a1a", "#1a1a3a", "#000010"],
+      "eraLabel": { "ar": "نزول الوحي", "en": "The Revelation" },
+      "eraTheme": { "ar": "اقرأ — بداية التحول", "en": "Read — The Beginning of Change" },
+      "title": { "ar": "نزول الوحي والبعثة", "en": "The Revelation and Prophethood" },
+      "focus": { "ar": "لحظة اقرأ وبداية الرسالة", "en": "The moment of 'Read' and the beginning of the message" },
+      "goal": { "ar": "فهم التحول من إنسان إلى نبي يحمل رسالة كونية", "en": "Understand the transformation from man to prophet carrying a universal message" },
+      "steps": [
+        {
+          "title": { "ar": "غار حراء: الخلوة التي غيّرت التاريخ", "en": "Cave Hira: The Retreat That Changed History" },
+          "narrative": {
+            "ar": "كان النبي ﷺ يخلو في غار حراء الليالي ذوات العدد يتحنث فيها — أي يتعبد — قبل أن يرجع إلى أهله. كان يتأمل في الكون والخالق بعيدًا عن أوثان قريش وضوضاء مكة. هذه الخلوة كانت تهيئة ربانية أخيرة قبل التكليف الأعظم. في رمضان من عام 610م، وهو ابن أربعين سنة، جاءه جبريل عليه السلام في الغار فقال: اقرأ. قال: ما أنا بقارئ. فضمّه حتى بلغ منه الجهد ثم أرسله ثلاثًا، ثم قال: ﴿اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ﴾.",
+            "en": "The Prophet ﷺ used to seclude himself in the Cave of Hira for nights at a time in devotion before returning to his family. He contemplated the universe and the Creator, away from Quraysh's idols and Makkah's noise. This seclusion was a final divine preparation before the greatest commission. In Ramadan of 610 CE, at age forty, Jibril came to him in the cave and said: 'Read!' He said: 'I cannot read.' Jibril squeezed him until he reached the limit of endurance, three times, then said: 'Read in the name of your Lord who created.' (96:1)"
+          },
+          "keyPoints": {
+            "ar": [
+              "كان يخلو في غار حراء الليالي يتعبد — تهيئة ربانية قبل التكليف",
+              "نزل الوحي أول مرة في رمضان 610م وعمره 40 سنة",
+              "جبريل ضمّه ثلاث مرات قبل أن ينزل أول آيات سورة العلق",
+              "﴿اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ﴾ — أول كلمات الوحي"
+            ],
+            "en": [
+              "He secluded himself in Cave Hira for nights of worship — divine preparation before commission",
+              "Revelation first descended in Ramadan 610 CE when he was 40 years old",
+              "Jibril squeezed him three times before the first verses of Surat al-Alaq descended",
+              "'Read in the name of your Lord who created' (96:1) — the first words of revelation"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "خديجة وورقة: أول من صدّق", "en": "Khadijah and Waraqa: The First Believers" },
+          "narrative": {
+            "ar": "رجع النبي ﷺ إلى خديجة يرجف فؤاده وقال: «زملوني زملوني». فأخبرها بما حدث فقالت له كلمتها الخالدة: «كلا! والله ما يخزيك الله أبدًا، إنك لتصل الرحم، وتحمل الكَلّ، وتُكسب المعدوم، وتَقري الضيف، وتعين على نوائب الحق». ثم ذهبت به إلى ابن عمها ورقة بن نوفل، وهو نصراني يعرف الكتاب، فقال: هذا الناموس الذي أنزل على موسى، يا ليتني أكون حيًا حين يُخرجك قومك. خديجة كانت أول من آمن — سندُه الأول الذي لم يتزعزع أبدًا.",
+            "en": "The Prophet ﷺ returned to Khadijah trembling and said: 'Cover me, cover me!' He told her what happened, and she spoke her immortal words: 'Never! By Allah, Allah will never disgrace you. You maintain ties of kinship, bear the burden of the weak, earn for the destitute, honor guests, and assist those afflicted by calamity.' She took him to her cousin Waraqa ibn Nawfal, a Christian who knew scripture, who said: 'This is the Namus (angel) that was sent to Musa. I wish I could be alive when your people drive you out.' Khadijah was the first to believe — his first, unwavering support."
+          },
+          "keyPoints": {
+            "ar": [
+              "خديجة أول من آمن وقالت: «والله ما يخزيك الله أبدًا» — لأخلاقه",
+              "علّلت إيمانها بصفاته: صلة الرحم، حمل الكَلّ، إكساب المعدوم",
+              "ورقة بن نوفل عرف أنه الناموس الذي أُنزل على موسى",
+              "ورقة حذّر من أن قومه سيُخرجونه — وهو ما تحقق لاحقًا"
+            ],
+            "en": [
+              "Khadijah was the first believer and said: 'By Allah, Allah will never disgrace you' — because of his character",
+              "She justified her faith by his qualities: maintaining kinship, bearing burdens, helping the destitute",
+              "Waraqa recognized it as the same angel sent to Musa",
+              "Waraqa warned his people would drive him out — which later came true"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "القرآن: المعجزة الكبرى", "en": "The Quran: The Greatest Miracle" },
+          "narrative": {
+            "ar": "أفرد القاضي عياض فصولًا لإعجاز القرآن بوصفه أعظم معجزات النبي ﷺ. القرآن لم يكن مجرد كتاب تشريع بل معجزة لغوية وبيانية تحدّى بها الله العرب — أمة الفصاحة — أن يأتوا بمثله فعجزوا. قال تعالى: ﴿قُل لَّئِنِ اجْتَمَعَتِ الْإِنسُ وَالْجِنُّ عَلَىٰ أَن يَأْتُوا بِمِثْلِ هَٰذَا الْقُرْآنِ لَا يَأْتُونَ بِمِثْلِهِ﴾. ذكر القاضي عياض أن القرآن فيه إخبار عن الغيب الماضي والمستقبل بما تحقق حرفيًا، وأنه يبقى عبر الزمان دون تحريف — وهذا في ذاته معجزة لا يشاركه فيها كتاب آخر.",
+            "en": "Qadi 'Iyad dedicates chapters to the Quran's inimitability as the Prophet's greatest miracle. The Quran was not merely a book of law but a linguistic and rhetorical miracle that challenged the Arabs — the nation of eloquence — to produce its like, and they failed. Allah said: 'Say: If mankind and jinn gathered to produce the like of this Quran, they could not produce its like.' (17:88). Qadi 'Iyad notes the Quran contains information about the unseen past and future that was fulfilled literally, and that it remains through time without distortion — this in itself is a miracle shared by no other book."
+          },
+          "keyPoints": {
+            "ar": [
+              "القرآن أعظم معجزات النبي ﷺ — معجزة لغوية بيانية خالدة",
+              "تحدى الله العرب (أمة الفصاحة) أن يأتوا بمثله فعجزوا تمامًا",
+              "فيه إخبار عن الغيب الماضي والمستقبل تحقق حرفيًا",
+              "بقاؤه دون تحريف عبر 14 قرنًا هو في ذاته معجزة لا يشاركه فيها كتاب"
+            ],
+            "en": [
+              "The Quran is the Prophet's greatest miracle — an eternal linguistic and rhetorical miracle",
+              "Allah challenged the Arabs (nation of eloquence) to produce its like — they completely failed",
+              "It contains news of unseen past and future that was literally fulfilled",
+              "Its preservation without distortion for 14 centuries is itself a miracle unmatched by any book"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "فترة الوحي والابتلاء", "en": "The Pause of Revelation and Trial" },
+          "narrative": {
+            "ar": "بعد نزول الآيات الأولى انقطع الوحي فترة (فترة الوحي)، وكان ذلك شديدًا على النبي ﷺ حتى حزن حزنًا شديدًا شوقًا للوحي. ثم نزل جبريل بسورة المدثر: ﴿يَا أَيُّهَا الْمُدَّثِّرُ * قُمْ فَأَنذِرْ﴾ — وكان هذا التكليف الرسمي بالدعوة. هذه الفترة علّمته ﷺ الشوق إلى الله والصبر على الابتلاء، وعلّمت الأمة بعده أن الطريق إلى الله فيه لحظات صمت يجب تحمّلها بيقين. بعد هذه الفترة لم ينقطع الوحي حتى وفاته ﷺ.",
+            "en": "After the first verses, revelation paused for a period (fatrat al-wahy), which was extremely difficult for the Prophet ﷺ who grieved deeply out of longing for revelation. Then Jibril descended with Surat al-Muddaththir: 'O you wrapped up, arise and warn!' (74:1-2) — this was the official commission to preach. This pause taught him ﷺ longing for Allah and patience in trial, and taught the Ummah after him that the path to Allah contains moments of silence that must be endured with certainty. After this period, revelation did not cease until his death ﷺ."
+          },
+          "keyPoints": {
+            "ar": [
+              "انقطع الوحي بعد الآيات الأولى فترة — حزن النبي ﷺ شوقًا للوحي",
+              "نزلت سورة المدثر بالتكليف الرسمي: ﴿قُمْ فَأَنذِرْ﴾",
+              "فترة الوحي علّمته الشوق إلى الله والصبر",
+              "بعد هذه الفترة لم ينقطع الوحي حتى وفاته ﷺ"
+            ],
+            "en": [
+              "Revelation paused after the first verses — the Prophet ﷺ grieved out of longing",
+              "Surat al-Muddaththir descended with the official commission: 'Arise and warn!'",
+              "The pause taught him longing for Allah and patience in trial",
+              "After this pause, revelation did not cease until his death ﷺ"
+            ]
+          }
+        }
+      ],
+      "quiz": [
+        {
+          "q": { "ar": "ما أول آية نزلت من القرآن؟", "en": "What was the first verse revealed of the Quran?" },
+          "o": {
+            "ar": ["﴿اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ﴾", "﴿بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ﴾", "﴿يَا أَيُّهَا الْمُدَّثِّرُ﴾", "﴿الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ﴾"],
+            "en": ["'Read in the name of your Lord who created'", "'In the name of Allah, the Merciful'", "'O you wrapped up'", "'Praise be to Allah, Lord of the worlds'"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "ماذا قالت خديجة حين أخبرها النبي ﷺ بالوحي؟", "en": "What did Khadijah say when the Prophet ﷺ told her about the revelation?" },
+          "o": {
+            "ar": ["والله ما يخزيك الله أبدًا — لأخلاقه الحميدة", "خافت وطلبت منه الصمت", "لم تصدقه", "طلبت منه الانتظار"],
+            "en": ["By Allah, Allah will never disgrace you — because of his noble character", "She was afraid and asked him to be silent", "She did not believe him", "She asked him to wait"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "لماذا القرآن معجزة خالدة وليس فقط كتاب تشريع؟", "en": "Why is the Quran an eternal miracle, not merely a book of law?" },
+          "o": {
+            "ar": ["لأنه تحدى أمة الفصاحة فعجزوا، وفيه إخبار بالغيب، وبقي دون تحريف", "لأنه طويل", "لأنه مكتوب بالعربية فقط", "لأنه قديم"],
+            "en": ["It challenged the eloquent Arabs who failed, contains prophecies, and remained undistorted", "Because it is long", "Because it is only in Arabic", "Because it is old"]
+          },
+          "a": 0
+        }
+      ],
+      "reading": [
+        ["الشفا — فصول إعجاز القرآن", "المرجع الأساسي"],
+        ["الرحيق المختوم — بدء الوحي", "السياق التاريخي"]
+      ],
+      "endorse": ["مدرس قرآن", "باحث سيرة", "مجلس علم"]
+    },
+    {
+      "id": 5,
+      "icon": "🔥",
+      "x": 680,
+      "y": 460,
+      "era": "struggle",
+      "eraIcon": "🔥",
+      "eraColor": "#D4603A",
+      "eraGradient": ["#1a0500", "#2d0a00", "#0d0000"],
+      "eraLabel": { "ar": "الابتلاء في مكة", "en": "Trials in Makkah" },
+      "eraTheme": { "ar": "الثبات تحت الاضطهاد", "en": "Steadfastness Under Persecution" },
+      "title": { "ar": "سنوات الصبر والثبات", "en": "Years of Patience and Perseverance" },
+      "focus": { "ar": "الدعوة المبكرة واضطهاد قريش", "en": "The early call and Quraysh's persecution" },
+      "goal": { "ar": "فهم ثمن حمل الحق وثبات النبي ﷺ أمام البطش", "en": "Understand the cost of carrying truth and the Prophet's steadfastness" },
+      "steps": [
+        {
+          "title": { "ar": "الدعوة السرية: ثلاث سنوات في الخفاء", "en": "The Secret Call: Three Years in Hiding" },
+          "narrative": {
+            "ar": "بدأ النبي ﷺ دعوته سرًا لمدة ثلاث سنوات، يدعو أقرب الناس إليه بحكمة وتدرج. آمنت خديجة أولًا، ثم علي بن أبي طالب وهو صبي، ثم زيد بن حارثة مولاه، ثم أبو بكر الصديق الذي أسلم فورًا دون تردد. ذكر القاضي عياض أن الله حمى نبيه في هذه الفترة وأن كل من اقترب منه بصدق أدرك نوره. كان أبو بكر يدعو بدوره فأسلم على يديه عثمان والزبير وعبد الرحمن بن عوف — نواة الأمة.",
+            "en": "The Prophet ﷺ began his call secretly for three years, inviting those closest to him with wisdom and gradualness. Khadijah believed first, then Ali ibn Abi Talib as a boy, then Zayd ibn Haritha his freed servant, then Abu Bakr al-Siddiq who embraced Islam immediately without hesitation. Qadi 'Iyad notes that Allah protected His Prophet during this period and that everyone who approached him sincerely recognized his light. Abu Bakr in turn called others, and through him Uthman, al-Zubayr, and Abdur-Rahman ibn Awf embraced Islam — the nucleus of the Ummah."
+          },
+          "keyPoints": {
+            "ar": [
+              "الدعوة السرية استمرت 3 سنوات — بدأ بأقرب الناس إليه",
+              "ترتيب الإسلام: خديجة → علي (صبي) → زيد بن حارثة → أبو بكر",
+              "أبو بكر أسلم فورًا دون تردد — ودعا آخرين بدوره",
+              "أسلم على يد أبي بكر: عثمان والزبير وعبد الرحمن بن عوف"
+            ],
+            "en": [
+              "The secret call lasted 3 years — he started with those closest to him",
+              "Order of Islam: Khadijah → Ali (boy) → Zayd ibn Haritha → Abu Bakr",
+              "Abu Bakr embraced Islam immediately without hesitation — and called others in turn",
+              "Through Abu Bakr: Uthman, al-Zubayr, and Abdur-Rahman ibn Awf embraced Islam"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "الجهر بالدعوة: المواجهة مع قريش", "en": "The Public Call: Confrontation with Quraysh" },
+          "narrative": {
+            "ar": "حين أمره الله بالجهر: ﴿فَاصْدَعْ بِمَا تُؤْمَرُ﴾ صعد على الصفا ونادى قريشًا قبيلة قبيلة. سألهم: لو أخبرتكم أن خيلًا تريد أن تغير عليكم أكنتم مصدقيّ؟ قالوا: ما جرّبنا عليك كذبًا. فقال: إني نذير لكم بين يدي عذاب شديد. فقال أبو لهب: تبًا لك! فنزلت: ﴿تَبَّتْ يَدَا أَبِي لَهَبٍ﴾. بدأ الاضطهاد فورًا — سُخر منه وأُوذي أصحابه. لكن ذكر القاضي عياض أن الله حماه من القتل: كلما أراد أحدهم قتله شُلّت يده أو صُرف عنه.",
+            "en": "When Allah commanded him to go public: 'Proclaim what you are commanded' (15:94), he climbed Safa and called Quraysh tribe by tribe. He asked: 'If I told you an army was about to attack, would you believe me?' They said: 'We never found you lying.' He said: 'I am a warner to you before a severe punishment.' Abu Lahab said: 'Perish you!' So was revealed: 'May the hands of Abu Lahab perish' (111:1). Persecution began immediately — he was mocked and his companions harmed. But Qadi 'Iyad notes Allah protected him from killing: whenever someone tried to kill him, their hand was paralyzed or they were diverted."
+          },
+          "keyPoints": {
+            "ar": [
+              "صعد على الصفا ونادى قريشًا — اعترفوا بصدقه ثم رفضوا رسالته",
+              "أبو لهب أول من جاهر بالعداء — نزلت سورة المسد في حقه",
+              "الاضطهاد بدأ فورًا بعد الجهر: سخرية وأذى للمسلمين",
+              "القاضي عياض: الله حماه من القتل — كل من حاول قتله صُرف عنه"
+            ],
+            "en": [
+              "He climbed Safa and called Quraysh — they admitted his truthfulness but rejected his message",
+              "Abu Lahab was the first to oppose publicly — Surat al-Masad was revealed about him",
+              "Persecution started immediately after going public: mockery and harm to Muslims",
+              "Qadi 'Iyad: Allah protected him from killing — everyone who tried was diverted"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "حصار شِعب أبي طالب: ثلاث سنوات من الحرمان", "en": "The Siege of Shi'b Abi Talib: Three Years of Deprivation" },
+          "narrative": {
+            "ar": "فرضت قريش حصارًا اقتصاديًا واجتماعيًا على بني هاشم في شِعب أبي طالب استمر ثلاث سنوات. مُنعوا من البيع والشراء والمصاهرة حتى أكلوا ورق الشجر من الجوع. كان النبي ﷺ يسمع بكاء الأطفال من الجوع ولا يملك لهم شيئًا. لكنه لم يتراجع قيد أنملة. انتهى الحصار حين أكلت الأرضة صحيفة المقاطعة إلا اسم الله — آية ربانية كشفها النبي ﷺ فصدقوه. هذه السنوات كشفت أن الحق لا يُشترى بالراحة.",
+            "en": "Quraysh imposed an economic and social boycott on Banu Hashim in the valley of Shi'b Abi Talib lasting three years. They were forbidden from buying, selling, or intermarrying, until they ate tree leaves from hunger. The Prophet ﷺ could hear children crying from hunger with nothing to offer. Yet he did not retreat one inch. The siege ended when termites ate the boycott pact except the name of Allah — a divine sign the Prophet ﷺ revealed and was proven right. These years showed that truth cannot be bought with comfort."
+          },
+          "keyPoints": {
+            "ar": [
+              "حصار اقتصادي واجتماعي لثلاث سنوات — مُنعوا من البيع والشراء والمصاهرة",
+              "أكلوا ورق الشجر من شدة الجوع — بكاء الأطفال كان يُسمع",
+              "لم يتراجع النبي ﷺ قيد أنملة رغم المعاناة",
+              "الأرضة أكلت صحيفة المقاطعة إلا اسم الله — آية ربانية أنهت الحصار"
+            ],
+            "en": [
+              "Economic and social boycott for 3 years — forbidden from trade and intermarriage",
+              "They ate tree leaves from extreme hunger — children's cries could be heard",
+              "The Prophet ﷺ did not retreat one inch despite the suffering",
+              "Termites ate the boycott pact except Allah's name — a divine sign that ended the siege"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "عام الحزن والإسراء: من أعمق الألم إلى أعلى المقام", "en": "The Year of Grief and Isra: From Deepest Pain to Highest Station" },
+          "narrative": {
+            "ar": "في عام واحد فقد النبي ﷺ زوجته خديجة (سنده العاطفي) وعمه أبو طالب (سنده الاجتماعي). سُمي عام الحزن. ذهب إلى الطائف فرُجم حتى أدمت قدماه، لكنه رفض أن يدعو عليهم وقال: «لعل الله يخرج من أصلابهم من يعبده». في هذه اللحظة الأحلك جاء الإسراء والمعراج. ذكر القاضي عياض فصولًا كاملة عن المعراج: أُسري به من المسجد الحرام إلى المسجد الأقصى ثم عُرج به إلى السماوات السبع حيث رأى الأنبياء، ثم قرُب من ربه قربًا لم يبلغه مخلوق. فُرضت الصلاة خمسًا — هدية المعراج للأمة.",
+            "en": "In one year, the Prophet ﷺ lost his wife Khadijah (his emotional anchor) and his uncle Abu Talib (his social protector). It was called the Year of Grief. He went to Ta'if and was stoned until his feet bled, yet he refused to curse them saying: 'Perhaps Allah will bring from their descendants those who worship Him.' In this darkest moment came the Isra and Mi'raj. Qadi 'Iyad dedicates entire chapters to the Mi'raj: he was taken from al-Masjid al-Haram to al-Masjid al-Aqsa, then ascended through the seven heavens where he met the prophets, then drew near to his Lord — a nearness no creature ever reached. The five daily prayers were ordained — the Mi'raj's gift to the Ummah."
+          },
+          "keyPoints": {
+            "ar": [
+              "عام الحزن: فقد خديجة (السند العاطفي) وأبا طالب (السند الاجتماعي) في عام واحد",
+              "في الطائف رُجم حتى أدمت قدماه — ورفض الدعاء عليهم",
+              "الإسراء والمعراج: من المسجد الحرام إلى الأقصى ثم السماوات السبع",
+              "فُرضت الصلوات الخمس في المعراج — هدية الله للأمة في أحلك لحظاتها"
+            ],
+            "en": [
+              "Year of Grief: lost Khadijah (emotional anchor) and Abu Talib (social protector) in one year",
+              "At Ta'if he was stoned till his feet bled — yet refused to curse them",
+              "Isra and Mi'raj: from al-Haram to al-Aqsa then through the seven heavens",
+              "The five daily prayers were ordained during Mi'raj — Allah's gift to the Ummah in its darkest hour"
+            ]
+          }
+        }
+      ],
+      "quiz": [
+        {
+          "q": { "ar": "كم سنة استمرت الدعوة السرية؟", "en": "How many years did the secret call last?" },
+          "o": { "ar": ["3 سنوات", "5 سنوات", "سنة واحدة", "10 سنوات"], "en": ["3 years", "5 years", "1 year", "10 years"] },
+          "a": 0
+        },
+        {
+          "q": { "ar": "ماذا قال النبي ﷺ حين رُجم في الطائف؟", "en": "What did the Prophet ﷺ say when stoned at Ta'if?" },
+          "o": {
+            "ar": ["لعل الله يخرج من أصلابهم من يعبده", "اللهم أهلكهم", "سأنتقم منهم", "لن أعود إلى الدعوة"],
+            "en": ["Perhaps Allah will bring from their descendants those who worship Him", "O Allah destroy them", "I will take revenge", "I will not return to preaching"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "ما الذي فُرض في ليلة المعراج؟", "en": "What was ordained on the night of Mi'raj?" },
+          "o": {
+            "ar": ["الصلوات الخمس", "الصيام", "الزكاة", "الحج"],
+            "en": ["The five daily prayers", "Fasting", "Zakat", "Hajj"]
+          },
+          "a": 0
+        }
+      ],
+      "reading": [
+        ["الشفا — فصل المعراج وقربه من ربه", "المرجع الأساسي"],
+        ["الرحيق المختوم — الاضطهاد المكي", "السياق التاريخي"]
+      ],
+      "endorse": ["معلم سيرة", "خطيب جمعة", "مربٍّ"]
+    },
+    {
+      "id": 6,
+      "icon": "🌅",
+      "x": 800,
+      "y": 350,
+      "era": "hijra",
+      "eraIcon": "🌅",
+      "eraColor": "#4A90D9",
+      "eraGradient": ["#00080d", "#001a2d", "#000a14"],
+      "eraLabel": { "ar": "الهجرة", "en": "The Hijra" },
+      "eraTheme": { "ar": "من الاضطهاد إلى الدولة", "en": "From Persecution to Statehood" },
+      "title": { "ar": "الهجرة إلى المدينة", "en": "The Migration to Madinah" },
+      "focus": { "ar": "الهجرة وتأسيس المجتمع الإسلامي", "en": "The migration and founding of the Islamic society" },
+      "goal": { "ar": "فهم التحول من جماعة مضطهدة إلى دولة ناشئة", "en": "Understand the shift from a persecuted group to a nascent state" },
+      "steps": [
+        {
+          "title": { "ar": "بيعة العقبة: نواة الدولة الجديدة", "en": "The Pledge of Aqaba: Nucleus of a New State" },
+          "narrative": {
+            "ar": "قبل الهجرة جاء وفد من يثرب (المدينة) في موسم الحج فالتقوا النبي ﷺ سرًا. في بيعة العقبة الأولى بايعوه على الإسلام، وفي الثانية بايعوه على النصرة والحماية — أن يمنعوه مما يمنعون منه نساءهم وأبناءهم. كانت هذه البيعة نقطة التحول: لأول مرة كان للمسلمين أرض وحلفاء أقوياء. قال أحدهم: يا رسول الله، إن بيننا وبين الرجال (يقصد يهود المدينة) عهودًا، فهل عسيت إن نحن وفينا لك ثم أظهرك الله أن ترجع إلى قومك؟ فتبسم ﷺ وقال: بل الدم الدم، والهدم الهدم، أنا منكم وأنتم مني.",
+            "en": "Before the Hijra, a delegation from Yathrib (Madinah) came during Hajj season and met the Prophet ﷺ secretly. In the First Pledge of Aqaba they pledged Islam, and in the Second they pledged protection — to defend him as they would their own women and children. This pledge was the turning point: for the first time, Muslims had land and strong allies. One of them asked: 'O Messenger of Allah, there are pacts between us and others (meaning Madinah's Jews); if we fulfill our pledge and Allah gives you victory, will you return to your people?' He ﷺ smiled and said: 'Rather, blood for blood, destruction for destruction — I am of you and you are of me.'"
+          },
+          "keyPoints": {
+            "ar": [
+              "بيعة العقبة الأولى: مبايعة على الإسلام — الثانية: على النصرة والحماية",
+              "أهل المدينة تعهدوا بحمايته كما يحمون نساءهم وأبناءهم",
+              "هذه البيعة أول مرة يكون للمسلمين أرض وحلفاء أقوياء",
+              "قال ﷺ: «الدم الدم والهدم الهدم، أنا منكم وأنتم مني»"
+            ],
+            "en": [
+              "First Pledge of Aqaba: Islam — Second: protection and support",
+              "People of Madinah pledged to protect him as they protect their own families",
+              "This pledge was the first time Muslims had land and strong allies",
+              "He ﷺ said: 'Blood for blood, destruction for destruction — I am of you and you are of me'"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "ليلة الهجرة: تخطيط إلهي ونبوي", "en": "The Night of Hijra: Divine and Prophetic Planning" },
+          "narrative": {
+            "ar": "خططت قريش لقتل النبي ﷺ في فراشه بسيوف من كل قبيلة ليتفرق دمه. لكن الله أعمى أبصارهم: نام علي في فراشه فداءً، وخرج النبي ﷺ من بين أيديهم يتلو: ﴿وَجَعَلْنَا مِن بَيْنِ أَيْدِيهِمْ سَدًّا وَمِنْ خَلْفِهِمْ سَدًّا فَأَغْشَيْنَاهُمْ فَهُمْ لَا يُبْصِرُونَ﴾. اختبأ في غار ثور ثلاثة أيام مع أبي بكر. حين خاف أبو بكر قال ﷺ: «لا تحزن إن الله معنا». نسجت العنكبوت على باب الغار وباضت الحمامة — حماية إلهية في أبسط المخلوقات.",
+            "en": "Quraysh planned to kill the Prophet ﷺ in his bed with swords from every tribe so his blood would be divided. But Allah blinded their eyes: Ali slept in his bed as sacrifice, and the Prophet ﷺ walked out through them reciting: 'We placed a barrier before them and behind them and covered them so they do not see' (36:9). He hid in the Cave of Thawr for three days with Abu Bakr. When Abu Bakr feared, the Prophet ﷺ said: 'Do not grieve, indeed Allah is with us.' A spider spun its web over the cave entrance and a dove nested — divine protection through the simplest of creatures."
+          },
+          "keyPoints": {
+            "ar": [
+              "قريش خططت لقتله بسيوف من كل قبيلة — الله أعمى أبصارهم",
+              "علي نام في فراش النبي ﷺ فداءً له",
+              "اختبأ في غار ثور 3 أيام — العنكبوت والحمامة حماية إلهية",
+              "﴿لَا تَحْزَنْ إِنَّ اللَّهَ مَعَنَا﴾ — كلمة الثبات واليقين"
+            ],
+            "en": [
+              "Quraysh planned to kill him with swords from every tribe — Allah blinded them",
+              "Ali slept in the Prophet's bed as sacrifice",
+              "He hid in Cave Thawr for 3 days — spider and dove as divine protection",
+              "'Do not grieve, indeed Allah is with us' — words of steadfastness and certainty"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "الوصول إلى المدينة: فجر جديد", "en": "Arriving in Madinah: A New Dawn" },
+          "narrative": {
+            "ar": "وصل النبي ﷺ إلى قباء ثم إلى المدينة واستقبله أهلها بنشيد «طلع البدر علينا». أول ما فعله: بنى المسجد (مؤسسة العبادة والحكم والتعليم)، وآخى بين المهاجرين والأنصار (تحويل الولاء من القبيلة إلى العقيدة)، ووضع وثيقة المدينة (أول دستور مدني في التاريخ ينظم العلاقة بين المسلمين واليهود والمشركين). في أشهر قليلة تحول المسلمون من لاجئين مضطهدين إلى مؤسسي دولة. هذا النموذج يُثبت أن الإسلام دين ودولة ومنهج حياة.",
+            "en": "The Prophet ﷺ arrived at Quba then Madinah where its people welcomed him singing 'The full moon has risen upon us.' His first acts: building the mosque (institution of worship, governance, and education), establishing brotherhood between Muhajirun and Ansar (shifting loyalty from tribe to creed), and drafting the Constitution of Madinah (the first civic constitution in history organizing relations between Muslims, Jews, and pagans). In a few months, Muslims transformed from persecuted refugees to founders of a state. This model proves Islam is a religion, a state, and a way of life."
+          },
+          "keyPoints": {
+            "ar": [
+              "أول عمل: بناء المسجد — مؤسسة عبادة وحكم وتعليم",
+              "المؤاخاة بين المهاجرين والأنصار: تحويل الولاء من القبيلة إلى العقيدة",
+              "وثيقة المدينة: أول دستور مدني ينظم العلاقة بين الأديان",
+              "تحول المسلمون من لاجئين مضطهدين إلى مؤسسي دولة في أشهر"
+            ],
+            "en": [
+              "First act: building the mosque — institution of worship, governance, and education",
+              "Brotherhood between Muhajirun and Ansar: shifting loyalty from tribe to creed",
+              "Constitution of Madinah: first civic constitution organizing interfaith relations",
+              "Muslims transformed from persecuted refugees to state founders within months"
+            ]
+          }
+        }
+      ],
+      "quiz": [
+        {
+          "q": { "ar": "ماذا تعهد أهل المدينة في بيعة العقبة الثانية؟", "en": "What did the people of Madinah pledge at the Second Pledge of Aqaba?" },
+          "o": {
+            "ar": ["حماية النبي ﷺ كما يحمون نساءهم وأبناءهم", "التجارة معه فقط", "الحج معه فقط", "عدم القتال"],
+            "en": ["Protecting the Prophet ﷺ as they protect their families", "Only trading with him", "Only performing Hajj with him", "Not fighting"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "من نام في فراش النبي ﷺ ليلة الهجرة؟", "en": "Who slept in the Prophet's bed on the night of Hijra?" },
+          "o": { "ar": ["علي بن أبي طالب", "أبو بكر", "عمر بن الخطاب", "زيد بن حارثة"], "en": ["Ali ibn Abi Talib", "Abu Bakr", "Umar ibn al-Khattab", "Zayd ibn Haritha"] },
+          "a": 0
+        },
+        {
+          "q": { "ar": "ما أول عمل فعله النبي ﷺ في المدينة؟", "en": "What was the Prophet's first act in Madinah?" },
+          "o": {
+            "ar": ["بناء المسجد", "تشكيل الجيش", "جمع الأموال", "بناء القصر"],
+            "en": ["Building the mosque", "Forming an army", "Collecting funds", "Building a palace"]
+          },
+          "a": 0
+        }
+      ],
+      "reading": [
+        ["الشفا — حماية الله لنبيه من الأعداء", "المرجع الأساسي"],
+        ["الرحيق المختوم — الهجرة", "السياق التاريخي"]
+      ],
+      "endorse": ["أستاذ تاريخ", "معلم سيرة", "مرشد شبابي"]
+    },
+    {
+      "id": 7,
+      "icon": "🕌",
+      "x": 930,
+      "y": 430,
+      "era": "madinah",
+      "eraIcon": "🕌",
+      "eraColor": "#2E8B57",
+      "eraGradient": ["#001a0d", "#002d14", "#000d08"],
+      "eraLabel": { "ar": "المدينة المنورة", "en": "Madinah Period" },
+      "eraTheme": { "ar": "بناء الأمة والمعجزات", "en": "Building the Ummah & Miracles" },
+      "title": { "ar": "بناء الأمة ومعجزات النصر", "en": "Building the Nation and Miracles of Victory" },
+      "focus": { "ar": "الدولة والمعجزات والغزوات", "en": "Statehood, miracles, and key battles" },
+      "goal": { "ar": "فهم كيف بنى ﷺ حضارة كاملة في 10 سنوات", "en": "See how he ﷺ built a complete civilization in 10 years" },
+      "steps": [
+        {
+          "title": { "ar": "بدر: يوم الفرقان", "en": "Badr: The Day of Criterion" },
+          "narrative": {
+            "ar": "في السنة الثانية للهجرة واجه 313 مسلمًا بأسلحة بسيطة جيش قريش البالغ ألف مقاتل مدجج بالسلاح. دعا النبي ﷺ ربه حتى سقط رداؤه: «اللهم إن تهلك هذه العصابة لا تُعبد في الأرض». أنزل الله ملائكة تقاتل معهم. انتهت بنصر حاسم كشف أن القوة الحقيقية ليست في العدد والعتاد بل في اليقين والصلة بالله. سُمي يوم الفرقان لأنه فرّق بين الحق والباطل. ذكر القاضي عياض هذا النصر ضمن علامات حماية الله لنبيه وتأييده.",
+            "en": "In the second year of Hijra, 313 Muslims with simple weapons faced Quraysh's 1000 fully-armed warriors. The Prophet ﷺ supplicated until his cloak fell: 'O Allah, if this group perishes, You will not be worshipped on earth.' Allah sent angels to fight alongside them. It ended in a decisive victory proving true power lies not in numbers and arms but in certainty and connection with Allah. It was called the Day of Criterion because it separated truth from falsehood. Qadi 'Iyad mentions this victory among the signs of Allah's protection and support of His Prophet."
+          },
+          "keyPoints": {
+            "ar": [
+              "313 مسلم بأسلحة بسيطة ضد 1000 مقاتل مدجج — نصر إلهي",
+              "دعاء النبي ﷺ: «إن تهلك هذه العصابة لا تُعبد في الأرض»",
+              "أنزل الله ملائكة تقاتل مع المسلمين",
+              "سُمي يوم الفرقان — فرّق بين الحق والباطل"
+            ],
+            "en": [
+              "313 lightly-armed Muslims vs 1000 fully-equipped warriors — divine victory",
+              "Prophet's supplication: 'If this group perishes, You will not be worshipped on earth'",
+              "Allah sent angels to fight alongside the Muslims",
+              "Called the Day of Criterion — it separated truth from falsehood"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "المعجزات الحسية: شهادة الكون", "en": "Physical Miracles: The Universe Testifies" },
+          "narrative": {
+            "ar": "أفرد القاضي عياض فصولًا كاملة لمعجزاته الحسية ﷺ: نبع الماء من بين أصابعه حتى توضأ منه الجيش كله (رواه البخاري ومسلم)، وتكثير الطعام حتى أطعم المئات من قصعة واحدة، وحنين الجذع إليه حين تركه إلى المنبر الجديد حتى سمع الناس صوته كأنه صوت الناقة — فنزل ووضع يده عليه فسكت. وانشقاق القمر حين طلبت قريش آية فانشق إلى فلقتين. هذه المعجزات ليست قصصًا خيالية بل رواها الثقات بأسانيد صحيحة.",
+            "en": "Qadi 'Iyad dedicates entire chapters to his physical miracles ﷺ: water flowed from between his fingers until the whole army performed ablution (narrated by Bukhari and Muslim), food was multiplied until hundreds were fed from a single bowl, the tree-trunk yearned for him when he left it for a new pulpit — people heard it moaning like a she-camel until he descended and placed his hand on it and it fell silent. The moon split when Quraysh demanded a sign — it split into two halves. These miracles are not fairy tales but were narrated by trustworthy authorities with authentic chains."
+          },
+          "keyPoints": {
+            "ar": [
+              "نبع الماء من بين أصابعه حتى توضأ الجيش كله — رواه البخاري ومسلم",
+              "تكثير الطعام: أطعم المئات من قصعة واحدة بدعائه",
+              "حنين الجذع: سمع الناس صوته كالناقة حين تركه ﷺ",
+              "انشقاق القمر إلى فلقتين — رواه الثقات بأسانيد صحيحة"
+            ],
+            "en": [
+              "Water flowed from his fingers until the whole army performed ablution — Bukhari and Muslim",
+              "Food multiplication: hundreds fed from a single bowl by his supplication",
+              "The tree-trunk yearned: people heard it moaning when he ﷺ left it",
+              "The moon split into two halves — narrated by trustworthy authorities with authentic chains"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "فتح مكة: العفو عند المقدرة", "en": "The Conquest of Makkah: Pardon at the Height of Power" },
+          "narrative": {
+            "ar": "بعد 8 سنوات من الهجرة دخل النبي ﷺ مكة فاتحًا بعشرة آلاف مقاتل، المدينة التي طردته وعذبت أصحابه وحاصرته. دخلها مطأطئ الرأس تواضعًا لله حتى كادت لحيته تمس رحله. وقف أمام قريش وقال: ما تظنون أني فاعل بكم؟ قالوا: أخ كريم وابن أخ كريم. قال: اذهبوا فأنتم الطلقاء. عفا عمن قتل عمه حمزة ومن أخرجه ومن آذاه. هذا العفو عند القدرة الكاملة هو أعظم درس في القيادة الأخلاقية — لم ينتقم بل رحم.",
+            "en": "After 8 years of Hijra, the Prophet ﷺ entered Makkah as conqueror with 10,000 warriors — the city that expelled him, tortured his companions, and besieged him. He entered with his head bowed in humility to Allah, his beard nearly touching his saddle. He stood before Quraysh and asked: 'What do you think I will do with you?' They said: 'A noble brother and the son of a noble brother.' He said: 'Go, you are free.' He pardoned those who killed his uncle Hamza, those who expelled him, and those who harmed him. This pardon at the height of complete power is the greatest lesson in moral leadership — he did not avenge, he showed mercy."
+          },
+          "keyPoints": {
+            "ar": [
+              "دخل مكة فاتحًا بعد 8 سنوات — بعشرة آلاف مقاتل",
+              "دخلها مطأطئ الرأس تواضعًا لله — لم يدخل دخول المنتصرين المتكبرين",
+              "قال: «اذهبوا فأنتم الطلقاء» — عفا عن كل من آذاه",
+              "العفو عند القدرة الكاملة = أعظم درس في القيادة الأخلاقية"
+            ],
+            "en": [
+              "Entered Makkah as conqueror after 8 years — with 10,000 warriors",
+              "Entered with his head bowed in humility — not as an arrogant conqueror",
+              "Said: 'Go, you are free' — pardoned everyone who harmed him",
+              "Pardon at the height of power = the greatest lesson in moral leadership"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "حجة الوداع: الوصية الأخيرة", "en": "The Farewell Pilgrimage: The Final Testament" },
+          "narrative": {
+            "ar": "في السنة العاشرة حج النبي ﷺ حجته الوحيدة مع أكثر من مئة ألف مسلم. في خطبة عرفات ألقى وصيته الخالدة: «إن دماءكم وأموالكم حرام عليكم... ألا كل شيء من أمر الجاهلية تحت قدميّ موضوع... اتقوا الله في النساء... تركت فيكم ما إن تمسكتم به لن تضلوا: كتاب الله». ثم نزلت: ﴿الْيَوْمَ أَكْمَلْتُ لَكُمْ دِينَكُمْ﴾. بكى عمر حين سمعها لأنه أدرك أن الكمال يعني قرب الوداع.",
+            "en": "In the 10th year, the Prophet ﷺ performed his only pilgrimage with over 100,000 Muslims. In his Arafat sermon he delivered his eternal testament: 'Your blood and property are sacred to you... Everything from Jahiliyyah is under my feet... Fear Allah regarding women... I have left among you what if you hold to, you will never go astray: the Book of Allah.' Then was revealed: 'Today I have perfected your religion for you.' (5:3). Umar wept when he heard it, for he understood that perfection meant the farewell was near."
+          },
+          "keyPoints": {
+            "ar": [
+              "حجة الوداع: حجته الوحيدة مع أكثر من 100,000 مسلم",
+              "الخطبة: حرمة الدماء والأموال، حقوق النساء، إبطال الجاهلية",
+              "«تركت فيكم ما إن تمسكتم به لن تضلوا: كتاب الله»",
+              "﴿الْيَوْمَ أَكْمَلْتُ لَكُمْ دِينَكُمْ﴾ — بكى عمر لأن الكمال يعني قرب النهاية"
+            ],
+            "en": [
+              "Farewell Pilgrimage: his only Hajj with over 100,000 Muslims",
+              "The sermon: sanctity of blood and property, women's rights, abolishing Jahiliyyah customs",
+              "'I left among you what will prevent your going astray: the Book of Allah'",
+              "'Today I have perfected your religion' — Umar wept knowing perfection meant the farewell was near"
+            ]
+          }
+        }
+      ],
+      "quiz": [
+        {
+          "q": { "ar": "كم كان عدد المسلمين في بدر مقابل قريش؟", "en": "How many Muslims were at Badr vs Quraysh?" },
+          "o": { "ar": ["313 مقابل 1000", "1000 مقابل 3000", "500 مقابل 500", "10000 مقابل 1000"], "en": ["313 vs 1000", "1000 vs 3000", "500 vs 500", "10000 vs 1000"] },
+          "a": 0
+        },
+        {
+          "q": { "ar": "ماذا قال النبي ﷺ لقريش يوم فتح مكة؟", "en": "What did the Prophet ﷺ say to Quraysh on the Conquest of Makkah?" },
+          "o": {
+            "ar": ["اذهبوا فأنتم الطلقاء", "سأنتقم منكم", "ادفعوا الجزية", "ارحلوا عن مكة"],
+            "en": ["Go, you are free", "I will take revenge", "Pay tribute", "Leave Makkah"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "ما الذي تركه النبي ﷺ للأمة في خطبة الوداع؟", "en": "What did the Prophet ﷺ leave for the Ummah in the Farewell Sermon?" },
+          "o": {
+            "ar": ["كتاب الله", "الذهب والفضة", "الجيش والسلاح", "القصور والأراضي"],
+            "en": ["The Book of Allah", "Gold and silver", "Army and weapons", "Palaces and lands"]
+          },
+          "a": 0
+        }
+      ],
+      "reading": [
+        ["الشفا — المعجزات الحسية", "المرجع الأساسي"],
+        ["الرحيق المختوم — غزوات المدينة", "السياق التاريخي"]
+      ],
+      "endorse": ["أستاذ تاريخ إسلامي", "معلم سيرة", "خطيب جمعة"]
+    },
+    {
+      "id": 8,
+      "icon": "✨",
+      "x": 1080,
+      "y": 300,
+      "era": "legacy",
+      "eraIcon": "✨",
+      "eraColor": "#9B59B6",
+      "eraGradient": ["#0a001a", "#1a002d", "#05000d"],
+      "eraLabel": { "ar": "الوفاة والإرث الخالد", "en": "Death & Eternal Legacy" },
+      "eraTheme": { "ar": "الخلود والحقوق", "en": "Eternity and Rights" },
+      "title": { "ar": "الرحيل والإرث الذي لا يموت", "en": "The Departure and the Undying Legacy" },
+      "focus": { "ar": "وفاته ﷺ وحقوقه على الأمة وأثره الخالد", "en": "His death ﷺ, his rights upon the Ummah, and his eternal impact" },
+      "goal": { "ar": "فهم أن علاقتنا بالنبي ﷺ لم تنتهِ بوفاته بل هي حية إلى قيام الساعة", "en": "Understand that our bond with the Prophet ﷺ did not end at his death but lives until the Hour" },
+      "steps": [
+        {
+          "title": { "ar": "المرض الأخير: وداع النبي ﷺ", "en": "The Final Illness: The Prophet's Farewell" },
+          "narrative": {
+            "ar": "بدأ مرضه ﷺ في صفر من السنة 11 للهجرة. اشتد عليه المرض حتى كان يقول: «وا رأساه». ومع ذلك كان حريصًا على الصلاة بالناس حتى عجز، فأمر أبا بكر أن يصلي بهم. خرج آخر مرة مستندًا على علي والعباس وقدماه تخطان في الأرض. نظر إلى المسلمين وهم يصلون فتبسم فرحًا. أوصى بالأنصار خيرًا وقال: «الصلاة الصلاة وما ملكت أيمانكم». آخر ما قال: «اللهم الرفيق الأعلى» — اختار لقاء ربه على البقاء في الدنيا.",
+            "en": "His illness ﷺ began in Safar of the 11th year of Hijra. It intensified until he would say: 'Oh, my head!' Yet he was keen to lead the prayer until he could not, then ordered Abu Bakr to lead. He came out the last time leaning on Ali and al-Abbas, his feet dragging on the ground. He looked at the Muslims praying and smiled with joy. He recommended the Ansar be treated well and said: 'The prayer! The prayer! And those whom your right hands possess.' His last words: 'O Allah, the Highest Companion' — he chose meeting his Lord over remaining in this world."
+          },
+          "keyPoints": {
+            "ar": [
+              "بدأ المرض في صفر سنة 11 هـ — أمر أبا بكر أن يؤم الناس",
+              "خرج آخر مرة مستندًا على علي والعباس — تبسم لما رأى المسلمين يصلون",
+              "آخر وصاياه: «الصلاة الصلاة وما ملكت أيمانكم»",
+              "آخر كلماته: «اللهم الرفيق الأعلى» — اختار لقاء ربه"
+            ],
+            "en": [
+              "Illness began in Safar 11 AH — he ordered Abu Bakr to lead prayer",
+              "Came out the last time leaning on Ali and al-Abbas — smiled seeing Muslims praying",
+              "Final advice: 'The prayer! The prayer! And those whom your right hands possess'",
+              "Last words: 'O Allah, the Highest Companion' — he chose meeting his Lord"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "يوم الوفاة: أعظم مصيبة", "en": "The Day of Death: The Greatest Calamity" },
+          "narrative": {
+            "ar": "توفي يوم الاثنين 12 ربيع الأول سنة 11 هـ في حجر عائشة ورأسه بين سحرها ونحرها. أظلمت المدينة. قال أنس: ما رأيت يومًا أظلم من يوم دخل فيه رسول الله ﷺ المدينة وما رأيت يومًا أظلم من يوم مات فيه. جاء عمر يقول: من قال إنه مات ضربته بسيفي! حتى جاء أبو بكر وقال كلمته الخالدة: «من كان يعبد محمدًا فإن محمدًا قد مات، ومن كان يعبد الله فإن الله حي لا يموت». ثم تلا: ﴿وَمَا مُحَمَّدٌ إِلَّا رَسُولٌ قَدْ خَلَتْ مِن قَبْلِهِ الرُّسُلُ﴾.",
+            "en": "He died on Monday, 12 Rabi al-Awwal, 11 AH, in A'isha's chamber with his head between her chest and neck. Madinah went dark. Anas said: 'I never saw a day darker than the day he entered Madinah, nor darker than the day he died in it.' Umar came saying: 'Whoever says he died, I will strike with my sword!' Until Abu Bakr came and spoke his immortal words: 'Whoever worshipped Muhammad, Muhammad has died. Whoever worships Allah, Allah is alive and never dies.' Then he recited: 'Muhammad is but a messenger; messengers have passed before him.' (3:144)"
+          },
+          "keyPoints": {
+            "ar": [
+              "توفي 12 ربيع الأول 11 هـ — في حجر عائشة رضي الله عنها",
+              "أنس: ما رأيت يومًا أظلم من يوم مات فيه ﷺ",
+              "عمر لم يصدق — أبو بكر ثبّت الأمة بكلمته الخالدة",
+              "﴿وَمَا مُحَمَّدٌ إِلَّا رَسُولٌ قَدْ خَلَتْ مِن قَبْلِهِ الرُّسُلُ﴾"
+            ],
+            "en": [
+              "Died 12 Rabi al-Awwal 11 AH — in A'isha's chamber",
+              "Anas: 'I never saw a day darker than the day he died'",
+              "Umar could not believe it — Abu Bakr steadied the Ummah with his immortal words",
+              "'Muhammad is but a messenger; messengers have passed before him' (3:144)"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "حق المحبة: لماذا نحبه ﷺ؟", "en": "The Right of Love: Why Do We Love Him ﷺ?" },
+          "narrative": {
+            "ar": "أفرد القاضي عياض الجزء الثاني من الشفا كاملًا لحقوق النبي ﷺ على الأمة. أول هذه الحقوق: المحبة. قال ﷺ: «لا يؤمن أحدكم حتى أكون أحب إليه من ولده ووالده والناس أجمعين». قال عمر: يا رسول الله لأنت أحب إلي من كل شيء إلا من نفسي. فقال: «لا يا عمر، حتى أكون أحب إليك من نفسك». قال عمر: فإنك الآن أحب إلي من نفسي. قال: «الآن يا عمر». محبته ﷺ ليست مجرد عاطفة بل شرط إيمان — وعلامتها اتباع سنته والصلاة عليه.",
+            "en": "Qadi 'Iyad dedicates the entire second part of the Shifa to the rights of the Prophet ﷺ upon the Ummah. The first of these rights: love. He ﷺ said: 'None of you truly believes until I am more beloved to him than his child, his parent, and all of mankind.' Umar said: 'O Messenger of Allah, you are more beloved to me than everything except myself.' He said: 'No, Umar, until I am more beloved to you than yourself.' Umar said: 'Now you are more beloved to me than myself.' He said: 'Now, Umar.' Loving him ﷺ is not mere emotion but a condition of faith — and its sign is following his Sunnah and sending blessings upon him."
+          },
+          "keyPoints": {
+            "ar": [
+              "محبته ﷺ شرط إيمان: «لا يؤمن أحدكم حتى أكون أحب إليه من والده وولده»",
+              "عمر قال: أنت أحب إلي من كل شيء إلا نفسي — فقال: «لا، حتى من نفسك»",
+              "علامة المحبة: اتباع السنة والصلاة عليه والشوق إلى لقائه",
+              "القاضي عياض أفرد لحق المحبة فصولًا كاملة في الشفا"
+            ],
+            "en": [
+              "Loving him ﷺ is a condition of faith: 'None believes until I am more beloved than parents and children'",
+              "Umar said he loved him more than everything except himself — Prophet said: 'No, even more than yourself'",
+              "Signs of love: following his Sunnah, sending blessings on him, and yearning to meet him",
+              "Qadi 'Iyad dedicates entire chapters to the right of love in the Shifa"
+            ]
+          }
+        },
+        {
+          "title": { "ar": "الصلاة عليه والأثر الخالد", "en": "Sending Blessings and the Eternal Impact" },
+          "narrative": {
+            "ar": "من حقوقه ﷺ الصلاة والسلام عليه. قال تعالى: ﴿إِنَّ اللَّهَ وَمَلَائِكَتَهُ يُصَلُّونَ عَلَى النَّبِيِّ﴾. الله نفسه يصلي عليه — فكيف لا نصلي نحن؟ ذكر القاضي عياض أن النبي ﷺ قال: «من صلّى عليّ واحدة صلّى الله عليه عشرًا». أثره ﷺ لم يتوقف بوفاته: حضارة امتدت 14 قرنًا، ومليارا مسلم يتبعون سنته، وكتابه القرآن أكثر كتاب محفوظ ومتلو في التاريخ. قال ﷺ: «حياتي خير لكم وموتي خير لكم» — حتى بعد الممات لا يزال شافعًا وقدوة.",
+            "en": "Among his rights ﷺ is sending blessings and peace upon him. Allah says: 'Indeed, Allah and His angels send blessings upon the Prophet.' (33:56) Allah Himself sends blessings upon him — how then can we not? Qadi 'Iyad mentions that the Prophet ﷺ said: 'Whoever sends blessings upon me once, Allah sends blessings upon him ten times.' His impact ﷺ did not stop with his death: a civilization spanning 14 centuries, two billion Muslims following his Sunnah, and the Quran as the most memorized and recited book in history. He ﷺ said: 'My life is good for you and my death is good for you' — even after death he remains intercessor and exemplar."
+          },
+          "keyPoints": {
+            "ar": [
+              "﴿إِنَّ اللَّهَ وَمَلَائِكَتَهُ يُصَلُّونَ عَلَى النَّبِيِّ﴾ — الله نفسه يصلي عليه",
+              "«من صلّى عليّ واحدة صلّى الله عليه عشرًا» — أجر مضاعف",
+              "أثره: حضارة 14 قرنًا، ملياران يتبعون سنته، القرآن أكثر كتاب محفوظ",
+              "«حياتي خير لكم وموتي خير لكم» — شفيع وقدوة حتى بعد الممات"
+            ],
+            "en": [
+              "'Allah and His angels send blessings upon the Prophet' (33:56) — Allah Himself blesses him",
+              "'Whoever sends blessings once, Allah sends blessings ten times' — multiplied reward",
+              "His impact: 14 centuries of civilization, 2 billion followers, the Quran as the most preserved book",
+              "'My life is good for you and my death is good for you' — intercessor and exemplar even after death"
+            ]
+          }
+        }
+      ],
+      "quiz": [
+        {
+          "q": { "ar": "ما آخر كلمات النبي ﷺ قبل وفاته؟", "en": "What were the Prophet's last words before death?" },
+          "o": {
+            "ar": ["اللهم الرفيق الأعلى", "اللهم انصرني", "أوصيكم بالمال", "لا إله إلا الله فقط"],
+            "en": ["O Allah, the Highest Companion", "O Allah, help me", "I advise you about wealth", "There is no god but Allah only"]
+          },
+          "a": 0
+        },
+        {
+          "q": { "ar": "من ثبّت الأمة يوم وفاة النبي ﷺ بكلمته الخالدة؟", "en": "Who steadied the Ummah on the day of the Prophet's death with immortal words?" },
+          "o": { "ar": ["أبو بكر الصديق", "عمر بن الخطاب", "علي بن أبي طالب", "عثمان بن عفان"], "en": ["Abu Bakr al-Siddiq", "Umar ibn al-Khattab", "Ali ibn Abi Talib", "Uthman ibn Affan"] },
+          "a": 0
+        },
+        {
+          "q": { "ar": "ماذا يحدث لمن صلّى على النبي ﷺ مرة واحدة؟", "en": "What happens to whoever sends blessings upon the Prophet ﷺ once?" },
+          "o": {
+            "ar": ["يصلي الله عليه عشر مرات", "لا شيء", "تُكتب له حسنة واحدة فقط", "يصبح غنيًا"],
+            "en": ["Allah sends blessings upon him ten times", "Nothing", "Only one good deed is written", "He becomes rich"]
+          },
+          "a": 0
+        }
+      ],
+      "reading": [
+        ["الشفا — الجزء الثاني: حقوق النبي ﷺ على الأمة", "المرجع الأساسي"],
+        ["الشفا — فصل محبة النبي ﷺ والصلاة عليه", "تعمق"]
+      ],
+      "endorse": ["مربٍّ", "معلم تدبر", "إمام مسجد"]
+    }
+  ]
+}

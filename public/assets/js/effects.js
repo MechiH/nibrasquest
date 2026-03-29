@@ -367,23 +367,23 @@ function drawBG() {
   requestAnimationFrame(drawBG);
 }
 let audioCtx;
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === "suspended") audioCtx.resume();
+  return audioCtx;
+}
 function beep(freq = 0.0, duration = 0.05, type = "sine") {
   if (!G.sound) return;
   try {
-    audioCtx =
-      audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-    const o = audioCtx.createOscillator(),
-      g = audioCtx.createGain();
+    const ctx = getAudioCtx();
+    const o = ctx.createOscillator(), g = ctx.createGain();
     o.type = type;
     o.frequency.value = freq;
     g.gain.value = 0.03;
     o.connect(g);
-    g.connect(audioCtx.destination);
+    g.connect(ctx.destination);
     o.start();
-    g.gain.exponentialRampToValueAtTime(
-      0.0001,
-      audioCtx.currentTime + duration,
-    );
-    o.stop(audioCtx.currentTime + duration);
+    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+    o.stop(ctx.currentTime + duration);
   } catch (e) {}
 }

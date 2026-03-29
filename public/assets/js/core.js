@@ -145,7 +145,7 @@ function setLang(lang) {
     renderStoryHeader();
     renderEraStrip();
     renderReferences();
-    showStoryParagraph(storyIndex);
+    showStoryStep(storyIndex);
   }
   if (currentScreen === "quiz" && activeStage) renderQuiz();
   if (currentScreen === "result" && lastResult) renderResult(lastResult);
