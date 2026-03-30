@@ -196,6 +196,20 @@
             }
         }
 
+        @keyframes atlasDrift {
+            0% {
+                transform: translate3d(0, 0, 0) scale(1)
+            }
+
+            50% {
+                transform: translate3d(-.6%, .6%, 0) scale(1.01)
+            }
+
+            100% {
+                transform: translate3d(0, 0, 0) scale(1)
+            }
+        }
+
         .top-controls {
             position: fixed;
             top: 14px;
@@ -565,17 +579,20 @@
 
         .map-hud {
             position: relative;
-            z-index: 2;
+            z-index: 6;
             display: grid;
             grid-template-columns: 1.2fr 1fr 1.2fr;
             align-items: center;
             gap: 12px;
-            padding: 82px 20px 8px
+            padding: 82px 20px 10px
         }
 
-        .hud-card {
+        .map-hud .hud-card {
             padding: 14px 16px;
-            border-radius: 20px
+            border-radius: 20px;
+            background:
+                linear-gradient(155deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .02) 42%),
+                rgba(8, 13, 24, .82)
         }
 
         .hud-left,
@@ -643,67 +660,240 @@
         .map-wrap {
             position: relative;
             flex: 1;
-            min-height: 0
+            min-height: clamp(520px, 68vh, 820px);
+            width: 100%;
+            margin: 0;
+            border-radius: 0;
+            overflow: hidden;
+            isolation: isolate;
+            border: none;
+            background: transparent;
+            box-shadow: none
+        }
+
+        .map-wrap::before {
+            content: none
+        }
+
+        .map-progress-badge,
+        .map-legend,
+        .panel-toggle,
+        .map-wrap .side-panel {
+            display: none !important
+        }
+
+        .map-atlas {
+            display: none
+        }
+
+        .atlas-grid {
+            position: absolute;
+            inset: 0;
+            opacity: .12;
+            background:
+                linear-gradient(to right, rgba(255, 255, 255, .035) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, .03) 1px, transparent 1px);
+            background-size: 124px 124px;
+            mask-image: radial-gradient(circle at 50% 46%, #000 45%, transparent 95%)
+        }
+
+        .atlas-aurora {
+            position: absolute;
+            width: 56%;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            filter: blur(62px);
+            opacity: .15;
+            animation: atlasDrift 24s ease-in-out infinite
+        }
+
+        .atlas-aurora-a {
+            inset-inline-start: -12%;
+            top: -20%;
+            background: radial-gradient(circle, rgba(87, 116, 174, .36) 0%, rgba(87, 116, 174, 0) 70%)
+        }
+
+        .atlas-aurora-b {
+            inset-inline-end: -16%;
+            bottom: -26%;
+            background: radial-gradient(circle, rgba(226, 191, 123, .3) 0%, rgba(226, 191, 123, 0) 72%);
+            opacity: .1;
+            animation-duration: 28s;
+            animation-delay: -4s
+        }
+
+        .atlas-vignette {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 44%, transparent 44%, rgba(0, 0, 0, .5) 100%)
         }
 
         #mapSvg {
+            position: relative;
+            z-index: 2;
             width: 100%;
             height: 100%;
             display: block
         }
 
+        .map-progress-badge {
+            position: absolute;
+            top: 14px;
+            inset-inline-start: 16px;
+            z-index: 6;
+            border-radius: 14px;
+            padding: 10px 12px;
+            min-width: 132px;
+            background:
+                linear-gradient(150deg, rgba(233, 208, 146, .1), rgba(255, 255, 255, .02) 44%),
+                rgba(6, 12, 24, .84);
+            border: 1px solid rgba(245, 217, 106, .18);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, .28)
+        }
+
+        .map-progress-badge .k {
+            font-size: 9px;
+            letter-spacing: .09em;
+            text-transform: uppercase;
+            color: var(--dim);
+            font-weight: 800
+        }
+
+        .map-progress-badge .v {
+            margin-top: 5px;
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--gold-2)
+        }
+
+        .map-legend {
+            position: absolute;
+            top: 16px;
+            inset-inline-end: 16px;
+            z-index: 6;
+            min-width: 160px;
+            border-radius: 14px;
+            padding: 10px 11px;
+            background:
+                linear-gradient(150deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, .015) 44%),
+                rgba(5, 10, 21, .86);
+            border: 1px solid rgba(245, 217, 106, .12);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, .28)
+        }
+
+        .map-legend .legend-title {
+            font-size: 9px;
+            letter-spacing: .11em;
+            text-transform: uppercase;
+            color: var(--gold);
+            font-weight: 900;
+            margin-bottom: 8px
+        }
+
+        .legend-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: 700
+        }
+
+        .legend-row+.legend-row {
+            margin-top: 6px
+        }
+
+        .legend-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            display: inline-block;
+            border: 1px solid rgba(255, 255, 255, .22);
+            flex-shrink: 0
+        }
+
+        .legend-dot.active {
+            background: var(--gold);
+            border-color: rgba(245, 217, 106, .9);
+            box-shadow: 0 0 8px rgba(245, 217, 106, .35)
+        }
+
+        .legend-dot.done {
+            background: #34d399;
+            border-color: rgba(52, 211, 153, .9)
+        }
+
+        .legend-dot.locked {
+            background: rgba(124, 93, 173, .45);
+            border-color: rgba(124, 93, 173, .7)
+        }
+
         .tooltip {
             position: absolute;
             pointer-events: none;
-            z-index: 4;
+            z-index: 8;
             opacity: 0;
-            transform: translateY(8px);
+            transform: translateY(10px) scale(.98);
             transition: .18s;
-            background: rgba(3, 6, 14, .94);
-            border: 1px solid var(--line-strong);
-            border-radius: 14px;
-            padding: 10px 12px;
-            min-width: 160px;
-            box-shadow: var(--shadow)
+            background:
+                linear-gradient(150deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, .015) 48%),
+                rgba(4, 8, 18, .95);
+            border: 1px solid rgba(245, 217, 106, .22);
+            border-radius: 12px;
+            padding: 10px 11px;
+            min-width: 172px;
+            max-width: min(250px, 82vw);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, .35)
         }
 
         .tooltip.on {
             opacity: 1;
-            transform: translateY(0)
+            transform: translateY(0) scale(1)
         }
 
         .tooltip .tt-state {
-            font-size: 10px;
-            letter-spacing: .16em;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 9px;
+            letter-spacing: .12em;
             text-transform: uppercase;
             color: var(--gold);
-            margin-bottom: 5px;
-            font-weight: 900
+            margin-bottom: 6px;
+            font-weight: 900;
+            padding: 2px 7px;
+            border-radius: 999px;
+            border: 1px solid rgba(245, 217, 106, .2);
+            background: rgba(245, 217, 106, .06)
         }
 
         .tooltip .tt-name {
-            font-weight: 800;
-            margin-bottom: 4px
+            font-weight: 900;
+            margin-bottom: 4px;
+            line-height: 1.35
         }
 
         .tooltip .tt-meta {
-            font-size: 12px;
-            color: var(--muted)
+            font-size: 11px;
+            color: var(--muted);
+            line-height: 1.6
         }
 
         .panel-toggle {
             position: absolute;
             bottom: 18px;
-            left: 18px;
-            z-index: 5;
+            inset-inline-start: 18px;
+            z-index: 7;
             display: flex;
             align-items: center;
             gap: 8px;
             padding: 12px 14px;
             border-radius: 999px;
-            background: rgba(5, 10, 20, .9);
-            border: 1px solid var(--line);
-            box-shadow: var(--shadow);
+            background:
+                linear-gradient(145deg, rgba(245, 217, 106, .08), rgba(255, 255, 255, .015) 45%),
+                rgba(5, 10, 20, .9);
+            border: 1px solid rgba(245, 217, 106, .16);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, .32);
             cursor: pointer;
             font-weight: 900;
             color: var(--text)
@@ -716,16 +906,19 @@
             text-transform: uppercase
         }
 
-        .side-panel {
+        .map-wrap .side-panel {
             position: absolute;
             bottom: 18px;
-            left: 18px;
-            z-index: 4;
+            inset-inline-start: 18px;
+            z-index: 6;
             width: min(360px, calc(100% - 36px));
             padding: 16px 16px 14px;
             border-radius: 22px;
             transition: transform .22s ease, opacity .22s ease;
-            overflow: hidden
+            overflow: hidden;
+            background:
+                linear-gradient(160deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .02) 40%),
+                rgba(4, 9, 20, .9)
         }
 
         .side-panel.hidden-panel {
@@ -2106,6 +2299,20 @@
                 padding-top: 92px
             }
 
+            .map-wrap {
+                margin: 0;
+                min-height: clamp(560px, 72vh, 880px)
+            }
+
+            .map-progress-badge,
+            .map-legend {
+                top: 12px
+            }
+
+            .atlas-grid {
+                opacity: .1
+            }
+
             .hud-left,
             .hud-center,
             .hud-right {
@@ -2198,7 +2405,24 @@
             }
 
             .map-wrap {
-                padding-bottom: 150px
+                margin: 0;
+                min-height: 620px;
+                padding-bottom: 0
+            }
+
+            .atlas-aurora {
+                display: none
+            }
+
+            .atlas-grid {
+                opacity: .08
+            }
+
+            .map-legend,
+            .map-progress-badge,
+            .panel-toggle,
+            .side-panel {
+                display: none !important
             }
 
             .logo {

@@ -84,7 +84,30 @@
                 <div class="stat">🏅 <span id="stat-ach">0</span></div>
             </div>
         </div>
-        <div class="map-wrap"><svg id="mapSvg" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="map-wrap">
+            <div class="map-atlas" aria-hidden="true">
+                <div class="atlas-grid"></div>
+                <div class="atlas-aurora atlas-aurora-a"></div>
+                <div class="atlas-aurora atlas-aurora-b"></div>
+                <div class="atlas-vignette"></div>
+            </div>
+            <svg id="mapSvg" viewBox="0 0 1200 640" preserveAspectRatio="xMidYMid meet"></svg>
+            <div class="map-progress-badge" id="map-progress-badge">
+                <div class="k" id="map-progress-k">Stage Progress</div>
+                <div class="v" id="map-progress-v">0/0</div>
+            </div>
+            <div class="map-legend" id="map-legend">
+                <div class="legend-title" id="map-legend-title">Map Signals</div>
+                <div class="legend-row">
+                    <span class="legend-dot active"></span><span id="legend-active-label">Current stage</span>
+                </div>
+                <div class="legend-row">
+                    <span class="legend-dot done"></span><span id="legend-done-label">Completed stage</span>
+                </div>
+                <div class="legend-row">
+                    <span class="legend-dot locked"></span><span id="legend-locked-label">Locked stage</span>
+                </div>
+            </div>
             <div class="tooltip" id="tooltip">
                 <div class="tt-state" id="tt-state"></div>
                 <div class="tt-name" id="tt-name"></div>

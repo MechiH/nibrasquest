@@ -1,8 +1,44 @@
+function rgba(hex, alpha = 1) {
+  if (!hex || typeof hex !== "string") return `rgba(212,168,67,${alpha})`;
+  const clean = hex.replace("#", "");
+  const full = clean.length === 3
+    ? clean.split("").map((c) => c + c).join("")
+    : clean;
+  const value = Number.parseInt(full, 16);
+  if (!Number.isFinite(value)) return `rgba(212,168,67,${alpha})`;
+  const r = (value >> 16) & 255;
+  const g = (value >> 8) & 255;
+  const b = value & 255;
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+function updateMapSignals(stages) {
+  const progressLabel = byId("map-progress-k");
+  const progressValue = byId("map-progress-v");
+  const legendTitle = byId("map-legend-title");
+  const activeLabel = byId("legend-active-label");
+  const doneLabel = byId("legend-done-label");
+  const lockedLabel = byId("legend-locked-label");
+  if (!progressLabel || !progressValue) return;
+  const done = stages.filter((st) => isStageCompleted(G.path, st.id)).length;
+  const next = stages.find((st) => !isStageCompleted(G.path, st.id)) || stages[stages.length - 1];
+  progressLabel.textContent = isAR()
+    ? `تقدّم المراحل • الحالية ${next.id}`
+    : `Stage Progress • Current ${next.id}`;
+  progressValue.textContent = `${done}/${stages.length}`;
+  byId("map-progress-badge").title = next.title[G.lang];
+  if (legendTitle) legendTitle.textContent = isAR() ? "إشارات الخريطة" : "Map Signals";
+  if (activeLabel) activeLabel.textContent = isAR() ? "المرحلة الحالية" : "Current stage";
+  if (doneLabel) doneLabel.textContent = isAR() ? "مرحلة مكتملة" : "Completed stage";
+  if (lockedLabel) lockedLabel.textContent = isAR() ? "مرحلة مغلقة" : "Locked stage";
+}
 function renderMap() {
   updateHUD();
   byId("map-title").textContent = activePath().name[G.lang];
   const svg = byId("mapSvg");
   svg.innerHTML = "";
+  const sts = activeStages();
+  const mapYOffset = -48;
+  updateMapSignals(sts);
   const NS = "http://www.w3.org/2000/svg",
     el = (t) => document.createElementNS(NS, t),
     set = (n, a) => {
@@ -11,194 +47,248 @@ function renderMap() {
     };
   const defs = el("defs");
   const glow = el("filter");
-  glow.id = "gl";
+  glow.id = "map-glow";
   glow.innerHTML =
-    '<feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>';
+    '<feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>';
   defs.appendChild(glow);
+  const soft = el("filter");
+  soft.id = "map-soft";
+  soft.innerHTML =
+    '<feGaussianBlur stdDeviation="1.8" result="s"/><feMerge><feMergeNode in="s"/><feMergeNode in="SourceGraphic"/></feMerge>';
+  defs.appendChild(soft);
+  const routeReady = el("linearGradient");
+  set(routeReady, { id: "route-ready", x1: "0", y1: "0", x2: "1", y2: "0" });
+  routeReady.innerHTML =
+    '<stop offset="0%" stop-color="rgba(187,201,228,.24)"/><stop offset="100%" stop-color="rgba(233,208,146,.45)"/>';
+  defs.appendChild(routeReady);
+  const routeDone = el("linearGradient");
+  set(routeDone, { id: "route-done", x1: "0", y1: "0", x2: "1", y2: "0" });
+  routeDone.innerHTML =
+    '<stop offset="0%" stop-color="rgba(248,232,176,.92)"/><stop offset="100%" stop-color="rgba(230,197,120,.7)"/>';
+  defs.appendChild(routeDone);
   svg.appendChild(defs);
-  const sts = activeStages();
+
   for (let i = 0; i < sts.length - 1; i++) {
-    const a = sts[i],
-      b = sts[i + 1],
-      done = isStageCompleted(G.path, a.id),
-      avail = a.id <= G.unlocked[G.path],
-      c1x = (a.x + b.x) / 2,
-      c2x = (a.x + b.x) / 2;
-    const d = `M${a.x},${a.y} C${c1x},${a.y - 80} ${c2x},${b.y + 80} ${b.x},${b.y}`;
-    svg.appendChild(
-      set(el("path"), {
-        d,
-        fill: "none",
-        stroke: "rgba(0,0,0,.52)",
-        "stroke-width": 13,
-        "stroke-linecap": "round",
-      }),
-    );
-    svg.appendChild(
-      set(el("path"), {
-        d,
-        fill: "none",
-        stroke: done
-          ? "rgba(212,168,67,.7)"
-          : avail
-            ? "rgba(120,90,18,.4)"
-            : "rgba(40,42,70,.35)",
-        "stroke-width": done ? 5 : 4,
-        "stroke-dasharray": done ? "" : "10,10",
-        "stroke-linecap": "round",
-      }),
-    );
-    if (done)
-      svg.appendChild(
-        set(el("path"), {
-          d,
-          fill: "none",
-          stroke: "rgba(252,235,140,.5)",
-          "stroke-width": 2.1,
-          "stroke-linecap": "round",
-        }),
-      );
+    const a = sts[i];
+    const b = sts[i + 1];
+    const ay = a.y + mapYOffset;
+    const by = b.y + mapYOffset;
+    const done = isStageCompleted(G.path, a.id);
+    const unlocked = b.id <= G.unlocked[G.path];
+    const c1x = (a.x + b.x) / 2;
+    const c2x = c1x;
+    const lift = 86 + Math.abs(a.y - b.y) * 0.2;
+    const d = `M${a.x},${ay} C${c1x},${ay - lift} ${c2x},${by + lift} ${b.x},${by}`;
+    svg.appendChild(set(el("path"), {
+      d,
+      fill: "none",
+      stroke: "rgba(0,0,0,.38)",
+      "stroke-width": 11,
+      "stroke-linecap": "round",
+    }));
+    svg.appendChild(set(el("path"), {
+      d,
+      fill: "none",
+      stroke: done ? "url(#route-done)" : unlocked ? "url(#route-ready)" : "rgba(72,74,108,.42)",
+      "stroke-width": done ? 3.6 : 3,
+      "stroke-linecap": "round",
+      "stroke-dasharray": done ? "" : "7 8",
+      opacity: done ? 1 : unlocked ? 0.74 : 0.74,
+    }));
   }
+
   sts.forEach((st) => {
-    const done = isStageCompleted(G.path, st.id),
-      locked = st.id > G.unlocked[G.path],
-      active = st.id === G.unlocked[G.path] && !done,
-      g = el("g");
-    set(g, { transform: `translate(${st.x},${st.y})` });
+    const done = isStageCompleted(G.path, st.id);
+    const locked = st.id > G.unlocked[G.path];
+    const active = st.id === G.unlocked[G.path] && !done;
+    const accent = st.eraColor || activePath().color;
+    const g = el("g");
+    set(g, { transform: `translate(${st.x},${st.y + mapYOffset})` });
     if (!locked) {
       g.style.cursor = "pointer";
       g.addEventListener("click", () => openPopup(st));
       g.addEventListener("mouseenter", (e) => showTip(st, e));
+      g.addEventListener("mousemove", (e) => showTip(st, e));
       g.addEventListener("mouseleave", hideTip);
     }
+
     if (active) {
-      [46, 62, 78].forEach((r, j) => {
-        const c = el("circle");
-        set(c, {
+      [58].forEach((r) => {
+        const pulse = el("circle");
+        set(pulse, {
           cx: 0,
           cy: 0,
           r,
           fill: "none",
-          stroke: activePath().color,
-          "stroke-width": j === 0 ? 1.6 : 0.9,
-          opacity: 0.55 - j * 0.12,
+          stroke: rgba(accent, 0.34),
+          "stroke-width": 1.2,
+          filter: "url(#map-soft)",
         });
-        g.appendChild(c);
         const anim = el("animate");
         set(anim, {
           attributeName: "opacity",
-          values: "0.7;0.08;0.7",
-          dur: 1.9 + j * 0.35 + "s",
+          values: "0.55;0.16;0.55",
+          dur: "2.4s",
           repeatCount: "indefinite",
         });
-        c.appendChild(anim);
+        pulse.appendChild(anim);
+        g.appendChild(pulse);
       });
     }
-    const shadow = el("circle");
-    set(shadow, { cx: 2, cy: 4, r: 30, fill: "rgba(0,0,0,.55)" });
+
+    const shadow = el("ellipse");
+    set(shadow, {
+      cx: 0,
+      cy: 8,
+      rx: 30,
+      ry: 10,
+      fill: "rgba(0,0,0,.36)",
+    });
     g.appendChild(shadow);
-    const base = el("circle");
-    set(base, {
+    const outer = el("circle");
+    set(outer, {
       cx: 0,
       cy: 0,
-      r: 28,
+      r: 27,
       fill: locked
-        ? "rgba(10,12,24,.96)"
+        ? "rgba(11,14,26,.95)"
         : done
-          ? "rgba(9,24,16,.95)"
-          : "rgba(10,14,28,.95)",
-      stroke: locked
-        ? "rgba(60,45,90,.45)"
-        : done
-          ? "#10b981"
-          : activePath().color,
-      "stroke-width": done ? 2.8 : 3,
+          ? "rgba(9,23,18,.95)"
+          : "rgba(8,13,26,.95)",
+      stroke: locked ? "rgba(114,89,162,.45)" : done ? "#34d399" : rgba(accent, 0.86),
+      "stroke-width": 2.4,
     });
-    if (active) base.setAttribute("filter", "url(#gl)");
-    g.appendChild(base);
+    if (active) outer.setAttribute("filter", "url(#map-glow)");
+    g.appendChild(outer);
+    const inner = el("circle");
+    set(inner, {
+      cx: 0,
+      cy: 0,
+      r: 20,
+      fill: locked ? "rgba(28,20,40,.45)" : done ? "rgba(14,54,38,.55)" : rgba(accent, 0.14),
+      stroke: locked ? "rgba(162,132,210,.3)" : rgba(accent, 0.34),
+      "stroke-width": 1,
+    });
+    g.appendChild(inner);
     const icon = el("text");
     set(icon, {
       x: 0,
       y: 9,
       "text-anchor": "middle",
       "font-size": locked ? 16 : 22,
+      filter: "url(#map-soft)",
     });
     icon.textContent = locked ? "🔒" : st.icon;
     g.appendChild(icon);
-    const badge = el("circle");
-    set(badge, {
-      cx: -23,
-      cy: -23,
+
+    const numberBadge = el("circle");
+    set(numberBadge, {
+      cx: -24,
+      cy: -24,
       r: 11,
-      fill: locked ? "rgba(70,58,112,.4)" : activePath().color,
+      fill: locked ? "rgba(92,72,132,.55)" : rgba(accent, 0.96),
+      stroke: "rgba(255,255,255,.2)",
+      "stroke-width": 1,
     });
-    g.appendChild(badge);
-    const badgeText = el("text");
-    set(badgeText, {
-      x: -23,
-      y: -19,
+    g.appendChild(numberBadge);
+    const numberText = el("text");
+    set(numberText, {
+      x: -24,
+      y: -20,
       "text-anchor": "middle",
       "font-size": 9,
-      fill: "#071019",
+      fill: "#070f18",
       "font-weight": "bold",
     });
-    badgeText.textContent = st.id;
-    g.appendChild(badgeText);
+    numberText.textContent = st.id;
+    g.appendChild(numberText);
+
     if (done) {
-      const doneB = el("circle");
-      set(doneB, {
-        cx: 23,
-        cy: -23,
-        r: 12,
-        fill: "rgba(8,24,14,.95)",
-        stroke: "#10b981",
+      const checkBadge = el("circle");
+      set(checkBadge, {
+        cx: 24,
+        cy: -24,
+        r: 11.5,
+        fill: "rgba(7,28,19,.95)",
+        stroke: "#34d399",
         "stroke-width": 1.5,
       });
-      g.appendChild(doneB);
-      const doneT = el("text");
-      set(doneT, {
-        x: 23,
-        y: -18,
+      g.appendChild(checkBadge);
+      const checkText = el("text");
+      set(checkText, {
+        x: 24,
+        y: -19,
         "text-anchor": "middle",
         "font-size": 11,
-        fill: "#52b788",
-        "font-weight": "bold",
+        fill: "#6ee7b7",
+        "font-weight": "900",
       });
-      doneT.textContent = "✓";
-      g.appendChild(doneT);
+      checkText.textContent = "✓";
+      g.appendChild(checkText);
     }
+
+    const labelText = st.title[G.lang];
+    const labelWidth = Math.max(94, Math.min(220, 30 + labelText.length * (isAR() ? 6.7 : 6.2)));
+    const overflowLeft = Math.max(0, labelWidth / 2 + 14 - st.x);
+    const overflowRight = Math.max(0, st.x + labelWidth / 2 + 14 - 1200);
+    const labelX = overflowLeft - overflowRight;
+    const label = el("rect");
+    set(label, {
+      x: labelX - labelWidth / 2,
+      y: 42,
+      width: labelWidth,
+      height: 20,
+      rx: 10,
+      ry: 10,
+      fill: locked
+        ? "rgba(24,19,38,.66)"
+        : active
+          ? rgba(accent, 0.2)
+          : "rgba(9,14,28,.65)",
+      stroke: locked ? "rgba(114,89,162,.4)" : rgba(accent, active ? 0.46 : 0.24),
+      "stroke-width": 1,
+    });
+    g.appendChild(label);
     const name = el("text");
     set(name, {
-      x: 0,
-      y: 52,
+      x: labelX,
+      y: 56,
       "text-anchor": "middle",
-      "font-size": 10,
-      "font-weight": 800,
+      "font-size": 9.6,
+      "font-weight": 700,
       fill: locked
-        ? "rgba(110,96,145,.52)"
+        ? "rgba(176,154,214,.7)"
         : active
-          ? activePath().color
-          : "rgba(255,255,255,.92)",
+          ? "rgba(255,245,217,.96)"
+          : "rgba(255,255,255,.9)",
     });
-    name.textContent = st.title[G.lang];
+    name.textContent = labelText;
     g.appendChild(name);
+
     svg.appendChild(g);
   });
 }
 function showTip(st, e) {
-  byId("tt-state").textContent =
-    st.id > G.unlocked[G.path]
-      ? t().locked
-      : isStageCompleted(G.path, st.id)
-        ? t().complete
-        : t().available;
+  const state = st.id > G.unlocked[G.path]
+    ? t().locked
+    : isStageCompleted(G.path, st.id)
+      ? t().complete
+      : t().available;
+  byId("tt-state").textContent = state;
   byId("tt-name").textContent = st.title[G.lang];
   byId("tt-meta").textContent =
-    `${st.eraLabel[G.lang]} • ⭐ ${G.stars[G.path][st.id] || 0}`;
+    `${st.eraLabel[G.lang]} • ⭐ ${G.stars[G.path][st.id] || 0} • ${st.steps.length} ${isAR() ? "خطوات" : "steps"}`;
   const tt = byId("tooltip");
-  tt.style.left = e.clientX + 12 + "px";
-  tt.style.top = e.clientY - 52 + "px";
   tt.classList.add("on");
+  const pad = 14;
+  const rect = tt.getBoundingClientRect();
+  let x = e.clientX + 16;
+  let y = e.clientY - rect.height - 14;
+  if (x + rect.width > innerWidth - pad) x = innerWidth - rect.width - pad;
+  if (x < pad) x = pad;
+  if (y < pad) y = Math.min(innerHeight - rect.height - pad, e.clientY + 14);
+  tt.style.left = `${x}px`;
+  tt.style.top = `${y}px`;
 }
 function hideTip() {
   byId("tooltip").classList.remove("on");
