@@ -765,6 +765,7 @@
             color: var(--muted);
             line-height: 1.8;
             font-size: 14px;
+            white-space: pre-line;
             margin: 0 auto
         }
 
@@ -1298,20 +1299,30 @@
         }
 
         .path-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: start;
+            gap: 12px
+        }
+
+        .path-copy {
+            min-height: 102px;
+            display: grid;
+            align-content: start;
+            gap: 6px
         }
 
         .path-badge {
-            width: 48px;
-            height: 48px;
+            width: 52px;
+            height: 52px;
             border-radius: 16px;
             display: grid;
             place-items: center;
             background: rgba(212, 168, 67, .08);
-            border: 1px solid rgba(212, 168, 67, .18)
+            border: 1px solid rgba(212, 168, 67, .18);
+            align-self: start;
+            flex: 0 0 52px;
+            margin-top: 2px
         }
 
         .path-icon {
@@ -1326,13 +1337,19 @@
 
         .path-name {
             font-size: 22px;
-            font-weight: 900
+            font-weight: 900;
+            line-height: 1.25
         }
 
         .path-desc {
             color: var(--muted);
-            line-height: 1.8;
-            font-size: 13px
+            line-height: 1.7;
+            font-size: 13px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: calc(1.7em * 3)
         }
 
         .path-meta {
@@ -2475,14 +2492,17 @@
         }
 
         .timeline-event.summary-node .timeline-event-node {
-            background: linear-gradient(135deg, rgba(46, 139, 87, .14), rgba(82, 192, 126, .2));
-            color: #7ee8ab;
-            border-color: rgba(126, 232, 171, .52)
+            background:
+                linear-gradient(135deg,
+                    color-mix(in srgb, var(--era-accent, var(--gold)) 14%, transparent),
+                    color-mix(in srgb, var(--era-accent, var(--gold)) 22%, transparent));
+            color: color-mix(in srgb, var(--era-accent, var(--gold)) 70%, #fff);
+            border-color: color-mix(in srgb, var(--era-accent, var(--gold)) 52%, transparent)
         }
 
         .timeline-event.summary-node.active .timeline-event-node {
-            color: #b6ffd5;
-            box-shadow: 0 0 20px rgba(126, 232, 171, .28)
+            color: color-mix(in srgb, var(--era-accent, var(--gold)) 84%, #fff);
+            box-shadow: 0 0 20px color-mix(in srgb, var(--era-accent, var(--gold)) 30%, transparent)
         }
 
         .summary-glyph {
@@ -3738,7 +3758,16 @@
             font-size: 13px;
             color: var(--muted);
             margin: 6px 0;
-            line-height: 1.6
+            line-height: 1.6;
+            text-align: center
+        }
+
+        html:not(.en) .popup-focus {
+            direction: rtl
+        }
+
+        html.en .popup-focus {
+            direction: ltr
         }
 
         .popup-focus strong {

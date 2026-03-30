@@ -103,6 +103,7 @@ function renderPaths() {
   });
   const grid = byId("path-grid");
   grid.innerHTML = "";
+  let visibleCount = 0;
   /* Active paths */
   allActivePaths.forEach((path, index) => {
     const { done, total, stars, nextStage, progress } = getPathStats(path);
@@ -125,6 +126,11 @@ function renderPaths() {
         : state === "locked"
           ? t().pathsLockedState
           : t().pathsActiveState;
+    const matchesFilter = pathFilter === "all"
+      || (pathFilter === "fresh" && state === "fresh")
+      || (pathFilter === "active" && (state === "active" || state === "locked"))
+      || (pathFilter === "mastered" && state === "mastered");
+    if (!matchesFilter) return;
     const card = document.createElement("div");
     card.className = "path-card glass"
       + (path.id === G.path ? " selected" : "")
@@ -137,7 +143,7 @@ function renderPaths() {
     const lockNote = dependencyName
       ? `<div class="path-lock-note">${t().pathsLockedBy(dependencyName)}</div>`
       : "";
-    card.innerHTML = `<div class="path-card-aura"></div><div class="path-top"><div><div class="path-name">${path.name[G.lang]}</div><div class="path-desc">${path.desc[G.lang]}</div></div><div class="path-badge">${iconHTML(path.icon, "path-icon")}</div></div>
+    card.innerHTML = `<div class="path-card-aura"></div><div class="path-top"><div class="path-copy"><div class="path-name">${path.name[G.lang]}</div><div class="path-desc">${path.desc[G.lang]}</div></div><div class="path-badge">${iconHTML(path.icon, "path-icon")}</div></div>
     ${path.source ? `<div class="path-source"><span>${t().sourceLabel}:</span> ${path.source[G.lang]}</div>` : ""}
     <div class="path-meta"><div class="meta-pill">${path.stages.length} ${isAR() ? "مراحل" : "Stages"}</div><div class="meta-pill">${levelName(difficulty)}</div><div class="meta-pill">x${rateMultiplier}</div><div class="meta-pill">${iconHTML("star", "meta-pill-icon icon-gold")} ${stars}</div><div class="meta-pill">${done}/${total}</div></div><div class="path-progress"><span style="width:${p}%"></span></div><div class="path-track"><div class="path-track-k">${t().pathsNextQuest}</div><div class="path-track-v">${t().chapterOf(nextStage, total)}</div></div>${lockNote}<div class="path-footer"><div class="path-state path-state-${state}">${stateLabel}</div><button class="path-enter" type="button" ${isLockedByPath ? "disabled" : ""}>${isLockedByPath ? t().pathsLockedState : t().pathsEnter}</button></div>`;
     card.onclick = () => {
@@ -164,16 +170,26 @@ function renderPaths() {
     };
     card.onpointerleave = () => { card.style.transform = ""; };
     grid.appendChild(card);
+    visibleCount++;
   });
   /* Disabled (coming soon) paths */
+  if (pathFilter === "all") {
   disabledPaths.forEach((path, index) => {
     const card = document.createElement("div");
     card.className = "path-card glass disabled";
     card.style.setProperty("--path-color", path.color);
     card.style.animationDelay = `${80 + (allActivePaths.length + index) * 40}ms`;
-    card.innerHTML = `<div class="path-card-aura"></div><div class="path-top"><div><div class="path-name">${path.name[G.lang]}</div><div class="path-desc">${path.desc[G.lang]}</div></div><div class="path-badge">${iconHTML(path.icon, "path-icon")}</div></div><div class="path-footer"><div class="path-state path-state-coming">${t().pathsComingSoon}</div></div>`;
+    card.innerHTML = `<div class="path-card-aura"></div><div class="path-top"><div class="path-copy"><div class="path-name">${path.name[G.lang]}</div><div class="path-desc">${path.desc[G.lang]}</div></div><div class="path-badge">${iconHTML(path.icon, "path-icon")}</div></div><div class="path-footer"><div class="path-state path-state-coming">${t().pathsComingSoon}</div></div>`;
     grid.appendChild(card);
+    visibleCount++;
   });
+  }
+  if (visibleCount === 0) {
+    const empty = document.createElement("div");
+    empty.className = "path-empty glass";
+    empty.textContent = t().pathsNoResult;
+    grid.appendChild(empty);
+  }
   renderLeaderboard();
 }
 function selectPath(id) {
