@@ -325,13 +325,6 @@ function showAchievement(icon, head, text) {
   e.classList.add("on");
   setTimeout(() => e.classList.remove("on"), 3200);
 }
-function demoAchievements() {
-  showAchievement(
-    "🏅",
-    t().achievement,
-    isAR() ? "هذه مجرد معاينة" : "This is a preview",
-  );
-}
 function floatXP(text) {
   const div = document.createElement("div");
   div.style.cssText =

@@ -1,8 +1,51 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "nibras",
+  // Default account (dev). Change if needed.
+  "account_id": "9e1a1d6a4d0b0c2e0f069d11e730ca2a",
   "main": "src/worker.js",
   "compatibility_date": "2026-03-29",
+  "routes": [
+    {
+      "pattern": "dev.nibrasquest.com",
+      "custom_domain": true
+    }
+  ],
+  // Dev DB binding
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "nibrasquest-dev",
+      "database_id": "0efcc99c-00cd-4b2c-8f58-55f131e57fd4"
+    }
+  ],
+  "vars": {
+    "BUY_ME_A_COFFEE_URL": "https://buymeacoffee.com/urnzikfqg5",
+    "DONATION_PER_STEP_CENTS": "1"
+  },
+  "env": {
+    "production": {
+      // Set a different account_id here if prod is in another account.
+      "account_id": "9e1a1d6a4d0b0c2e0f069d11e730ca2a",
+      "routes": [
+        {
+          "pattern": "nibrasquest.com",
+          "custom_domain": true
+        }
+      ],
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "nibrasquest-prod",
+          "database_id": "6c5d8e7f-8cb2-4d84-b461-f3ad8e5dba60"
+        }
+      ],
+      "vars": {
+        "BUY_ME_A_COFFEE_URL": "https://buymeacoffee.com/urnzikfqg5",
+        "DONATION_PER_STEP_CENTS": "1"
+      }
+    }
+  },
   "assets": {
     "binding": "ASSETS",
     "directory": "./public"

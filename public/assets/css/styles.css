@@ -28,17 +28,29 @@
             padding: 0
         }
 
-        html,
-        body {
+        html {
             width: 100%;
             height: 100%;
             overflow-x: hidden;
-            overflow-y: auto;
+            overflow-y: hidden;
             background: radial-gradient(circle at top, #0d1a34 0%, #040812 45%, #02050c 100%);
             color: var(--text);
             font-family: var(--ff);
             -webkit-tap-highlight-color: transparent;
-            user-select: none
+            user-select: none;
+            direction: ltr
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: hidden;
+            direction: rtl
+        }
+
+        html.en body {
+            direction: ltr
         }
 
         * {
@@ -90,12 +102,22 @@
             pointer-events: none;
             transition: opacity .35s ease;
             overflow-x: hidden;
-            overflow-y: auto
+            overflow-y: hidden;
+            direction: ltr
+        }
+
+        .screen>* {
+            direction: rtl
+        }
+
+        html.en .screen>* {
+            direction: ltr
         }
 
         .screen.on {
             opacity: 1;
-            pointer-events: auto
+            pointer-events: auto;
+            overflow-y: auto
         }
 
         .glass {
@@ -229,9 +251,14 @@
             pointer-events: auto
         }
 
+        .top-actions {
+            display: flex;
+            gap: 8px
+        }
+
         .langbar,
         .backbtn,
-        .soundbtn {
+        .startbtn {
             display: flex;
             align-items: center;
             gap: 6px;
@@ -244,7 +271,7 @@
 
         .langbar button,
         .backbtn button,
-        .soundbtn button {
+        .startbtn button {
             border: none;
             background: none;
             color: var(--muted);
@@ -256,69 +283,253 @@
             transition: .2s
         }
 
-        .langbar button.active,
-        .soundbtn button.active {
+        .langbar button.active {
             background: linear-gradient(135deg, var(--gold), #a9700a);
             color: #071019
         }
 
+        .startbtn button {
+            background: linear-gradient(135deg, var(--gold), #a9700a);
+            color: #071019;
+            font-weight: 900
+        }
+
         #title {
+            align-items: stretch;
+            justify-content: flex-start;
+            padding: 84px 20px 28px
+        }
+
+        .home-shell {
+            width: min(1120px, 100%);
+            margin: 0 auto;
+            display: grid;
+            gap: 18px
+        }
+
+        .home-section {
+            width: 100%
+        }
+
+        .home-hero {
+            position: relative;
+            min-height: calc(100vh - 120px);
+            display: flex;
             align-items: center;
             justify-content: center;
-            padding: 40px 20px;
-            min-height: 100vh;
-            overflow-y: auto
+            text-align: center;
+            border-radius: 28px;
+            overflow: hidden
+        }
+
+        .home-hero::before,
+        .home-hero::after {
+            content: "";
+            position: absolute;
+            pointer-events: none
+        }
+
+        .home-hero::before {
+            inset: 0;
+            background:
+                radial-gradient(circle at 50% 30%, rgba(212, 168, 67, .12), transparent 56%),
+                radial-gradient(circle at 18% 76%, rgba(96, 165, 250, .11), transparent 52%),
+                radial-gradient(circle at 82% 80%, rgba(16, 185, 129, .09), transparent 54%)
+        }
+
+        .home-hero::after {
+            inset: 14px;
+            border-radius: 24px;
+            border: 1px solid rgba(212, 168, 67, .12)
         }
 
         .hero {
             position: relative;
+            z-index: 2;
             text-align: center;
             max-width: 980px;
             width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 18px;
+            gap: 20px;
             animation: rise .7s ease
         }
 
-        .moon-wrap {
+        .purpose-section {
             position: relative;
-            width: 180px;
-            height: 180px;
+            border-radius: 24px;
+            padding: 22px;
+            display: grid;
+            gap: 12px;
+            text-align: center;
+            overflow: hidden
+        }
+
+        .purpose-section::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(130deg, rgba(255, 236, 179, .08), transparent 45%),
+                radial-gradient(circle at 12% 18%, rgba(212, 168, 67, .14), transparent 46%)
+        }
+
+        .purpose-section::after {
+            content: "";
+            position: absolute;
+            inset: 10px;
+            border-radius: 18px;
+            border: 1px solid rgba(212, 168, 67, .14)
+        }
+
+        .purpose-kicker,
+        .purpose-title,
+        .purpose-section .mission-card {
+            position: relative;
+            z-index: 1
+        }
+
+        .purpose-kicker {
+            color: rgba(255, 223, 146, .92);
+            letter-spacing: .22em;
+            text-transform: uppercase;
+            font-size: 11px;
+            font-weight: 800
+        }
+
+        .purpose-title {
+            font-size: 30px;
+            font-weight: 900;
+            line-height: 1.2
+        }
+
+        .lantern-wrap {
+            position: relative;
+            width: 210px;
+            height: 270px;
             animation: floatY 6s ease-in-out infinite
         }
 
-        .moon-wrap::before,
-        .moon-wrap::after {
+        .lantern-wrap::before,
+        .lantern-wrap::after {
             content: "";
             position: absolute;
-            inset: -26px;
             border-radius: 50%;
-            border: 1px solid rgba(212, 168, 67, .09)
+            pointer-events: none
         }
 
-        .moon-wrap::after {
-            inset: -44px;
-            opacity: .6
+        .lantern-wrap::before {
+            inset: 22px -20px 6px;
+            border: 1px solid rgba(212, 168, 67, .16)
         }
 
-        .moon-core {
+        .lantern-wrap::after {
+            inset: 6px -38px -12px;
+            border: 1px solid rgba(212, 168, 67, .1)
+        }
+
+        .lantern-handle {
             position: absolute;
-            inset: 0;
-            border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, #fff8d7 0%, #f0d36e 52%, #bb8428 100%);
-            filter: drop-shadow(0 0 28px rgba(212, 168, 67, .35))
-        }
-
-        .moon-cut {
-            position: absolute;
-            right: 8px;
             top: 0;
-            width: 140px;
-            height: 140px;
+            left: 50%;
+            width: 84px;
+            height: 46px;
+            transform: translateX(-50%);
+            border: 4px solid rgba(241, 211, 140, .92);
+            border-bottom: none;
+            border-radius: 60px 60px 0 0;
+            box-shadow:
+                inset 0 0 0 2px rgba(117, 84, 28, .34),
+                0 8px 18px rgba(212, 168, 67, .22)
+        }
+
+        .lantern-handle::before,
+        .lantern-handle::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            width: 16px;
+            height: 14px;
+            border-radius: 4px;
+            background: linear-gradient(180deg, rgba(245, 220, 156, .92), rgba(165, 118, 21, .85));
+            border: 1px solid rgba(255, 226, 163, .7)
+        }
+
+        .lantern-handle::before {
+            left: 8px
+        }
+
+        .lantern-handle::after {
+            right: 8px
+        }
+
+        .lantern-neck {
+            position: absolute;
+            top: 41px;
+            left: 50%;
+            width: 76px;
+            height: 20px;
+            transform: translateX(-50%);
+            border-radius: 999px;
+            background:
+                linear-gradient(180deg, rgba(246, 223, 161, .88), rgba(160, 113, 19, .84));
+            border: 2px solid rgba(250, 223, 156, .72);
+            box-shadow:
+                0 5px 14px rgba(212, 168, 67, .2),
+                inset 0 1px 2px rgba(255, 237, 194, .5)
+        }
+
+        .lantern-frame {
+            position: absolute;
+            top: 56px;
+            left: 50%;
+            width: 152px;
+            height: 198px;
+            transform: translateX(-50%);
+            border-radius: 30px;
+            border: 3px solid rgba(250, 222, 157, .92);
+            background:
+                radial-gradient(circle at 50% 36%, rgba(242, 203, 98, .62) 0, rgba(242, 203, 98, .06) 54%, transparent 72%),
+                linear-gradient(180deg, rgba(255, 243, 204, .18), rgba(239, 189, 70, .32) 52%, rgba(92, 57, 8, .86));
+            box-shadow:
+                inset 0 0 22px rgba(255, 229, 165, .4),
+                0 0 54px rgba(212, 168, 67, .34)
+        }
+
+        .lantern-frame::before,
+        .lantern-frame::after {
+            content: "";
+            position: absolute
+        }
+
+        .lantern-frame::before {
+            inset: 14px;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 229, 167, .42);
+            box-shadow:
+                inset 0 0 14px rgba(255, 229, 167, .22),
+                inset 0 -16px 22px rgba(76, 44, 5, .24)
+        }
+
+        .lantern-frame::after {
+            inset: 42px 24px 18px;
+            border-radius: 12px;
+            border-top: 2px solid rgba(255, 227, 164, .48);
+            border-bottom: 2px solid rgba(255, 227, 164, .34)
+        }
+
+        .lantern-glow {
+            position: absolute;
+            left: 50%;
+            bottom: 16px;
+            width: 220px;
+            height: 220px;
+            transform: translateX(-50%);
             border-radius: 50%;
-            background: var(--bg)
+            background: radial-gradient(circle, rgba(243, 208, 118, .7) 0%, rgba(243, 208, 118, .08) 48%, rgba(243, 208, 118, 0) 72%);
+            filter: blur(9px);
+            pointer-events: none
         }
 
         .kicker {
@@ -399,7 +610,11 @@
             font-weight: 800;
             transition: .18s transform, .18s filter;
             position: relative;
-            overflow: hidden
+            overflow: hidden;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center
         }
 
         .cta {
@@ -425,13 +640,203 @@
 
         .mission-card {
             max-width: 760px;
-            padding: 18px 20px;
+            padding: 20px 22px;
             border-radius: 22px;
-            background: rgba(255, 255, 255, .04);
-            border: 1px solid var(--line);
+            background:
+                linear-gradient(145deg, rgba(255, 255, 255, .08), rgba(255, 255, 255, .03)),
+                rgba(5, 10, 20, .44);
+            border: 1px solid rgba(212, 168, 67, .24);
             color: var(--muted);
             line-height: 1.8;
-            font-size: 14px
+            font-size: 14px;
+            margin: 0 auto
+        }
+
+        .success-section {
+            display: grid;
+            grid-template-columns: minmax(0, 1.3fr) minmax(0, .7fr);
+            align-items: start;
+            gap: 14px
+        }
+
+        .initiative-card {
+            position: relative;
+            width: 100%;
+            border-radius: 24px;
+            padding: 16px;
+            display: grid;
+            align-content: start;
+            align-self: start;
+            gap: 12px;
+            overflow: hidden
+        }
+
+        .initiative-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 14%, rgba(212, 168, 67, .12), transparent 40%),
+                radial-gradient(circle at 86% 86%, rgba(96, 165, 250, .1), transparent 46%);
+            pointer-events: none
+        }
+
+        .initiative-card>* {
+            position: relative;
+            z-index: 1
+        }
+
+        .initiative-head {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(212, 168, 67, .16)
+        }
+
+        .initiative-title {
+            font-size: 20px;
+            font-weight: 900;
+            letter-spacing: .01em
+        }
+
+        .initiative-copy {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.75
+        }
+
+        .initiative-metrics {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 8px
+        }
+
+        .initiative-metric {
+            border-radius: 16px;
+            background:
+                linear-gradient(152deg, rgba(255, 255, 255, .09), rgba(255, 255, 255, .02)),
+                rgba(9, 16, 29, .64);
+            border: 1px solid rgba(212, 168, 67, .2);
+            padding: 10px;
+            display: grid;
+            gap: 6px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08)
+        }
+
+        .initiative-metric span {
+            font-size: 11px;
+            color: var(--dim);
+            font-weight: 700
+        }
+
+        .initiative-metric strong {
+            color: var(--gold-2);
+            font-size: 19px;
+            line-height: 1
+        }
+
+        .identity-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 3200;
+            display: grid;
+            place-items: center;
+            padding: 16px;
+            background: rgba(2, 6, 14, .72);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .2s ease
+        }
+
+        .identity-modal.on {
+            opacity: 1;
+            pointer-events: auto
+        }
+
+        .identity-card {
+            width: min(560px, 100%);
+            border-radius: 24px;
+            padding: 18px;
+            display: grid;
+            gap: 10px;
+            border: 1px solid rgba(212, 168, 67, .22);
+            background:
+                linear-gradient(152deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .02)),
+                rgba(6, 12, 24, .92)
+        }
+
+        .identity-title {
+            font-size: 22px;
+            font-weight: 900
+        }
+
+        .identity-copy {
+            color: var(--muted);
+            line-height: 1.7;
+            font-size: 13px
+        }
+
+        .identity-generated {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            border: 1px solid rgba(212, 168, 67, .24);
+            border-radius: 14px;
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, .04)
+        }
+
+        .identity-generated span {
+            color: var(--dim);
+            font-size: 12px;
+            font-weight: 700
+        }
+
+        .identity-generated strong {
+            color: var(--gold-2);
+            font-weight: 900
+        }
+
+        .identity-input-label {
+            color: var(--dim);
+            font-size: 12px;
+            font-weight: 700
+        }
+
+        #identity-name-input {
+            border: 1px solid rgba(212, 168, 67, .22);
+            border-radius: 14px;
+            padding: 12px;
+            background: rgba(9, 16, 29, .72);
+            color: #fff;
+            font: inherit
+        }
+
+        .identity-error {
+            min-height: 18px;
+            font-size: 12px;
+            color: #fecaca;
+            visibility: hidden
+        }
+
+        .identity-error.on {
+            visibility: visible
+        }
+
+        .identity-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap
+        }
+
+        .identity-cancel-btn {
+            justify-self: flex-start;
+            padding: 10px 16px;
+            font-size: 12px
         }
 
         #paths {
@@ -496,6 +901,103 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 14px
+        }
+
+        .leaderboard-card {
+            border-radius: 22px;
+            padding: 14px
+        }
+
+        #title .leaderboard-card {
+            background:
+                linear-gradient(155deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .03) 42%),
+                rgba(7, 13, 24, .82);
+            border: 1px solid rgba(212, 168, 67, .2);
+            position: relative;
+            overflow: hidden
+        }
+
+        #title .leaderboard-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 100% 0%, rgba(212, 168, 67, .12), transparent 45%),
+                radial-gradient(circle at 0% 100%, rgba(96, 165, 250, .1), transparent 48%);
+            pointer-events: none
+        }
+
+        #title .leaderboard-card>* {
+            position: relative;
+            z-index: 1
+        }
+
+        .leaderboard-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap
+        }
+
+        .leaderboard-title {
+            font-size: 16px;
+            font-weight: 900
+        }
+
+        .leaderboard-copy {
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .leaderboard-list {
+            margin-top: 10px;
+            display: grid;
+            gap: 7px
+        }
+
+        .leaderboard-row {
+            display: grid;
+            grid-template-columns: auto 1fr auto auto;
+            gap: 9px;
+            align-items: center;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, .03);
+            border-radius: 14px;
+            padding: 8px 10px
+        }
+
+        .leaderboard-row.me {
+            border-color: rgba(245, 217, 106, .6);
+            background: rgba(212, 168, 67, .12)
+        }
+
+        .leaderboard-rank {
+            font-weight: 900;
+            color: var(--gold-2)
+        }
+
+        .leaderboard-name {
+            font-weight: 800
+        }
+
+        .leaderboard-stages {
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .leaderboard-amount {
+            font-size: 13px;
+            font-weight: 900;
+            color: var(--gold-2)
+        }
+
+        .leaderboard-empty {
+            border: 1px dashed var(--line);
+            border-radius: 14px;
+            color: var(--dim);
+            padding: 10px 12px;
+            font-size: 12px
         }
 
         .path-card {
@@ -573,8 +1075,7 @@
         }
 
         #map {
-            background: transparent;
-            overflow-y: auto
+            background: transparent
         }
 
         .map-hud {
@@ -1026,7 +1527,7 @@
             display: flex;
             flex-direction: column;
             padding: 72px 20px 20px;
-            overflow-y: auto;
+            overflow-y: visible;
             overflow-x: hidden;
             gap: 14px
         }
@@ -1361,8 +1862,8 @@
             line-height: 2.05;
             font-weight: 500;
             color: rgba(255, 255, 255, .88);
-            max-height: 38vh;
-            overflow-y: auto;
+            max-height: none;
+            overflow-y: visible;
             scrollbar-width: thin;
             scrollbar-color: rgba(255, 255, 255, .15) transparent
         }
@@ -2322,6 +2823,10 @@
             .timeline-event {
                 min-width: 140px
             }
+
+            .initiative-metrics {
+                grid-template-columns: 1fr 1fr
+            }
         }
 
         @media (max-width: 680px) {
@@ -2341,7 +2846,7 @@
                 font-size: 15px;
                 padding: 14px 18px;
                 line-height: 1.9;
-                max-height: 30vh
+                max-height: none
             }
 
             .step-header {
@@ -2431,6 +2936,24 @@
 
             html.en .logo {
                 font-size: 54px
+            }
+
+            .initiative-head {
+                justify-content: center
+            }
+
+            .initiative-metrics {
+                grid-template-columns: 1fr
+            }
+
+            .leaderboard-row {
+                grid-template-columns: auto 1fr;
+                gap: 6px 10px
+            }
+
+            .leaderboard-amount,
+            .leaderboard-stages {
+                grid-column: 2
             }
         }
 
@@ -2525,6 +3048,12 @@
             font-size: 28px;
             line-height: 1;
             font-weight: 900
+        }
+
+        .path-dash-v.user {
+            font-size: 18px;
+            line-height: 1.2;
+            word-break: break-word
         }
 
         .path-filters {
@@ -2816,9 +3345,35 @@
                 flex-direction: column;
                 align-items: flex-start
             }
+
+            .home-hero {
+                min-height: calc(100vh - 150px)
+            }
+
+            .lantern-wrap {
+                width: 188px;
+                height: 244px
+            }
+
+            .lantern-frame {
+                width: 142px;
+                height: 186px
+            }
+
+            .success-section {
+                grid-template-columns: 1fr
+            }
+
+            .purpose-title {
+                font-size: 22px
+            }
         }
 
         @media (max-width: 760px) {
+            #title {
+                padding: 76px 10px 18px
+            }
+
             #paths {
                 padding: 84px 10px 16px
             }
@@ -2826,6 +3381,36 @@
             .top-controls {
                 width: calc(100% - 8px);
                 gap: 8px
+            }
+
+            .home-hero {
+                min-height: auto
+            }
+
+            .lantern-wrap {
+                width: 168px;
+                height: 220px
+            }
+
+            .lantern-handle {
+                width: 68px;
+                height: 36px
+            }
+
+            .lantern-neck {
+                width: 62px;
+                top: 35px
+            }
+
+            .lantern-frame {
+                top: 50px;
+                width: 126px;
+                height: 162px
+            }
+
+            .lantern-glow {
+                width: 184px;
+                height: 184px
             }
 
             .paths-dashboard {
@@ -2851,9 +3436,13 @@
 
             .langbar button,
             .backbtn button,
-            .soundbtn button {
+            .startbtn button {
                 padding: 8px 10px;
                 font-size: 11px
+            }
+
+            .purpose-title {
+                font-size: 20px
             }
         }
 

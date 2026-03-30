@@ -2,7 +2,9 @@ function showPaths() {
   renderPaths();
   screen("paths");
 }
-function startJourney() {
+async function startJourney() {
+  const ready = await ensureIdentityForJourneyStart();
+  if (!ready) return;
   showPaths();
 }
 
@@ -65,12 +67,13 @@ function renderPaths() {
   const totalStages = allActivePaths.reduce((acc, p) => acc + p.stages.length, 0);
   const completedStages = allActivePaths.reduce((acc, p) => acc + (G.completed[p.id] || []).length, 0);
   const progressPct = totalStages ? Math.round((completedStages / totalStages) * 100) : 0;
+  const userLabel = G.username || (isAR() ? "قيد الإنشاء" : "Preparing");
   const dashboard = byId("paths-dashboard");
   dashboard.innerHTML = `
-    <div class="path-dash-card glass"><div class="path-dash-k">${t().level}</div><div class="path-dash-v">LV ${G.level}</div></div>
-    <div class="path-dash-card glass"><div class="path-dash-k">⭐ ${isAR() ? "نجوم" : "Stars"}</div><div class="path-dash-v">${G.totalStars}</div></div>
+    <div class="path-dash-card glass"><div class="path-dash-k">${t().initiativeUserLabel}</div><div class="path-dash-v user">${userLabel}</div></div>
+    <div class="path-dash-card glass"><div class="path-dash-k">${t().initiativeTotalLabel}</div><div class="path-dash-v">${formatMoney(G.donations.totalCents)}</div></div>
     <div class="path-dash-card glass"><div class="path-dash-k">${t().pathsCompleted}</div><div class="path-dash-v">${completedStages}/${totalStages}</div></div>
-    <div class="path-dash-card glass"><div class="path-dash-k">${t().pathsProgress}</div><div class="path-dash-v">${progressPct}%</div></div>`;
+    <div class="path-dash-card glass"><div class="path-dash-k">${t().initiativeStepsLabel}</div><div class="path-dash-v">${G.donations.stepsFunded}</div></div>`;
   const filterWrap = byId("path-filters");
   filterWrap.innerHTML = "";
   const filters = [
@@ -125,6 +128,7 @@ function renderPaths() {
     card.innerHTML = `<div class="path-card-aura"></div><div class="path-top"><div><div class="path-name">${path.name[G.lang]}</div><div class="path-desc">${path.desc[G.lang]}</div></div><div class="path-badge">${path.icon}</div></div><div class="path-footer"><div class="path-state path-state-coming">${t().pathsComingSoon}</div></div>`;
     grid.appendChild(card);
   });
+  renderLeaderboard();
 }
 function selectPath(id) {
   G.path = id;
@@ -414,7 +418,11 @@ function pickAnswer(selected, correct) {
     fb.textContent = t().correct[quizScore % t().correct.length];
     fb.classList.add("ok");
     addFXBurst(activePath().color);
-    floatXP("+" + (fast ? 20 : 15) + " XP");
+    floatXP(
+      fast
+        ? "+" + formatMoney(SPEED_DONATION_BONUS_CENTS)
+        : (isAR() ? "تعلّم مستمر" : "Keep learning"),
+    );
     byId("booster-speed").classList.toggle("active", fast);
     beep(680, 0.05, "triangle");
   } else {
@@ -432,6 +440,7 @@ function finishQuiz() {
   const stars = perfect ? 3 : quizScore >= 1 ? 2 : 1;
   const speedBonus = G.combo >= 2 ? 10 : 0, perfectBonus = perfect ? 20 : 0;
   const xpGain = stars * 20 + 15 + speedBonus + perfectBonus, gemGain = stars >= 2 ? 1 : 0, oldLevel = G.level;
+  const wasCompleted = isStageCompleted(G.path, activeStage.id);
   markStageCompleted(G.path, activeStage.id);
   G.stars[G.path][activeStage.id] = Math.max(G.stars[G.path][activeStage.id] || 0, stars);
   G.xp += xpGain;
@@ -439,13 +448,66 @@ function finishQuiz() {
   G.streak = perfect ? G.streak + 1 : 0;
   G.unlocked[G.path] = Math.min(activeStages().length + 1, Math.max(G.unlocked[G.path], activeStage.id + 1));
   if (G.completed[G.path].length >= activeStages().length) G.unlocked[G.path] = activeStages().length + 1;
-  lastResult = { stars, xpGain, gemGain, total, correct: quizScore, perfect };
+  let stepDonationCents = 0;
+  let speedDonationCents = 0;
+  let perfectDonationCents = 0;
+  let pathBonusCents = 0;
+  let donationGainCents = 0;
+  let donationEvent = null;
+  if (!wasCompleted) {
+    const stepCount = activeStage.steps.length;
+    stepDonationCents = stepCount * G.donationPerStepCents;
+    speedDonationCents = G.combo >= 2 ? SPEED_DONATION_BONUS_CENTS : 0;
+    perfectDonationCents = perfect ? PERFECT_DONATION_BONUS_CENTS : 0;
+    const pathJustCompleted = G.completed[G.path].length >= activeStages().length;
+    if (pathJustCompleted && !G.completedPathBonuses[G.path]) {
+      pathBonusCents = PATH_COMPLETION_BONUS_CENTS;
+      G.completedPathBonuses[G.path] = true;
+    }
+    donationGainCents =
+      stepDonationCents +
+      speedDonationCents +
+      perfectDonationCents +
+      pathBonusCents;
+    if (donationGainCents > 0) {
+      G.donations.fromStepsCents += donationGainCents;
+      G.donations.totalCents += donationGainCents;
+      G.donations.stepsFunded += stepCount;
+      donationEvent = {
+        eventKey: `stage:${G.path}:${activeStage.id}`,
+        source: "stage_step",
+        amountCents: donationGainCents,
+        pathId: G.path,
+        stageId: activeStage.id,
+        stepCount,
+        note: "Learning completion donation",
+      };
+    }
+  }
+  lastResult = {
+    stars,
+    xpGain,
+    gemGain,
+    total,
+    correct: quizScore,
+    perfect,
+    donationGainCents,
+    stepDonationCents,
+    speedDonationCents,
+    perfectDonationCents,
+    pathBonusCents,
+  };
   renderResult(lastResult);
   screen("result");
   historyStack = [];
   save();
+  syncProgress({ donationEvent }).then(() => {
+    updateHUD();
+    renderPaths();
+    refreshLeaderboard();
+  });
   if (G.level > oldLevel)
-    showToast("⬆️", t().levelUp, (isAR() ? "وصلت إلى المستوى " : "Reached level ") + G.level);
+    showToast("🪔", t().levelUp, (isAR() ? "ارتفع أثرك إلى المستوى " : "Your impact reached level ") + G.level);
   setTimeout(() => checkAchievements(lastResult), 700);
   if (stars >= 2) confetti();
 }
@@ -462,10 +524,10 @@ function renderResult(data) {
     wrap.appendChild(s);
     setTimeout(() => s.classList.toggle("on", i < data.stars), 280 + i * 180);
   }
-  byId("loot-xp").textContent = "+" + data.xpGain;
-  byId("loot-gems").textContent = "+" + data.gemGain;
-  byId("loot-streak").textContent = G.streak;
-  byId("loot-rank").textContent = G.rank;
+  byId("loot-xp").textContent = "+" + formatMoney(data.donationGainCents || 0);
+  byId("loot-gems").textContent = formatMoney(G.donations.totalCents);
+  byId("loot-streak").textContent = G.donations.stepsFunded;
+  byId("loot-rank").textContent = leaderboardRankText();
   byId("next-stage-btn").disabled = activeStage.id >= activeStages().length;
   updateHUD();
 }

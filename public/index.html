@@ -1,45 +1,78 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="ltr">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
-    <title>نبراس — Nibras Quest Paths</title>
+    <title>NBRAS | نبراس</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Amiri:wght@400;700&family=Nunito:wght@400;600;700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
 
-<body>
+<body dir="rtl">
     <canvas id="bg"></canvas><canvas id="fx"></canvas>
     <div class="era-overlay" id="era-overlay"></div>
     <div class="top-controls">
         <div class="langbar"><button id="lang-ar" class="active">عربي</button><button id="lang-en">EN</button></div>
-        <div style="display:flex;gap:8px">
-            <div class="soundbtn"><button id="sound-toggle" class="active">🔊 SFX</button></div>
+        <div class="top-actions">
+            <div class="startbtn" id="startWrap"><button id="start-btn">▶ ابدأ الرحلة</button></div>
             <div class="backbtn hidden" id="backWrap"><button id="back-btn">← رجوع</button></div>
         </div>
     </div>
     <section id="title" class="screen on">
-        <div class="hero">
-            <div class="moon-wrap">
-                <div class="moon-core"></div>
-                <div class="moon-cut"></div>
+        <div class="home-shell">
+            <div class="home-section home-hero">
+                <div class="hero">
+                    <div class="lantern-wrap">
+                        <div class="lantern-handle"></div>
+                        <div class="lantern-neck"></div>
+                        <div class="lantern-frame"></div>
+                        <div class="lantern-glow"></div>
+                    </div>
+                    <div class="kicker" id="hero-kicker">مبادرة نبراس</div>
+                    <div class="logo" id="hero-logo">نبراس</div>
+                    <div class="subtitle" id="hero-sub">تعلّم ينير الطريق، وتبرّع يصنع أثرًا</div>
+                    <div class="chip-row">
+                        <div class="chip" id="chip-1">🌙 السيرة النبوية</div>
+                        <div class="chip" id="chip-2">📖 مبني على كتاب الشفا</div>
+                        <div class="chip" id="chip-3">✅ تعلّم وتحقق بالخطوات</div>
+                        <div class="chip" id="chip-4">🗺️ 8 مراحل من الولادة إلى الخلود</div>
+                    </div>
+                </div>
             </div>
-            <div class="kicker" id="hero-kicker">Journey of Light</div>
-            <div class="logo" id="hero-logo">نبراس</div>
-            <div class="subtitle" id="hero-sub">السيرة النبوية كما لم تعرفها من قبل</div>
-            <div class="chip-row">
-                <div class="chip" id="chip-1">🌙 السيرة النبوية</div>
-                <div class="chip" id="chip-2">📖 مبني على كتاب الشفا</div>
-                <div class="chip" id="chip-3">✅ تعلّم وتحقق بالخطوات</div>
-                <div class="chip" id="chip-4">🗺️ 8 مراحل من الولادة إلى الخلود</div>
+            <div class="home-section purpose-section glass">
+                <div class="purpose-kicker" id="purpose-kicker">رسالة المبادرة</div>
+                <div class="purpose-title" id="purpose-title">ما هدف نبراس؟</div>
+                <div class="mission-card" id="mission-copy">النبراس هو المصباح أو الفانوس الذي يُستنار به في الظلام، ولذلك اخترناه
+                    رمزًا للتعلّم الذي يفتح الطريق ويمنح الأمل.</div>
             </div>
-            <div class="mission-card" id="mission-copy">رحلة كاملة عبر حياة النبي ﷺ من ظلمات الجاهلية حتى الإرث الخالد
-                — مبنية على كتاب الشفا للقاضي عياض.</div>
-            <div class="cta-wrap"><button class="cta" id="start-btn">▶ ابدأ الرحلة</button><button class="ghost"
-                    id="demo-btn">★ عرض الإنجازات</button></div>
+            <div class="home-section success-section">
+                <div class="initiative-card glass">
+                    <div class="initiative-head">
+                        <div class="initiative-title" id="initiative-title">كيف تعمل المبادرة؟</div>
+                    </div>
+                    <div class="initiative-copy" id="initiative-copy">كل خطوة تعلّم تتحول إلى تبرع صغير لدعم الأيتام والطلاب.</div>
+                    <div class="initiative-metrics">
+                        <div class="initiative-metric"><span id="initiative-step-label">قيمة كل خطوة</span><strong
+                                id="initiative-step-value">$0.05</strong></div>
+                        <div class="initiative-metric"><span id="initiative-total-label">إجمالي التبرع</span><strong
+                                id="initiative-total-value">$0.00</strong></div>
+                        <div class="initiative-metric"><span id="initiative-steps-label">خطوات ممولة</span><strong
+                                id="initiative-steps-value">0</strong></div>
+                        <div class="initiative-metric"><span id="initiative-rank-label">الترتيب</span><strong
+                                id="initiative-rank-value">—</strong></div>
+                    </div>
+                </div>
+                <div class="leaderboard-card glass">
+                    <div class="leaderboard-head">
+                        <div class="leaderboard-title" id="home-leaderboard-title">لوحة الأثر</div>
+                        <div class="leaderboard-copy" id="home-leaderboard-copy">أعلى المساهمين في دعم تعلم الأيتام والطلاب.</div>
+                    </div>
+                    <div class="leaderboard-list" id="home-leaderboard-list"></div>
+                </div>
+            </div>
         </div>
     </section>
     <section id="paths" class="screen">
@@ -64,13 +97,13 @@
             <div class="hud-left glass hud-card">
                 <div>
                     <div class="label" id="level-label">المستوى</div>
-                    <div class="value" id="level-value">1</div>
+                    <div class="value" id="level-value">$0.00</div>
                 </div>
                 <div>
                     <div class="xp-bar">
                         <div class="xp-fill" id="xp-fill"></div>
                     </div>
-                    <div style="font-size:12px;color:var(--muted);margin-top:6px" id="xp-text">0 XP</div>
+                    <div style="font-size:12px;color:var(--muted);margin-top:6px" id="xp-text">$0.05 / خطوة</div>
                 </div>
             </div>
             <div class="hud-center glass hud-card">
@@ -78,10 +111,10 @@
                 <div class="value" id="map-title">اختر المرحلة التالية</div>
             </div>
             <div class="hud-right glass hud-card">
-                <div class="stat">⭐ <span id="stat-stars">0</span></div>
-                <div class="stat">💎 <span id="stat-gems">0</span></div>
-                <div class="stat">🔥 <span id="stat-streak">0</span></div>
-                <div class="stat">🏅 <span id="stat-ach">0</span></div>
+                <div class="stat">📚 <span id="stat-stars">0</span></div>
+                <div class="stat">🎓 <span id="stat-gems">$0.00</span></div>
+                <div class="stat">☕ <span id="stat-streak">$0.00</span></div>
+                <div class="stat">🏆 <span id="stat-ach">—</span></div>
             </div>
         </div>
         <div class="map-wrap">
@@ -117,9 +150,9 @@
             <div class="side-panel glass hidden-panel" id="quest-panel">
                 <div class="quest-head">
                     <div class="quest-title" id="panel-title">المهمة الحالية</div>
-                    <div class="stat">⚔️ <span id="panel-rank">R1</span></div>
+                    <div class="stat">🏆 <span id="panel-rank">—</span></div>
                 </div>
-                <div class="quest-sub" id="panel-copy">أكمل المرحلة الحالية للحصول على XP وفتح المرحلة التالية.</div>
+                <div class="quest-sub" id="panel-copy">أكمل المرحلة الحالية لزيادة التبرع وفتح المرحلة التالية.</div>
                 <div class="quest-progress" id="quest-progress"></div>
                 <div class="deep-grid">
                     <div class="deep-card">
@@ -159,9 +192,9 @@
             <div class="story-event-content" id="story-event-content"></div>
             <div class="story-dots" id="story-dots"></div>
             <div class="story-rewards">
-                <div class="reward-pill" id="reward-1">⭐ حتى 3 نجوم</div>
-                <div class="reward-pill" id="reward-2">💎 جوهرة إضافية</div>
-                <div class="reward-pill" id="reward-3">🔥 سلسلة إجابات</div>
+                <div class="reward-pill" id="reward-1">🪔 كل خطوة تعلّم = تبرع صغير</div>
+                <div class="reward-pill" id="reward-2">✅ الإتقان يضيف دعمًا إضافيًا</div>
+                <div class="reward-pill" id="reward-3">🎓 إكمال المسار يرفع أثر الدعم</div>
             </div>
             <div class="reference-board">
                 <div class="ref-card">
@@ -205,7 +238,7 @@
                 <div class="mission-card-mini">
                     <div class="mi">⚡</div>
                     <div class="mt" id="mini-bonus-label">Bonus</div>
-                    <div class="mv" id="mini-bonus-value">+0 XP</div>
+                    <div class="mv" id="mini-bonus-value">+$0.00</div>
                 </div>
                 <div class="mission-card-mini">
                     <div class="mi">🔥</div>
@@ -229,19 +262,19 @@
             <div class="loot-grid">
                 <div class="loot">
                     <div class="n" id="loot-xp">+0</div>
-                    <div class="l">XP</div>
+                    <div class="l" id="loot-xp-label">تبرع المرحلة</div>
                 </div>
                 <div class="loot">
-                    <div class="n" id="loot-gems">+0</div>
-                    <div class="l" id="loot-gems-label">Gem</div>
+                    <div class="n" id="loot-gems">$0.00</div>
+                    <div class="l" id="loot-gems-label">إجمالي التبرع</div>
                 </div>
                 <div class="loot">
                     <div class="n" id="loot-streak">0</div>
-                    <div class="l" id="loot-streak-label">Streak</div>
+                    <div class="l" id="loot-streak-label">خطوات ممولة</div>
                 </div>
                 <div class="loot">
-                    <div class="n" id="loot-rank">R1</div>
-                    <div class="l" id="loot-rank-label">Rank</div>
+                    <div class="n" id="loot-rank">—</div>
+                    <div class="l" id="loot-rank-label">الترتيب</div>
                 </div>
             </div>
             <div class="result-actions"><button class="primary" id="next-stage-btn">المرحلة التالية</button><button
@@ -256,7 +289,7 @@
         <div class="i" id="toast-i">⚡</div>
         <div>
             <div class="t1" id="toast-t1">LEVEL UP</div>
-            <div class="t2" id="toast-t2">+100 XP</div>
+            <div class="t2" id="toast-t2">+$0.00</div>
         </div>
     </div>
     <div class="achievement" id="achievement">
@@ -264,6 +297,24 @@
         <div>
             <div class="t1" id="achievement-t1">Achievement</div>
             <div class="t2" id="achievement-t2">First Step</div>
+        </div>
+    </div>
+    <div class="identity-modal" id="identity-modal" aria-hidden="true">
+        <div class="identity-card glass" role="dialog" aria-modal="true" aria-labelledby="identity-modal-title">
+            <div class="identity-title" id="identity-modal-title">قبل بدء الرحلة</div>
+            <div class="identity-copy" id="identity-modal-copy">يمكنك المتابعة بالاسم المولد أو كتابة اسمك.</div>
+            <div class="identity-generated">
+                <span id="identity-generated-label">الاسم المولد</span>
+                <strong id="identity-generated-value">—</strong>
+            </div>
+            <label class="identity-input-label" id="identity-input-label" for="identity-name-input">اكتب اسمك (اختياري)</label>
+            <input id="identity-name-input" type="text" maxlength="40" placeholder="نور_العلم_123" />
+            <div class="identity-error" id="identity-error"></div>
+            <div class="identity-actions">
+                <button class="ghost" id="identity-use-generated-btn" type="button">استخدم الاسم المولد</button>
+                <button class="cta" id="identity-continue-btn" type="button">متابعة الرحلة</button>
+            </div>
+            <button class="ghost identity-cancel-btn" id="identity-cancel-btn" type="button">إلغاء</button>
         </div>
     </div>
     <script defer src="/assets/js/data.js"></script>
