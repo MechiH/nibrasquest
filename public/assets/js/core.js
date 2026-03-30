@@ -157,6 +157,71 @@ function setText(id, value) {
   if (el) el.textContent = value;
 }
 
+const ICON_CLASSES = {
+  fallback: "fa-solid fa-circle",
+  play: "fa-solid fa-play",
+  flask: "fa-solid fa-flask",
+  book: "fa-solid fa-book-open",
+  "book-reader": "fa-solid fa-book-open-reader",
+  "heart-hand": "fa-solid fa-hand-holding-heart",
+  "piggy-bank": "fa-solid fa-piggy-bank",
+  trophy: "fa-solid fa-trophy",
+  bullseye: "fa-solid fa-bullseye",
+  bolt: "fa-solid fa-bolt",
+  lock: "fa-solid fa-lock",
+  rotate: "fa-solid fa-rotate-right",
+  medal: "fa-solid fa-medal",
+  dumbbell: "fa-solid fa-dumbbell",
+  link: "fa-solid fa-link",
+  warning: "fa-solid fa-triangle-exclamation",
+  info: "fa-solid fa-circle-info",
+  star: "fa-solid fa-star",
+  "check-circle": "fa-solid fa-circle-check",
+  "dot-circle": "fa-solid fa-circle-dot",
+  "file-lines": "fa-solid fa-file-lines",
+  sparkles: "fa-solid fa-wand-magic-sparkles",
+  moon: "fa-solid fa-moon",
+  sun: "fa-solid fa-sun",
+  fire: "fa-solid fa-fire",
+  droplet: "fa-solid fa-droplet",
+  scale: "fa-solid fa-scale-balanced",
+  gem: "fa-solid fa-gem",
+  feather: "fa-solid fa-feather-pointed",
+  route: "fa-solid fa-route",
+  mosque: "fa-solid fa-mosque",
+  landmark: "fa-solid fa-landmark",
+  "hands-praying": "fa-solid fa-hands-praying",
+  "sack-dollar": "fa-solid fa-sack-dollar",
+  lightbulb: "fa-solid fa-lightbulb",
+  award: "fa-solid fa-award",
+  "graduation-cap": "fa-solid fa-graduation-cap",
+};
+
+function resolveIconClass(icon) {
+  const raw = String(icon || "").trim();
+  if (!raw) return ICON_CLASSES.fallback;
+  if (raw.includes("fa-")) return raw;
+  return ICON_CLASSES[raw] || ICON_CLASSES.fallback;
+}
+
+function iconHTML(icon, extraClass = "") {
+  const iconClass = resolveIconClass(icon);
+  const safeExtra = String(extraClass || "").replace(/[^a-zA-Z0-9_\- ]/g, "").trim();
+  const cls = `nq-icon ${iconClass}${safeExtra ? ` ${safeExtra}` : ""}`;
+  return `<i class="${cls}" aria-hidden="true"></i>`;
+}
+
+function setHTML(id, value) {
+  const el = byId(id);
+  if (el) el.innerHTML = value;
+}
+
+function setLabelWithIcon(id, icon, label, extraIconClass = "") {
+  const el = byId(id);
+  if (!el) return;
+  el.innerHTML = `${iconHTML(icon, `inline-fa ${extraIconClass}`)}<span>${escapeHTML(label)}</span>`;
+}
+
 function shareIconSVG(platform) {
   if (platform === "facebook") {
     return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.5 1.6-1.5h1.7V3.9c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.5-4 4.2V10H8v3h2.3v8h3.2z"></path></svg>';
@@ -735,13 +800,13 @@ async function refreshGlobalImpact() {
 async function activateBoostPotion() {
   if (!G.userId) return false;
   if ((G.boost?.potionBalance || 0) <= 0) {
-    showToast("🧪", t().activatePotionNone, t().activatePotionNone);
+    showToast("flask", t().activatePotionNone, t().activatePotionNone);
     return false;
   }
   const btn = byId("activate-potion-btn");
   if (btn) {
     btn.disabled = true;
-    btn.textContent = t().activatePotionBusy;
+    setLabelWithIcon("activate-potion-btn", "flask", t().activatePotionBusy);
   }
   try {
     const res = await apiJSON("/api/boost/activate", {
@@ -752,16 +817,16 @@ async function activateBoostPotion() {
     updateInitiativePanel();
     updateHUD();
     save();
-    showToast("⚡", t().activatePotionDone, t().activatePotionDone);
+    showToast("bolt", t().activatePotionDone, t().activatePotionDone);
     return true;
   } catch (err) {
     console.warn("Failed to activate potion:", err);
-    showToast("⚠️", t().activatePotionError, t().activatePotionError);
+    showToast("warning", t().activatePotionError, t().activatePotionError);
     return false;
   } finally {
     if (btn) {
       btn.disabled = false;
-      btn.textContent = t().activatePotion;
+      setLabelWithIcon("activate-potion-btn", "flask", t().activatePotion);
     }
   }
 }
@@ -770,10 +835,10 @@ async function copyInviteLink() {
   const link = getInviteUrl();
   try {
     await navigator.clipboard.writeText(link);
-    showToast("🔗", t().inviteCopied, link);
+    showToast("link", t().inviteCopied, link);
   } catch (err) {
     console.warn("Failed to copy invite link:", err);
-    showToast("⚠️", t().inviteCopyFailed, t().inviteCopyFailed);
+    showToast("warning", t().inviteCopyFailed, t().inviteCopyFailed);
   }
 }
 
@@ -865,7 +930,7 @@ function updateInitiativePanel() {
   const activateBtn = byId("activate-potion-btn");
   if (activateBtn) {
     activateBtn.disabled = balance <= 0;
-    activateBtn.textContent = t().activatePotion;
+    setLabelWithIcon("activate-potion-btn", "flask", t().activatePotion);
   }
 }
 
@@ -939,8 +1004,8 @@ function refreshText() {
   setShareButton("share-fb-btn", t().shareFacebook, "facebook");
   setShareButton("share-x-btn", t().shareX, "x");
   setShareButton("share-li-btn", t().shareLinkedIn, "linkedin");
-  setText("activate-potion-btn", t().activatePotion);
-  setText("start-btn", t().start);
+  setLabelWithIcon("activate-potion-btn", "flask", t().activatePotion);
+  setLabelWithIcon("start-btn", "play", t().start);
   setText("identity-modal-title", t().identityModalTitle);
   setText("identity-modal-copy", t().identityModalCopy);
   setText("identity-generated-label", t().identityGeneratedLabel);
@@ -975,7 +1040,6 @@ function refreshText() {
   setText("reading-copy", t().readingCopy);
   setText("endorse-title", t().endorseTitle);
   setText("endorse-copy", t().endorseCopy);
-  setText("story-skip", t().skip);
   setText("quiz-label", t().quizLabel);
   setText("loot-xp-label", t().lootStageDonation);
   setText("loot-gems-label", t().lootTotalDonation);
@@ -1023,7 +1087,7 @@ function updateHUD() {
   setText("booster-combo", (isAR() ? "سلسلة: " : "Combo: ") + G.combo);
   setText("booster-perfect", t().perfectReady);
   setText("booster-speed", t().quick);
-  setText("booster-potion", t().boosterPotion);
+  setLabelWithIcon("booster-potion", "flask", t().boosterPotion, "icon-flask");
   const potionBooster = byId("booster-potion");
   if (potionBooster) potionBooster.classList.toggle("active", Boolean(G.boost?.isActive));
   setText(
@@ -1040,7 +1104,7 @@ function updateHUD() {
 
   const soundToggle = byId("sound-toggle");
   if (soundToggle) {
-    soundToggle.textContent = (G.sound ? "🔊 " : "🔈 ") + "SFX";
+    soundToggle.innerHTML = `${iconHTML(G.sound ? "fa-solid fa-volume-high" : "fa-solid fa-volume-low", "inline-fa")}<span>SFX</span>`;
     soundToggle.classList.toggle("active", G.sound);
   }
 

@@ -137,12 +137,12 @@ function renderPaths() {
     const lockNote = dependencyName
       ? `<div class="path-lock-note">${t().pathsLockedBy(dependencyName)}</div>`
       : "";
-    card.innerHTML = `<div class="path-card-aura"></div><div class="path-top"><div><div class="path-name">${path.name[G.lang]}</div><div class="path-desc">${path.desc[G.lang]}</div></div><div class="path-badge">${path.icon}</div></div>
+    card.innerHTML = `<div class="path-card-aura"></div><div class="path-top"><div><div class="path-name">${path.name[G.lang]}</div><div class="path-desc">${path.desc[G.lang]}</div></div><div class="path-badge">${iconHTML(path.icon, "path-icon")}</div></div>
     ${path.source ? `<div class="path-source"><span>${t().sourceLabel}:</span> ${path.source[G.lang]}</div>` : ""}
-    <div class="path-meta"><div class="meta-pill">${path.stages.length} ${isAR() ? "مراحل" : "Stages"}</div><div class="meta-pill">${levelName(difficulty)}</div><div class="meta-pill">x${rateMultiplier}</div><div class="meta-pill">⭐ ${stars}</div><div class="meta-pill">${done}/${total}</div></div><div class="path-progress"><span style="width:${p}%"></span></div><div class="path-track"><div class="path-track-k">${t().pathsNextQuest}</div><div class="path-track-v">${t().chapterOf(nextStage, total)}</div></div>${lockNote}<div class="path-footer"><div class="path-state path-state-${state}">${stateLabel}</div><button class="path-enter" type="button" ${isLockedByPath ? "disabled" : ""}>${isLockedByPath ? t().pathsLockedState : t().pathsEnter}</button></div>`;
+    <div class="path-meta"><div class="meta-pill">${path.stages.length} ${isAR() ? "مراحل" : "Stages"}</div><div class="meta-pill">${levelName(difficulty)}</div><div class="meta-pill">x${rateMultiplier}</div><div class="meta-pill">${iconHTML("star", "meta-pill-icon icon-gold")} ${stars}</div><div class="meta-pill">${done}/${total}</div></div><div class="path-progress"><span style="width:${p}%"></span></div><div class="path-track"><div class="path-track-k">${t().pathsNextQuest}</div><div class="path-track-v">${t().chapterOf(nextStage, total)}</div></div>${lockNote}<div class="path-footer"><div class="path-state path-state-${state}">${stateLabel}</div><button class="path-enter" type="button" ${isLockedByPath ? "disabled" : ""}>${isLockedByPath ? t().pathsLockedState : t().pathsEnter}</button></div>`;
     card.onclick = () => {
       if (isLockedByPath) {
-        showToast("🔒", t().pathLockedTitle, dependencyName ? t().pathsLockedBy(dependencyName) : t().pathLockedTitle);
+        showToast("lock", t().pathLockedTitle, dependencyName ? t().pathsLockedBy(dependencyName) : t().pathLockedTitle);
         return;
       }
       selectPath(path.id);
@@ -150,7 +150,7 @@ function renderPaths() {
     card.querySelector(".path-enter").onclick = (e) => {
       e.stopPropagation();
       if (isLockedByPath) {
-        showToast("🔒", t().pathLockedTitle, dependencyName ? t().pathsLockedBy(dependencyName) : t().pathLockedTitle);
+        showToast("lock", t().pathLockedTitle, dependencyName ? t().pathsLockedBy(dependencyName) : t().pathLockedTitle);
         return;
       }
       selectPath(path.id);
@@ -171,7 +171,7 @@ function renderPaths() {
     card.className = "path-card glass disabled";
     card.style.setProperty("--path-color", path.color);
     card.style.animationDelay = `${80 + (allActivePaths.length + index) * 40}ms`;
-    card.innerHTML = `<div class="path-card-aura"></div><div class="path-top"><div><div class="path-name">${path.name[G.lang]}</div><div class="path-desc">${path.desc[G.lang]}</div></div><div class="path-badge">${path.icon}</div></div><div class="path-footer"><div class="path-state path-state-coming">${t().pathsComingSoon}</div></div>`;
+    card.innerHTML = `<div class="path-card-aura"></div><div class="path-top"><div><div class="path-name">${path.name[G.lang]}</div><div class="path-desc">${path.desc[G.lang]}</div></div><div class="path-badge">${iconHTML(path.icon, "path-icon")}</div></div><div class="path-footer"><div class="path-state path-state-coming">${t().pathsComingSoon}</div></div>`;
     grid.appendChild(card);
   });
   renderLeaderboard();
@@ -180,7 +180,7 @@ function selectPath(id) {
   const dependencyPathId = pathLockDependency(id);
   if (dependencyPathId) {
     const dependencyName = PATHS[dependencyPathId]?.name?.[G.lang] || "";
-    showToast("🔒", t().pathLockedTitle, dependencyName ? t().pathsLockedBy(dependencyName) : t().pathLockedTitle);
+    showToast("lock", t().pathLockedTitle, dependencyName ? t().pathsLockedBy(dependencyName) : t().pathLockedTitle);
     return;
   }
   G.path = id;
@@ -206,14 +206,14 @@ function updateUnlockedByLevel() {
 function openPopup(st) {
   const done = isStageCompleted(G.path, st.id), starCount = G.stars[G.path][st.id] || 0;
   const pc = byId("popup-card");
-  pc.innerHTML = `<button class="close" id="close-popup">✕</button>
+  pc.innerHTML = `<button class="close" id="close-popup">${iconHTML("fa-solid fa-xmark", "icon-dim")}</button>
     <div class="popup-head">
-      <div class="popup-ico">${st.icon}</div>
+      <div class="popup-ico">${iconHTML(st.icon, "stage-icon icon-gold")}</div>
       <div class="popup-kicker">${t().chapterOf(st.id, activeStages().length)} • ${stageDateLabel(st)}</div>
       <div class="popup-title">${st.title[G.lang]}</div>
       <div class="popup-era">${st.eraLabel[G.lang]}</div>
     </div>
-    <div style="display:flex;justify-content:center;gap:6px;margin:10px 0 4px">${[0, 1, 2].map((i) => `<span style="font-size:22px;opacity:${i < starCount ? 1 : 0.18}">⭐</span>`).join("")}</div>
+    <div style="display:flex;justify-content:center;gap:8px;margin:10px 0 4px">${[0, 1, 2].map((i) => `<span style="font-size:20px;opacity:${i < starCount ? 1 : 0.18}">${iconHTML("star", "icon-gold")}</span>`).join("")}</div>
     <div class="popup-desc">${t().popupDesc}</div>
     <div class="popup-focus"><strong>${t().deepFocus}:</strong> ${st.focus[G.lang]}</div>
     <div class="popup-focus"><strong>${t().deepGoal}:</strong> ${st.goal[G.lang]}</div>
@@ -224,7 +224,9 @@ function openPopup(st) {
   byId("begin-stage").onclick = () => beginStage(st.id);
 }
 function closePopup(e) {
-  if (!e || e.target === byId("popup") || e.target.id === "close-popup") byId("popup").classList.remove("on");
+  const target = e?.target;
+  const closeButton = target?.closest ? target.closest("#close-popup") : null;
+  if (!e || target === byId("popup") || closeButton) byId("popup").classList.remove("on");
 }
 
 /* ── Story (Step-based learning) ── */
@@ -244,7 +246,7 @@ function beginStage(id) {
 }
 function renderStoryHeader() {
   byId("story-chapter").textContent = t().chapterOf(activeStage.id, activeStages().length);
-  byId("story-icon").textContent = activeStage.icon;
+  setHTML("story-icon", iconHTML(activeStage.icon, "stage-icon icon-gold"));
   byId("story-title").textContent = activeStage.title[G.lang];
   byId("story-date").textContent = `${t().storyDate}: ${stageDateLabel(activeStage)}`;
   const pathMultiplier = getPathDonationMultiplier(G.path);
@@ -260,16 +262,16 @@ function renderStoryHeader() {
 }
 const PATH_PERIODS = {
   prophet: [
-    { eras: ["jahiliyyah", "birth"], icon: "🏜️", label: { ar: "قبل البعثة", en: "Pre-Revelation" }, color: "#8B6914" },
-    { eras: ["character", "revelation"], icon: "🕯️", label: { ar: "البعثة والوحي", en: "Revelation" }, color: "#E8D44D" },
-    { eras: ["struggle", "hijra"], icon: "🔥", label: { ar: "الابتلاء والهجرة", en: "Trials & Hijra" }, color: "#D4603A" },
-    { eras: ["madinah", "legacy"], icon: "🕌", label: { ar: "المدينة والإرث", en: "Madinah & Legacy" }, color: "#2E8B57" },
+    { eras: ["jahiliyyah", "birth"], icon: "landmark", label: { ar: "قبل البعثة", en: "Pre-Revelation" }, color: "#8B6914" },
+    { eras: ["character", "revelation"], icon: "lightbulb", label: { ar: "البعثة والوحي", en: "Revelation" }, color: "#E8D44D" },
+    { eras: ["struggle", "hijra"], icon: "fire", label: { ar: "الابتلاء والهجرة", en: "Trials & Hijra" }, color: "#D4603A" },
+    { eras: ["madinah", "legacy"], icon: "mosque", label: { ar: "المدينة والإرث", en: "Madinah & Legacy" }, color: "#2E8B57" },
   ],
   essentials: [
-    { eras: ["tawheed", "pillars"], icon: "🕋", label: { ar: "العقيدة والأركان", en: "Creed & Pillars" }, color: "#10b981" },
-    { eras: ["taharah", "salah"], icon: "💧", label: { ar: "الطهارة والصلاة", en: "Purity & Prayer" }, color: "#38bdf8" },
-    { eras: ["sawm", "zakat"], icon: "🌙", label: { ar: "الصيام والزكاة", en: "Fasting & Zakat" }, color: "#8b5cf6" },
-    { eras: ["halal", "akhlaq"], icon: "⚖️", label: { ar: "الحلال والأخلاق", en: "Halal & Character" }, color: "#f59e0b" },
+    { eras: ["tawheed", "pillars"], icon: "landmark", label: { ar: "العقيدة والأركان", en: "Creed & Pillars" }, color: "#10b981" },
+    { eras: ["taharah", "salah"], icon: "droplet", label: { ar: "الطهارة والصلاة", en: "Purity & Prayer" }, color: "#38bdf8" },
+    { eras: ["sawm", "zakat"], icon: "moon", label: { ar: "الصيام والزكاة", en: "Fasting & Zakat" }, color: "#8b5cf6" },
+    { eras: ["halal", "akhlaq"], icon: "scale", label: { ar: "الحلال والأخلاق", en: "Halal & Character" }, color: "#f59e0b" },
   ],
 };
 function renderEraStrip() {
@@ -281,7 +283,7 @@ function renderEraStrip() {
     const c = document.createElement("div");
     c.className = "era-card" + (active ? " active" : "");
     if (active) c.style.setProperty("--era-card-color", activeStage.eraColor || p.color);
-    c.innerHTML = `<div class="e1">${active ? activeStage.eraIcon : p.icon}</div><div class="e2">${active ? activeStage.eraLabel[G.lang] : p.label[G.lang]}</div><div class="e3">${active ? activeStage.eraTheme[G.lang] : ""}</div>`;
+    c.innerHTML = `<div class="e1">${iconHTML(active ? activeStage.eraIcon : p.icon, "era-icon")}</div><div class="e2">${active ? activeStage.eraLabel[G.lang] : p.label[G.lang]}</div><div class="e3">${active ? activeStage.eraTheme[G.lang] : ""}</div>`;
     strip.appendChild(c);
   });
 }
@@ -341,7 +343,7 @@ function showStoryStep(index) {
     const state = i < index ? "done" : i === index ? "active" : "next";
     const ev = document.createElement("div");
     ev.className = `timeline-event ${state}`;
-    ev.innerHTML = `<div class="timeline-event-node">${i < index ? "✓" : i + 1}</div><div class="timeline-event-label"><div class="timeline-event-title">${step.title[G.lang]}</div></div>`;
+    ev.innerHTML = `<div class="timeline-event-node">${i < index ? iconHTML("check-circle", "icon-emerald timeline-node-icon") : i + 1}</div><div class="timeline-event-label"><div class="timeline-event-title">${step.title[G.lang]}</div></div>`;
     ev.onclick = () => { if (i <= storyIndex) showStoryStep(i); };
     track.appendChild(ev);
     /* connector after each step */
@@ -379,16 +381,16 @@ function showStoryStep(index) {
         <div class="summary-step-title"><span class="summary-step-num">${si + 1}</span>${step.title[G.lang]}</div>
         <div class="summary-kp-list">${pts.map((pt, pi) => {
           const ck = getCheckKey(activeStage.id, si, pi);
-          return `<div class="summary-kp${checkedPoints[ck] ? " checked" : ""}"><span class="summary-kp-icon">${checkedPoints[ck] ? "✅" : "○"}</span><span>${pt}</span></div>`;
+          return `<div class="summary-kp${checkedPoints[ck] ? " checked" : ""}"><span class="summary-kp-icon">${checkedPoints[ck] ? iconHTML("check-circle", "icon-emerald") : iconHTML("dot-circle", "icon-dim")}</span><span>${pt}</span></div>`;
         }).join("")}</div>
       </div>`;
     }).join("");
 
     card.innerHTML =
-      `<div class="step-header summary-header"><div class="step-number summary-icon">📋</div><div class="step-info"><div class="step-title-text">${t().storySummaryTitle}</div><div class="step-label">${t().storySummaryDesc}</div></div></div>` +
+      `<div class="step-header summary-header"><div class="step-number summary-icon">${iconHTML("file-lines", "icon-soft-light")}</div><div class="step-info"><div class="step-title-text">${t().storySummaryTitle}</div><div class="step-label">${t().storySummaryDesc}</div></div></div>` +
       `<div class="summary-all-points">${allKeyPoints}</div>` +
       `<div class="summary-reading-section">` +
-        `<div class="summary-reading-header"><span>📚</span><span>${t().storyDeepReadingTitle}</span></div>` +
+        `<div class="summary-reading-header"><span>${iconHTML("book-reader", "icon-gold")}</span><span>${t().storyDeepReadingTitle}</span></div>` +
         `<div class="summary-reading-desc">${t().storyDeepReadingDesc}</div>` +
         `<div class="summary-reading-list">${readingItems}</div>` +
       `</div>`;
@@ -402,7 +404,7 @@ function showStoryStep(index) {
     card.innerHTML =
       `<div class="step-header"><div class="step-number">${index + 1}</div><div class="step-info"><div class="step-title-text">${step.title[G.lang]}</div><div class="step-label">${stepLabel}</div></div></div>` +
       `<div class="story-content-main"><p>${narrative}</p></div>` +
-      `<div class="key-points-section"><div class="key-points-header"><span class="key-points-icon">✅</span><span>${t().storyKeyPoints}</span><span class="key-points-count" id="kp-count-${index}">0/${keyPoints.length}</span></div>` +
+      `<div class="key-points-section"><div class="key-points-header"><span class="key-points-icon">${iconHTML("check-circle", "icon-emerald")}</span><span>${t().storyKeyPoints}</span><span class="key-points-count" id="kp-count-${index}">0/${keyPoints.length}</span></div>` +
       `<div class="key-points-list">${keyPoints.map((point, pi) => {
         const ck = getCheckKey(activeStage.id, index, pi);
         const checked = checkedPoints[ck];
@@ -461,7 +463,7 @@ function renderQuiz() {
     grid.appendChild(el);
   });
   byId("combo").classList.toggle("on", G.combo >= 2);
-  byId("combo").textContent = `🔥 ${G.combo}× Combo`;
+  byId("combo").innerHTML = `${iconHTML("bolt", "icon-gold combo-fa")}<span>${G.combo}x Combo</span>`;
   byId("booster-perfect").classList.toggle("active", quizScore === quizIndex && quizIndex > 0);
   byId("booster-speed").classList.remove("active");
   byId("booster-potion").classList.toggle("active", Boolean(G.boost?.isActive));
@@ -605,11 +607,11 @@ function finishQuiz() {
     refreshLeaderboard();
   });
   if (firstPerfectCompletion && G.level > oldLevel)
-    showToast("🪔", t().levelUp, (isAR() ? "ارتفع أثرك إلى المستوى " : "Your impact reached level ") + G.level);
+    showToast("lightbulb", t().levelUp, (isAR() ? "ارتفع أثرك إلى المستوى " : "Your impact reached level ") + G.level);
   if (!passedStrict) {
-    showToast("🔒", t().strictPerfectTitle, t().strictPerfectMessage);
+    showToast("lock", t().strictPerfectTitle, t().strictPerfectMessage);
   } else if (perfect && wasCompleted) {
-    showToast("ℹ️", t().replayNoRewardTitle, t().replayNoRewardText);
+    showToast("info", t().replayNoRewardTitle, t().replayNoRewardText);
   }
   if (firstPerfectCompletion) {
     setTimeout(() => checkAchievements(lastResult), 700);
@@ -619,15 +621,16 @@ function finishQuiz() {
 function renderResult(data) {
   const titles = t().resultTitles;
   if (!data.passedStrict) {
-    byId("result-emoji").textContent = "🔒";
+    setHTML("result-emoji", iconHTML("lock", "result-icon icon-rose"));
     byId("result-title").textContent = t().strictPerfectTitle;
     byId("result-sub").textContent = t().strictPerfectResult(data.correct, data.total);
   } else if (data.replayNoReward) {
-    byId("result-emoji").textContent = "♻️";
+    setHTML("result-emoji", iconHTML("rotate", "result-icon icon-sky"));
     byId("result-title").textContent = t().replayNoRewardTitle;
     byId("result-sub").textContent = t().replayNoRewardText;
   } else {
-    byId("result-emoji").textContent = data.stars === 3 ? "🏆" : data.stars === 2 ? "🥇" : "💪";
+    const resultIcon = data.stars === 3 ? "trophy" : data.stars === 2 ? "medal" : "dumbbell";
+    setHTML("result-emoji", iconHTML(resultIcon, "result-icon icon-gold"));
     byId("result-title").textContent = titles[Math.max(0, data.stars - 1)] || titles[0];
     byId("result-sub").textContent = t().correctOut(data.correct, data.total);
   }
@@ -636,7 +639,7 @@ function renderResult(data) {
   const stars = Math.max(0, Math.min(3, Number(data.stars || 0)));
   for (let i = 0; i < 3; i++) {
     const s = document.createElement("span");
-    s.textContent = "⭐";
+    s.innerHTML = iconHTML("star", "icon-gold");
     wrap.appendChild(s);
     setTimeout(() => s.classList.toggle("on", i < stars), 280 + i * 180);
   }
@@ -649,7 +652,7 @@ function renderResult(data) {
 }
 function nextStage() {
   if (!isStageCompleted(G.path, activeStage.id)) {
-    showToast("🔒", t().strictPerfectTitle, t().strictPerfectMessage);
+    showToast("lock", t().strictPerfectTitle, t().strictPerfectMessage);
     return;
   }
   if (activeStage.id >= activeStages().length) { renderMap(); screen("map", false); return; }

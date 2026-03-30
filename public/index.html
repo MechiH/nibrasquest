@@ -4,10 +4,11 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
-    <title>NBRAS | نبراس</title>
+    <title>NIBRAS | نبراس</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Amiri:wght@400;700&family=Nunito:wght@400;600;700;800;900&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
 
@@ -17,7 +18,7 @@
         <div class="top-controls">
             <div class="langbar"><button id="lang-ar" class="active">عربي</button><button id="lang-en">EN</button></div>
         <div class="top-actions">
-            <div class="startbtn" id="startWrap"><button id="start-btn">▶ ابدأ الرحلة</button></div>
+            <div class="startbtn" id="startWrap"><button id="start-btn"><i class="nq-icon fa-solid fa-play inline-fa icon-gold" aria-hidden="true"></i><span>ابدأ الرحلة</span></button></div>
             <div class="backbtn hidden" id="backWrap"><button id="back-btn">رجوع</button></div>
         </div>
     </div>
@@ -79,8 +80,8 @@
                             <button id="share-li-btn" type="button" aria-label="LinkedIn" title="LinkedIn"></button>
                         </div>
                         <div class="potion-row">
-                            <div class="potion-status" id="potion-status">⚗️ رصيد تعزيز التبرع x4: 0</div>
-                            <button id="activate-potion-btn" type="button">⚗️ تفعيل تعزيز التبرع x4 (ساعة)</button>
+                            <div class="potion-status" id="potion-status">رصيد تعزيز التبرع x4: 0</div>
+                            <button id="activate-potion-btn" type="button"><i class="nq-icon fa-solid fa-flask inline-fa icon-gold" aria-hidden="true"></i><span>تفعيل تعزيز التبرع x4 (ساعة)</span></button>
                         </div>
                     </div>
                 </div>
@@ -130,10 +131,10 @@
                 <div class="value" id="map-title">اختر المرحلة التالية</div>
             </div>
             <div class="hud-right glass hud-card">
-                <div class="stat">📚 <span id="stat-stars">0</span></div>
-                <div class="stat">🎓 <span id="stat-gems">$0.00</span></div>
-                <div class="stat">☕ <span id="stat-streak">$0.00</span></div>
-                <div class="stat">🏆 <span id="stat-ach">—</span></div>
+                <div class="stat"><span class="stat-icon icon-gold"><i class="nq-icon fa-solid fa-book-open-reader" aria-hidden="true"></i></span> <span id="stat-stars">0</span></div>
+                <div class="stat"><span class="stat-icon icon-sky"><i class="nq-icon fa-solid fa-hand-holding-heart" aria-hidden="true"></i></span> <span id="stat-gems">$0.00</span></div>
+                <div class="stat"><span class="stat-icon icon-rose"><i class="nq-icon fa-solid fa-piggy-bank" aria-hidden="true"></i></span> <span id="stat-streak">$0.00</span></div>
+                <div class="stat"><span class="stat-icon icon-gold"><i class="nq-icon fa-solid fa-trophy" aria-hidden="true"></i></span> <span id="stat-ach">—</span></div>
             </div>
         </div>
         <div class="map-wrap">
@@ -164,12 +165,12 @@
                 <div class="tt-state" id="tt-state"></div>
                 <div class="tt-name" id="tt-name"></div>
                 <div class="tt-meta" id="tt-meta"></div>
-            </div><button class="panel-toggle" id="panel-toggle"><span>🎯</span><span class="mini"
+            </div><button class="panel-toggle" id="panel-toggle"><span class="panel-toggle-icon"><i class="nq-icon fa-solid fa-bullseye icon-gold" aria-hidden="true"></i></span><span class="mini"
                     id="panel-toggle-label">Quest</span></button>
             <div class="side-panel glass hidden-panel" id="quest-panel">
                 <div class="quest-head">
                     <div class="quest-title" id="panel-title">المهمة الحالية</div>
-                    <div class="stat">🏆 <span id="panel-rank">—</span></div>
+                    <div class="stat"><span class="stat-icon icon-gold"><i class="nq-icon fa-solid fa-trophy" aria-hidden="true"></i></span> <span id="panel-rank">—</span></div>
                 </div>
                 <div class="quest-sub" id="panel-copy">أكمل المرحلة الحالية لزيادة التبرع وفتح المرحلة التالية.</div>
                 <div class="quest-progress" id="quest-progress"></div>
@@ -247,7 +248,7 @@
         <div class="quiz-shell">
             <div class="quiz-top glass">
                 <div class="quiz-label" id="quiz-label">اختبار المعرفة</div>
-                <div class="combo" id="combo">🔥 2× Combo</div>
+                <div class="combo" id="combo"><i class="nq-icon fa-solid fa-bolt combo-fa icon-gold" aria-hidden="true"></i><span>2x Combo</span></div>
                 <div class="quiz-count" id="quiz-count">1 / 2</div>
             </div>
             <div class="progress glass"><span id="quiz-progress"></span></div>
@@ -255,21 +256,21 @@
                 <div class="booster" id="booster-combo">Combo: 0</div>
                 <div class="booster" id="booster-perfect">Perfect Bonus</div>
                 <div class="booster" id="booster-speed">Quick Bonus</div>
-                <div class="booster" id="booster-potion">⚗️ x4 Study Boost</div>
+                <div class="booster" id="booster-potion"><i class="nq-icon fa-solid fa-flask inline-fa icon-gold" aria-hidden="true"></i><span>x4 Study Boost</span></div>
             </div>
             <div class="mission-row">
                 <div class="mission-card-mini">
-                    <div class="mi">🎯</div>
+                    <div class="mi"><i class="nq-icon fa-solid fa-bullseye icon-gold" aria-hidden="true"></i></div>
                     <div class="mt" id="mini-goal-label">Goal</div>
                     <div class="mv" id="mini-goal-value">2/2</div>
                 </div>
                 <div class="mission-card-mini">
-                    <div class="mi">⚡</div>
+                    <div class="mi"><i class="nq-icon fa-solid fa-bolt icon-sky" aria-hidden="true"></i></div>
                     <div class="mt" id="mini-bonus-label">Bonus</div>
                     <div class="mv" id="mini-bonus-value">+$0.00</div>
                 </div>
                 <div class="mission-card-mini">
-                    <div class="mi">🔥</div>
+                    <div class="mi"><i class="nq-icon fa-solid fa-fire icon-orange" aria-hidden="true"></i></div>
                     <div class="mt" id="mini-streak-label">Streak</div>
                     <div class="mv" id="mini-streak-value">0</div>
                 </div>
@@ -283,7 +284,7 @@
     </section>
     <section id="result" class="screen">
         <div class="result-card glass">
-            <div class="result-emoji" id="result-emoji">🏆</div>
+            <div class="result-emoji" id="result-emoji"><i class="nq-icon fa-solid fa-trophy result-icon icon-gold" aria-hidden="true"></i></div>
             <div class="result-title" id="result-title">ممتاز</div>
             <div class="result-sub" id="result-sub">2 / 2 صحيحة</div>
             <div class="stars" id="result-stars"></div>
@@ -314,14 +315,14 @@
         <div class="popup-card glass" id="popup-card"></div>
     </div>
     <div class="toast" id="toast">
-        <div class="i" id="toast-i">⚡</div>
+        <div class="i" id="toast-i"><i class="nq-icon fa-solid fa-bolt toast-icon icon-gold" aria-hidden="true"></i></div>
         <div>
             <div class="t1" id="toast-t1">LEVEL UP</div>
             <div class="t2" id="toast-t2">+$0.00</div>
         </div>
     </div>
     <div class="achievement" id="achievement">
-        <div class="i" id="achievement-i">🏅</div>
+        <div class="i" id="achievement-i"><i class="nq-icon fa-solid fa-award achievement-icon icon-gold" aria-hidden="true"></i></div>
         <div>
             <div class="t1" id="achievement-t1">Achievement</div>
             <div class="t2" id="achievement-t2">First Step</div>

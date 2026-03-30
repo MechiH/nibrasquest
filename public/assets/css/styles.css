@@ -265,6 +265,54 @@
             pointer-events: auto
         }
 
+        .nq-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1
+        }
+
+        .inline-fa {
+            margin-inline-end: 7px;
+            font-size: .95em
+        }
+
+        .icon-gold {
+            color: var(--gold-2)
+        }
+
+        .icon-emerald {
+            color: #6ee7b7
+        }
+
+        .icon-sky {
+            color: #7dd3fc
+        }
+
+        .icon-rose {
+            color: #fb7185
+        }
+
+        .icon-orange {
+            color: #fb923c
+        }
+
+        .icon-flask {
+            color: #93c5fd
+        }
+
+        .icon-violet {
+            color: #c4b5fd
+        }
+
+        .icon-dim {
+            color: var(--muted)
+        }
+
+        .icon-soft-light {
+            color: #d2ffe6
+        }
+
         .top-actions {
             display: flex;
             gap: 8px
@@ -294,7 +342,10 @@
             cursor: pointer;
             font-weight: 800;
             font-size: 12px;
-            transition: .2s
+            transition: .2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center
         }
 
         .langbar button.active {
@@ -901,7 +952,10 @@
             font-size: 12px;
             font-weight: 800;
             padding: 9px 12px;
-            cursor: pointer
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center
         }
 
         #activate-potion-btn {
@@ -1257,8 +1311,17 @@
             display: grid;
             place-items: center;
             background: rgba(212, 168, 67, .08);
-            border: 1px solid rgba(212, 168, 67, .18);
-            font-size: 24px
+            border: 1px solid rgba(212, 168, 67, .18)
+        }
+
+        .path-icon {
+            font-size: 23px;
+            color: color-mix(in srgb, var(--path-color, var(--gold)) 82%, #fff)
+        }
+
+        .meta-pill-icon {
+            margin-inline-end: 6px;
+            font-size: 12px
         }
 
         .path-name {
@@ -1386,6 +1449,20 @@
             font-weight: 800
         }
 
+        .stat-icon {
+            width: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .panel-toggle-icon {
+            width: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center
+        }
+
         .map-wrap {
             position: relative;
             flex: 1;
@@ -1463,6 +1540,10 @@
             width: 100%;
             height: 100%;
             display: block
+        }
+
+        .map-node-icon {
+            pointer-events: none
         }
 
         .map-progress-badge {
@@ -1817,6 +1898,10 @@
             filter: drop-shadow(0 0 14px rgba(212, 168, 67, .22))
         }
 
+        .stage-icon {
+            font-size: inherit
+        }
+
         .story-header-rewards {
             width: 100%;
             margin-top: 10px;
@@ -1878,6 +1963,10 @@
 
         .era-card .e1 {
             font-size: 22px
+        }
+
+        .era-card .e1 .nq-icon {
+            color: color-mix(in srgb, var(--era-card-color, var(--gold)) 70%, #fff)
         }
 
         .era-card .e2 {
@@ -2179,6 +2268,10 @@
             font-size: 16px
         }
 
+        .key-points-icon .nq-icon {
+            display: inline-flex
+        }
+
         .key-points-count {
             margin-inline-start: auto;
             font-size: 12px;
@@ -2244,10 +2337,12 @@
         }
 
         .key-point.checked .kp-check::after {
-            content: "✓";
-            color: #fff;
-            font-size: 13px;
-            font-weight: 900
+            content: "";
+            width: 6px;
+            height: 10px;
+            border-right: 2px solid #fff;
+            border-bottom: 2px solid #fff;
+            transform: rotate(40deg) translateY(-1px)
         }
 
         .kp-text {
@@ -2335,6 +2430,10 @@
             font-size: 14px;
             flex-shrink: 0;
             margin-top: 1px
+        }
+
+        .summary-kp-icon .nq-icon {
+            display: inline-flex
         }
 
         .summary-reading-section {
@@ -2651,7 +2750,14 @@
             font-weight: 900;
             opacity: 0;
             transform: scale(.85);
-            transition: .2s
+            transition: .2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px
+        }
+
+        .combo-fa {
+            font-size: 14px
         }
 
         .combo.on {
@@ -2845,6 +2951,10 @@
             filter: drop-shadow(0 0 24px rgba(212, 168, 67, .34))
         }
 
+        .result-icon {
+            font-size: 88px
+        }
+
         .result-title {
             font-size: 46px;
             font-family: var(--fd);
@@ -2984,6 +3094,10 @@
             font-size: 56px
         }
 
+        .popup-ico .nq-icon {
+            color: var(--gold-2)
+        }
+
         .popup-kicker {
             font-size: 10px;
             color: var(--dim);
@@ -3084,6 +3198,11 @@
         .toast .i,
         .achievement .i {
             font-size: 26px
+        }
+
+        .toast .i .nq-icon,
+        .achievement .i .nq-icon {
+            font-size: 24px
         }
 
         .toast .t1,

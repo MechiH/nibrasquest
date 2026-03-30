@@ -186,16 +186,15 @@ function renderMap() {
       "stroke-width": 1,
     });
     g.appendChild(inner);
-    const icon = el("text");
-    set(icon, {
-      x: 0,
-      y: 9,
-      "text-anchor": "middle",
-      "font-size": locked ? 16 : 22,
-      filter: "url(#map-soft)",
-    });
-    icon.textContent = locked ? "🔒" : st.icon;
-    g.appendChild(icon);
+    const iconHost = el("foreignObject");
+    set(iconHost, { x: -15, y: -15, width: 30, height: 30 });
+    const iconWrap = document.createElement("div");
+    iconWrap.setAttribute("xmlns", "http://www.w3.org/1999/xhtml");
+    iconWrap.className = "map-node-icon";
+    iconWrap.style.cssText = `width:30px;height:30px;display:flex;align-items:center;justify-content:center;color:${locked ? "rgba(190,161,232,.95)" : "#f5d96a"};font-size:${locked ? 14 : 18}px;line-height:1;`;
+    iconWrap.innerHTML = iconHTML(locked ? "lock" : st.icon, locked ? "icon-violet" : "icon-gold");
+    iconHost.appendChild(iconWrap);
+    g.appendChild(iconHost);
 
     const numberBadge = el("circle");
     set(numberBadge, {
@@ -230,17 +229,16 @@ function renderMap() {
         "stroke-width": 1.5,
       });
       g.appendChild(checkBadge);
-      const checkText = el("text");
-      set(checkText, {
-        x: 24,
-        y: -19,
-        "text-anchor": "middle",
-        "font-size": 11,
-        fill: "#6ee7b7",
-        "font-weight": "900",
+      const checkPath = el("path");
+      set(checkPath, {
+        d: "M20 -24 L23 -21 L28 -27",
+        fill: "none",
+        stroke: "#6ee7b7",
+        "stroke-width": 2.4,
+        "stroke-linecap": "round",
+        "stroke-linejoin": "round",
       });
-      checkText.textContent = "✓";
-      g.appendChild(checkText);
+      g.appendChild(checkPath);
     }
 
     const labelText = st.title[G.lang];
@@ -293,7 +291,7 @@ function showTip(st, e) {
   byId("tt-state").textContent = state;
   byId("tt-name").textContent = st.title[G.lang];
   byId("tt-meta").textContent =
-    `${st.eraLabel[G.lang]} • ⭐ ${G.stars[G.path][st.id] || 0} • ${st.steps.length} ${isAR() ? "خطوات" : "steps"}`;
+    `${st.eraLabel[G.lang]} • ${isAR() ? "النجوم" : "Stars"}: ${G.stars[G.path][st.id] || 0} • ${st.steps.length} ${isAR() ? "خطوات" : "steps"}`;
   const tt = byId("tooltip");
   tt.classList.add("on");
   const pad = 14;
@@ -310,7 +308,7 @@ function hideTip() {
   byId("tooltip").classList.remove("on");
 }
 function showToast(icon, head, text) {
-  byId("toast-i").textContent = icon;
+  byId("toast-i").innerHTML = iconHTML(icon, "toast-icon");
   byId("toast-t1").textContent = head;
   byId("toast-t2").textContent = text;
   const e = byId("toast");
@@ -318,7 +316,7 @@ function showToast(icon, head, text) {
   setTimeout(() => e.classList.remove("on"), 2600);
 }
 function showAchievement(icon, head, text) {
-  byId("achievement-i").textContent = icon;
+  byId("achievement-i").innerHTML = iconHTML(icon, "achievement-icon");
   byId("achievement-t1").textContent = head;
   byId("achievement-t2").textContent = text;
   const e = byId("achievement");
