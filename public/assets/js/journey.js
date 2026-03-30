@@ -247,6 +247,16 @@ function renderStoryHeader() {
   byId("story-icon").textContent = activeStage.icon;
   byId("story-title").textContent = activeStage.title[G.lang];
   byId("story-date").textContent = `${t().storyDate}: ${stageDateLabel(activeStage)}`;
+  const pathMultiplier = getPathDonationMultiplier(G.path);
+  const stepValue = getEffectiveStepDonationCents(G.path);
+  const stageStepsTotal = stepValue * activeStage.steps.length;
+  const perfectTotal = stageStepsTotal + (PERFECT_DONATION_BONUS_CENTS * pathMultiplier);
+  setText("story-reward-step-label", t().storyRewardPerStep);
+  setText("story-reward-stage-label", t().storyRewardStage);
+  setText("story-reward-perfect-label", t().storyRewardPerfect);
+  setText("story-reward-step-value", formatMoney(stepValue));
+  setText("story-reward-stage-value", formatMoney(stageStepsTotal));
+  setText("story-reward-perfect-value", formatMoney(perfectTotal));
 }
 const PATH_PERIODS = {
   prophet: [
@@ -344,7 +354,7 @@ function showStoryStep(index) {
   const summaryState = isSummary ? "active" : index > summaryIndex ? "done" : "next";
   const summaryEv = document.createElement("div");
   summaryEv.className = `timeline-event ${summaryState} summary-node`;
-  summaryEv.innerHTML = `<div class="timeline-event-node">${isSummary ? "📋" : index > summaryIndex ? "✓" : "📋"}</div><div class="timeline-event-label"><div class="timeline-event-title">${t().storySummaryTitle}</div></div>`;
+  summaryEv.innerHTML = `<div class="timeline-event-node"><span class="summary-glyph${index > summaryIndex ? " done" : ""}"></span></div><div class="timeline-event-label"><div class="timeline-event-title">${t().storySummaryTitle}</div></div>`;
   summaryEv.onclick = () => { if (storyIndex >= summaryIndex - 1) showStoryStep(summaryIndex); };
   track.appendChild(summaryEv);
 

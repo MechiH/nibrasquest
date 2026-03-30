@@ -228,6 +228,24 @@
             }
         }
 
+        @keyframes lanternCorePulse {
+
+            0%,
+            100% {
+                opacity: .88;
+                box-shadow:
+                    inset 0 0 24px rgba(255, 224, 148, .52),
+                    0 0 22px rgba(242, 195, 86, .26)
+            }
+
+            50% {
+                opacity: 1;
+                box-shadow:
+                    inset 0 0 34px rgba(255, 228, 155, .7),
+                    0 0 34px rgba(242, 195, 86, .38)
+            }
+        }
+
         .top-controls {
             position: fixed;
             top: 14px;
@@ -427,53 +445,83 @@
 
         .lantern-handle {
             position: absolute;
-            top: 0;
+            top: -2px;
             left: 50%;
-            width: 84px;
-            height: 46px;
+            width: 96px;
+            height: 56px;
             transform: translateX(-50%);
-            border: 4px solid rgba(241, 211, 140, .92);
+            border: 3px solid rgba(247, 223, 161, .94);
             border-bottom: none;
-            border-radius: 60px 60px 0 0;
+            border-radius: 76px 76px 0 0;
+            background: linear-gradient(180deg, rgba(255, 242, 199, .14), rgba(147, 100, 17, .18));
             box-shadow:
-                inset 0 0 0 2px rgba(117, 84, 28, .34),
-                0 8px 18px rgba(212, 168, 67, .22)
+                inset 0 0 0 1px rgba(123, 85, 24, .46),
+                0 8px 18px rgba(212, 168, 67, .24)
         }
 
         .lantern-handle::before,
         .lantern-handle::after {
             content: "";
-            position: absolute;
-            bottom: -2px;
-            width: 16px;
-            height: 14px;
-            border-radius: 4px;
-            background: linear-gradient(180deg, rgba(245, 220, 156, .92), rgba(165, 118, 21, .85));
-            border: 1px solid rgba(255, 226, 163, .7)
+            position: absolute
         }
 
         .lantern-handle::before {
-            left: 8px
+            top: 8px;
+            left: 50%;
+            width: 60px;
+            height: 34px;
+            transform: translateX(-50%);
+            border: 2px solid rgba(255, 231, 170, .55);
+            border-bottom: none;
+            border-radius: 56px 56px 0 0
         }
 
         .lantern-handle::after {
-            right: 8px
+            top: -8px;
+            left: 50%;
+            width: 24px;
+            height: 12px;
+            transform: translateX(-50%);
+            border-radius: 999px;
+            border: 1px solid rgba(255, 229, 166, .7);
+            background: linear-gradient(180deg, rgba(250, 229, 168, .96), rgba(171, 121, 28, .88));
+            box-shadow: 0 4px 10px rgba(212, 168, 67, .32)
         }
 
         .lantern-neck {
             position: absolute;
-            top: 41px;
+            top: 45px;
             left: 50%;
-            width: 76px;
-            height: 20px;
+            width: 84px;
+            height: 22px;
             transform: translateX(-50%);
             border-radius: 999px;
             background:
-                linear-gradient(180deg, rgba(246, 223, 161, .88), rgba(160, 113, 19, .84));
+                linear-gradient(180deg, rgba(247, 226, 168, .9), rgba(160, 112, 17, .84));
             border: 2px solid rgba(250, 223, 156, .72);
             box-shadow:
-                0 5px 14px rgba(212, 168, 67, .2),
+                0 5px 14px rgba(212, 168, 67, .24),
                 inset 0 1px 2px rgba(255, 237, 194, .5)
+        }
+
+        .lantern-neck::before,
+        .lantern-neck::after {
+            content: "";
+            position: absolute;
+            top: -16px;
+            width: 8px;
+            height: 18px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 227, 162, .66);
+            background: linear-gradient(180deg, rgba(247, 224, 163, .92), rgba(162, 113, 20, .88))
+        }
+
+        .lantern-neck::before {
+            left: 12px
+        }
+
+        .lantern-neck::after {
+            right: 12px
         }
 
         .lantern-frame {
@@ -503,6 +551,8 @@
             inset: 14px;
             border-radius: 20px;
             border: 2px solid rgba(255, 229, 167, .42);
+            background:
+                radial-gradient(circle at 50% 44%, rgba(250, 211, 110, .3), rgba(250, 211, 110, .05) 54%, transparent 74%);
             box-shadow:
                 inset 0 0 14px rgba(255, 229, 167, .22),
                 inset 0 -16px 22px rgba(76, 44, 5, .24)
@@ -515,16 +565,35 @@
             border-bottom: 2px solid rgba(255, 227, 164, .34)
         }
 
+        .lantern-core {
+            position: absolute;
+            top: 98px;
+            left: 50%;
+            width: 88px;
+            height: 118px;
+            transform: translateX(-50%);
+            border-radius: 14px;
+            border: 1.6px solid rgba(255, 230, 170, .46);
+            background:
+                radial-gradient(circle at 50% 46%, rgba(255, 228, 150, .9) 0%, rgba(247, 196, 83, .48) 35%, rgba(247, 196, 83, .14) 66%, rgba(247, 196, 83, 0) 100%),
+                linear-gradient(180deg, rgba(255, 241, 204, .14), rgba(87, 52, 8, .08));
+            box-shadow:
+                inset 0 0 24px rgba(255, 224, 148, .52),
+                0 0 22px rgba(242, 195, 86, .26);
+            animation: lanternCorePulse 3.2s ease-in-out infinite;
+            pointer-events: none
+        }
+
         .lantern-glow {
             position: absolute;
             left: 50%;
-            bottom: 16px;
-            width: 220px;
-            height: 220px;
+            bottom: 12px;
+            width: 232px;
+            height: 232px;
             transform: translateX(-50%);
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(243, 208, 118, .7) 0%, rgba(243, 208, 118, .08) 48%, rgba(243, 208, 118, 0) 72%);
-            filter: blur(9px);
+            background: radial-gradient(circle, rgba(243, 208, 118, .76) 0%, rgba(243, 208, 118, .12) 44%, rgba(243, 208, 118, 0) 72%);
+            filter: blur(10px);
             pointer-events: none
         }
 
@@ -1677,7 +1746,8 @@
         }
 
         #story {
-            justify-content: flex-start
+            justify-content: flex-start;
+            direction: ltr
         }
 
         .story-shell {
@@ -1688,7 +1758,16 @@
             padding: 72px 20px 20px;
             overflow-y: visible;
             overflow-x: hidden;
-            gap: 14px
+            gap: 14px;
+            direction: ltr
+        }
+
+        html:not(.en) #story .story-shell>* {
+            direction: rtl
+        }
+
+        html.en #story .story-shell>* {
+            direction: ltr
         }
 
         /* ── header ── */
@@ -1696,6 +1775,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
             padding: 14px 20px;
             border-radius: 20px;
             max-width: 1100px;
@@ -1735,6 +1815,40 @@
         .story-header-right .icon {
             font-size: 42px;
             filter: drop-shadow(0 0 14px rgba(212, 168, 67, .22))
+        }
+
+        .story-header-rewards {
+            width: 100%;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, .08);
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px
+        }
+
+        .story-reward-item {
+            border-radius: 14px;
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(212, 168, 67, .2);
+            padding: 8px 10px;
+            display: grid;
+            gap: 5px
+        }
+
+        .story-reward-item span {
+            font-size: 10px;
+            color: var(--dim);
+            font-weight: 800;
+            letter-spacing: .08em;
+            text-transform: uppercase
+        }
+
+        .story-reward-item strong {
+            color: var(--gold-2);
+            font-size: 16px;
+            line-height: 1;
+            font-weight: 900
         }
 
         /* ── era strip ── */
@@ -2262,8 +2376,53 @@
         }
 
         .timeline-event.summary-node .timeline-event-node {
-            background: linear-gradient(135deg, #2E8B57, #52c07e);
-            font-size: 13px
+            background: linear-gradient(135deg, rgba(46, 139, 87, .14), rgba(82, 192, 126, .2));
+            color: #7ee8ab;
+            border-color: rgba(126, 232, 171, .52)
+        }
+
+        .timeline-event.summary-node.active .timeline-event-node {
+            color: #b6ffd5;
+            box-shadow: 0 0 20px rgba(126, 232, 171, .28)
+        }
+
+        .summary-glyph {
+            width: 14px;
+            height: 16px;
+            border: 2px solid currentColor;
+            border-radius: 4px;
+            display: inline-block;
+            position: relative
+        }
+
+        .summary-glyph::before {
+            content: "";
+            position: absolute;
+            left: 2px;
+            right: 2px;
+            top: 3px;
+            height: 2px;
+            background: currentColor;
+            box-shadow: 0 4px 0 currentColor, 0 8px 0 currentColor
+        }
+
+        .summary-glyph.done {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%
+        }
+
+        .summary-glyph.done::before {
+            left: 4px;
+            right: auto;
+            top: 1px;
+            width: 6px;
+            height: 10px;
+            background: transparent;
+            box-shadow: none;
+            border-right: 2px solid currentColor;
+            border-bottom: 2px solid currentColor;
+            transform: rotate(40deg)
         }
 
         @keyframes fadeSlideIn {
@@ -3060,6 +3219,10 @@
                 font-size: 22px
             }
 
+            .story-header-rewards {
+                grid-template-columns: 1fr
+            }
+
             .question-text {
                 font-size: 20px
             }
@@ -3546,6 +3709,12 @@
                 height: 186px
             }
 
+            .lantern-core {
+                top: 92px;
+                width: 80px;
+                height: 108px
+            }
+
             .success-section {
                 grid-template-columns: 1fr
             }
@@ -3579,19 +3748,25 @@
             }
 
             .lantern-handle {
-                width: 68px;
-                height: 36px
+                width: 74px;
+                height: 42px
             }
 
             .lantern-neck {
-                width: 62px;
-                top: 35px
+                width: 64px;
+                top: 38px
             }
 
             .lantern-frame {
                 top: 50px;
                 width: 126px;
                 height: 162px
+            }
+
+            .lantern-core {
+                top: 82px;
+                width: 68px;
+                height: 92px
             }
 
             .lantern-glow {

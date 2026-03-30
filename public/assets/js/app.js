@@ -37,7 +37,6 @@ function bind() {
     byId("quest-panel").classList.toggle("hidden-panel");
   byId("back-btn").onclick = back;
   byId("story-next").onclick = storyNext;
-  byId("story-skip").onclick = storySkip;
   byId("next-stage-btn").onclick = nextStage;
   byId("map-btn").onclick = backToMap;
   byId("retry-btn").onclick = retryStage;

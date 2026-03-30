@@ -965,6 +965,9 @@ function refreshText() {
   setText("panel-title", t().panelTitle);
   setText("panel-copy", t().panelCopy);
   setText("panel-toggle-label", t().panelToggle);
+  setText("story-reward-step-label", t().storyRewardPerStep);
+  setText("story-reward-stage-label", t().storyRewardStage);
+  setText("story-reward-perfect-label", t().storyRewardPerfect);
   setText("deep-focus-label", t().deepFocus);
   setText("deep-goal-label", t().deepGoal);
   setText("deep-books-label", t().deepBooks);
@@ -985,9 +988,6 @@ function refreshText() {
   setText("mini-goal-label", t().goal);
   setText("mini-bonus-label", t().bonus);
   setText("mini-streak-label", t().streakLabel);
-  ["reward-1", "reward-2", "reward-3"].forEach(
-    (id, i) => setText(id, t().rewards[i]),
-  );
   updateHUD();
   renderLeaderboard();
 }
