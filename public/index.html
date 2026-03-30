@@ -11,14 +11,14 @@
     <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
 
-<body dir="rtl">
+<body dir="ltr">
     <canvas id="bg"></canvas><canvas id="fx"></canvas>
     <div class="era-overlay" id="era-overlay"></div>
-    <div class="top-controls">
-        <div class="langbar"><button id="lang-ar" class="active">عربي</button><button id="lang-en">EN</button></div>
+        <div class="top-controls">
+            <div class="langbar"><button id="lang-ar" class="active">عربي</button><button id="lang-en">EN</button></div>
         <div class="top-actions">
             <div class="startbtn" id="startWrap"><button id="start-btn">▶ ابدأ الرحلة</button></div>
-            <div class="backbtn hidden" id="backWrap"><button id="back-btn">← رجوع</button></div>
+            <div class="backbtn hidden" id="backWrap"><button id="back-btn">رجوع</button></div>
         </div>
     </div>
     <section id="title" class="screen on">
@@ -34,19 +34,12 @@
                     <div class="kicker" id="hero-kicker">مبادرة نبراس</div>
                     <div class="logo" id="hero-logo">نبراس</div>
                     <div class="subtitle" id="hero-sub">تعلّم ينير الطريق، وتبرّع يصنع أثرًا</div>
-                    <div class="chip-row">
-                        <div class="chip" id="chip-1">🌙 السيرة النبوية</div>
-                        <div class="chip" id="chip-2">📖 مبني على كتاب الشفا</div>
-                        <div class="chip" id="chip-3">✅ تعلّم وتحقق بالخطوات</div>
-                        <div class="chip" id="chip-4">🗺️ 8 مراحل من الولادة إلى الخلود</div>
-                    </div>
                 </div>
             </div>
             <div class="home-section purpose-section glass">
                 <div class="purpose-kicker" id="purpose-kicker">رسالة المبادرة</div>
-                <div class="purpose-title" id="purpose-title">ما هدف نبراس؟</div>
-                <div class="mission-card" id="mission-copy">النبراس هو المصباح أو الفانوس الذي يُستنار به في الظلام، ولذلك اخترناه
-                    رمزًا للتعلّم الذي يفتح الطريق ويمنح الأمل.</div>
+                <div class="purpose-title" id="purpose-title">أهداف نبراس</div>
+                <div class="mission-card" id="mission-copy">هدف نبراس هو نشر المعرفة وتمكين الناس من صناعة أثر حقيقي أثناء التعلّم. ببساطة: تتعلّم، تُكمل مرحلة، فيُضاف مبلغ صغير تلقائيًا لدعم الأيتام والطلاب.</div>
             </div>
             <div class="home-section success-section">
                 <div class="initiative-card glass">
@@ -56,13 +49,38 @@
                     <div class="initiative-copy" id="initiative-copy">كل خطوة تعلّم تتحول إلى تبرع صغير لدعم الأيتام والطلاب.</div>
                     <div class="initiative-metrics">
                         <div class="initiative-metric"><span id="initiative-step-label">قيمة كل خطوة</span><strong
-                                id="initiative-step-value">$0.05</strong></div>
+                                id="initiative-step-value">$0.001</strong></div>
                         <div class="initiative-metric"><span id="initiative-total-label">إجمالي التبرع</span><strong
                                 id="initiative-total-value">$0.00</strong></div>
                         <div class="initiative-metric"><span id="initiative-steps-label">خطوات ممولة</span><strong
                                 id="initiative-steps-value">0</strong></div>
                         <div class="initiative-metric"><span id="initiative-rank-label">الترتيب</span><strong
                                 id="initiative-rank-value">—</strong></div>
+                    </div>
+                    <div class="global-impact-card">
+                        <div class="global-impact-head">
+                            <span id="global-target-label">الهدف العالمي للتعلّم</span>
+                            <strong id="global-target-value">$0.000 / $100.000</strong>
+                        </div>
+                        <div class="global-impact-bar"><span id="global-target-fill"></span></div>
+                        <div class="global-impact-meta" id="global-target-meta">0%</div>
+                    </div>
+                    <div class="invite-card">
+                        <div class="invite-title" id="invite-title">دعوة الأصدقاء</div>
+                        <div class="invite-copy" id="invite-copy">شارك رابطك: كل من يبدأ ويتعلّم من رابطك يمنحك قارورة تعزيز تبرع x4 لمدة ساعة كاملة.</div>
+                        <div class="invite-link-wrap">
+                            <input id="invite-link-input" type="text" readonly value="" />
+                            <button id="invite-copy-btn" type="button">نسخ الرابط</button>
+                        </div>
+                        <div class="invite-actions">
+                            <button id="share-fb-btn" type="button" aria-label="Facebook" title="Facebook"></button>
+                            <button id="share-x-btn" type="button" aria-label="X" title="X"></button>
+                            <button id="share-li-btn" type="button" aria-label="LinkedIn" title="LinkedIn"></button>
+                        </div>
+                        <div class="potion-row">
+                            <div class="potion-status" id="potion-status">⚗️ رصيد تعزيز التبرع x4: 0</div>
+                            <button id="activate-potion-btn" type="button">⚗️ تفعيل تعزيز التبرع x4 (ساعة)</button>
+                        </div>
                     </div>
                 </div>
                 <div class="leaderboard-card glass">
@@ -103,7 +121,7 @@
                     <div class="xp-bar">
                         <div class="xp-fill" id="xp-fill"></div>
                     </div>
-                    <div style="font-size:12px;color:var(--muted);margin-top:6px" id="xp-text">$0.05 / خطوة</div>
+                    <div style="font-size:12px;color:var(--muted);margin-top:6px" id="xp-text">$0.001 / خطوة</div>
                 </div>
             </div>
             <div class="hud-center glass hud-card">
@@ -228,6 +246,7 @@
                 <div class="booster" id="booster-combo">Combo: 0</div>
                 <div class="booster" id="booster-perfect">Perfect Bonus</div>
                 <div class="booster" id="booster-speed">Quick Bonus</div>
+                <div class="booster" id="booster-potion">⚗️ x4 Study Boost</div>
             </div>
             <div class="mission-row">
                 <div class="mission-card-mini">

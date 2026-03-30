@@ -21,7 +21,8 @@
   ],
   "vars": {
     "BUY_ME_A_COFFEE_URL": "https://buymeacoffee.com/urnzikfqg5",
-    "DONATION_PER_STEP_CENTS": "1"
+    "DONATION_PER_STEP_CENTS": "1",
+    "GLOBAL_STUDY_TARGET_CENTS": "100000"
   },
   "env": {
     "production": {
@@ -42,7 +43,8 @@
       ],
       "vars": {
         "BUY_ME_A_COFFEE_URL": "https://buymeacoffee.com/urnzikfqg5",
-        "DONATION_PER_STEP_CENTS": "1"
+        "DONATION_PER_STEP_CENTS": "1",
+        "GLOBAL_STUDY_TARGET_CENTS": "100000"
       }
     }
   },

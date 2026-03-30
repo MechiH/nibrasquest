@@ -42,11 +42,26 @@ function applyStoryTheme() {
 /* ── Checked key-points tracker (per session) ── */
 let checkedPoints = {};
 function getCheckKey(stageId, stepIdx, pointIdx) { return `${stageId}-${stepIdx}-${pointIdx}`; }
+function activePathSequence() {
+  return getPathOrder().filter((id) => PATHS[id]);
+}
+function isPathCompleted(pathId) {
+  const path = PATHS[pathId];
+  if (!path) return false;
+  return (G.completed[pathId] || []).length >= path.stages.length;
+}
+function pathLockDependency(pathId) {
+  const ordered = activePathSequence();
+  const idx = ordered.indexOf(pathId);
+  if (idx <= 0) return null;
+  const requiredPathId = ordered[idx - 1];
+  return isPathCompleted(requiredPathId) ? null : requiredPathId;
+}
 
 /* ── Path Rendering ── */
 function renderPaths() {
   ensureState();
-  const allActivePaths = Object.values(PATHS);
+  const allActivePaths = activePathSequence().map((id) => PATHS[id]).filter(Boolean);
   const disabledPaths = Object.values(DISABLED_PATHS);
   const getPathStats = (path) => {
     const done = (G.completed[path.id] || []).length;
@@ -56,14 +71,10 @@ function renderPaths() {
     return { done, total, stars, nextStage, progress: total ? done / total : 0 };
   };
   const lp = byId("level-picker");
-  lp.innerHTML = "";
-  LEVELS.forEach((l) => {
-    const b = document.createElement("button");
-    b.className = "level-pill" + (G.levelStart === l ? " active" : "");
-    b.textContent = levelName(l);
-    b.onclick = () => { G.levelStart = l; renderPaths(); save(); };
-    lp.appendChild(b);
-  });
+  if (lp) {
+    lp.innerHTML = "";
+    lp.classList.add("hidden");
+  }
   const totalStages = allActivePaths.reduce((acc, p) => acc + p.stages.length, 0);
   const completedStages = allActivePaths.reduce((acc, p) => acc + (G.completed[p.id] || []).length, 0);
   const progressPct = totalStages ? Math.round((completedStages / totalStages) * 100) : 0;
@@ -96,19 +107,54 @@ function renderPaths() {
   allActivePaths.forEach((path, index) => {
     const { done, total, stars, nextStage, progress } = getPathStats(path);
     const p = Math.round(progress * 100);
-    const state = done === 0 ? "fresh" : done >= total ? "mastered" : "active";
-    const stateLabel = state === "fresh" ? t().pathsFreshState : state === "mastered" ? t().pathsMasteredState : t().pathsActiveState;
+    const difficulty = getPathDifficulty(path.id);
+    const rateMultiplier = getPathDonationMultiplier(path.id);
+    const dependencyPathId = pathLockDependency(path.id);
+    const isLockedByPath = Boolean(dependencyPathId);
+    const state = isLockedByPath
+      ? "locked"
+      : done === 0
+        ? "fresh"
+        : done >= total
+          ? "mastered"
+          : "active";
+    const stateLabel = state === "fresh"
+      ? t().pathsFreshState
+      : state === "mastered"
+        ? t().pathsMasteredState
+        : state === "locked"
+          ? t().pathsLockedState
+          : t().pathsActiveState;
     const card = document.createElement("div");
-    card.className = "path-card glass" + (path.id === G.path ? " selected" : "");
+    card.className = "path-card glass"
+      + (path.id === G.path ? " selected" : "")
+      + (isLockedByPath ? " locked-chain" : "");
     card.style.setProperty("--path-color", path.color);
     card.style.animationDelay = `${80 + index * 40}ms`;
     card.tabIndex = 0;
     card.setAttribute("role", "button");
+    const dependencyName = dependencyPathId ? PATHS[dependencyPathId]?.name?.[G.lang] : "";
+    const lockNote = dependencyName
+      ? `<div class="path-lock-note">${t().pathsLockedBy(dependencyName)}</div>`
+      : "";
     card.innerHTML = `<div class="path-card-aura"></div><div class="path-top"><div><div class="path-name">${path.name[G.lang]}</div><div class="path-desc">${path.desc[G.lang]}</div></div><div class="path-badge">${path.icon}</div></div>
     ${path.source ? `<div class="path-source"><span>${t().sourceLabel}:</span> ${path.source[G.lang]}</div>` : ""}
-    <div class="path-meta"><div class="meta-pill">${path.stages.length} ${isAR() ? "مراحل" : "Stages"}</div><div class="meta-pill">${levelName(G.levelStart)}</div><div class="meta-pill">⭐ ${stars}</div><div class="meta-pill">${done}/${total}</div></div><div class="path-progress"><span style="width:${p}%"></span></div><div class="path-track"><div class="path-track-k">${t().pathsNextQuest}</div><div class="path-track-v">${t().chapterOf(nextStage, total)}</div></div><div class="path-footer"><div class="path-state path-state-${state}">${stateLabel}</div><button class="path-enter" type="button">${t().pathsEnter}</button></div>`;
-    card.onclick = () => selectPath(path.id);
-    card.querySelector(".path-enter").onclick = (e) => { e.stopPropagation(); selectPath(path.id); };
+    <div class="path-meta"><div class="meta-pill">${path.stages.length} ${isAR() ? "مراحل" : "Stages"}</div><div class="meta-pill">${levelName(difficulty)}</div><div class="meta-pill">x${rateMultiplier}</div><div class="meta-pill">⭐ ${stars}</div><div class="meta-pill">${done}/${total}</div></div><div class="path-progress"><span style="width:${p}%"></span></div><div class="path-track"><div class="path-track-k">${t().pathsNextQuest}</div><div class="path-track-v">${t().chapterOf(nextStage, total)}</div></div>${lockNote}<div class="path-footer"><div class="path-state path-state-${state}">${stateLabel}</div><button class="path-enter" type="button" ${isLockedByPath ? "disabled" : ""}>${isLockedByPath ? t().pathsLockedState : t().pathsEnter}</button></div>`;
+    card.onclick = () => {
+      if (isLockedByPath) {
+        showToast("🔒", t().pathLockedTitle, dependencyName ? t().pathsLockedBy(dependencyName) : t().pathLockedTitle);
+        return;
+      }
+      selectPath(path.id);
+    };
+    card.querySelector(".path-enter").onclick = (e) => {
+      e.stopPropagation();
+      if (isLockedByPath) {
+        showToast("🔒", t().pathLockedTitle, dependencyName ? t().pathsLockedBy(dependencyName) : t().pathLockedTitle);
+        return;
+      }
+      selectPath(path.id);
+    };
     card.onpointermove = (e) => {
       if (!matchMedia("(hover: hover)").matches) return;
       const rect = card.getBoundingClientRect();
@@ -131,6 +177,12 @@ function renderPaths() {
   renderLeaderboard();
 }
 function selectPath(id) {
+  const dependencyPathId = pathLockDependency(id);
+  if (dependencyPathId) {
+    const dependencyName = PATHS[dependencyPathId]?.name?.[G.lang] || "";
+    showToast("🔒", t().pathLockedTitle, dependencyName ? t().pathsLockedBy(dependencyName) : t().pathLockedTitle);
+    return;
+  }
   G.path = id;
   G.pathSeen[id] = true;
   updateUnlockedByLevel();
@@ -139,11 +191,15 @@ function selectPath(id) {
   save();
 }
 function updateUnlockedByLevel() {
-  const path = activePath(), len = path.stages.length;
-  let base = 1;
-  if (G.levelStart === "intermediate") base = Math.min(2, len);
-  if (G.levelStart === "advanced") base = Math.min(3, len);
-  G.unlocked[G.path] = Math.max(G.unlocked[G.path] || 1, base);
+  const path = activePath();
+  const len = path.stages.length;
+  const completedSet = new Set((G.completed[G.path] || []).map((v) => Number(v)));
+  let next = 1;
+  for (let stageId = 1; stageId <= len; stageId++) {
+    if (!completedSet.has(stageId)) break;
+    next = stageId + 1;
+  }
+  G.unlocked[G.path] = Math.min(len + 1, next);
 }
 
 /* ── Popup ── */
@@ -398,6 +454,7 @@ function renderQuiz() {
   byId("combo").textContent = `🔥 ${G.combo}× Combo`;
   byId("booster-perfect").classList.toggle("active", quizScore === quizIndex && quizIndex > 0);
   byId("booster-speed").classList.remove("active");
+  byId("booster-potion").classList.toggle("active", Boolean(G.boost?.isActive));
   updateHUD();
   answerLocked = false;
   questionStart = performance.now();
@@ -436,39 +493,61 @@ function pickAnswer(selected, correct) {
   }, 1300);
 }
 function finishQuiz() {
-  const total = activeStage.quiz.length, perfect = quizScore === total;
-  const stars = perfect ? 3 : quizScore >= 1 ? 2 : 1;
-  const speedBonus = G.combo >= 2 ? 10 : 0, perfectBonus = perfect ? 20 : 0;
-  const xpGain = stars * 20 + 15 + speedBonus + perfectBonus, gemGain = stars >= 2 ? 1 : 0, oldLevel = G.level;
+  const total = activeStage.quiz.length;
+  const perfect = quizScore === total;
+  const oldLevel = G.level;
   const wasCompleted = isStageCompleted(G.path, activeStage.id);
-  markStageCompleted(G.path, activeStage.id);
-  G.stars[G.path][activeStage.id] = Math.max(G.stars[G.path][activeStage.id] || 0, stars);
-  G.xp += xpGain;
-  G.gems += gemGain;
-  G.streak = perfect ? G.streak + 1 : 0;
-  G.unlocked[G.path] = Math.min(activeStages().length + 1, Math.max(G.unlocked[G.path], activeStage.id + 1));
-  if (G.completed[G.path].length >= activeStages().length) G.unlocked[G.path] = activeStages().length + 1;
+  const firstPerfectCompletion = perfect && !wasCompleted;
+  const passedStrict = firstPerfectCompletion || wasCompleted;
+
+  let stars = wasCompleted ? Number(G.stars[G.path][activeStage.id] || 3) : 0;
+  let xpGain = 0;
+  let gemGain = 0;
   let stepDonationCents = 0;
   let speedDonationCents = 0;
   let perfectDonationCents = 0;
   let pathBonusCents = 0;
+  let pathRateMultiplier = getPathDonationMultiplier(G.path);
+  let donationMultiplier = 1;
+  let baseDonationCents = 0;
   let donationGainCents = 0;
   let donationEvent = null;
-  if (!wasCompleted) {
+  if (firstPerfectCompletion) {
+    stars = 3;
+    const speedBonusXP = G.combo >= 2 ? 10 : 0;
+    const perfectBonusXP = 20;
+    xpGain = stars * 20 + 15 + speedBonusXP + perfectBonusXP;
+    gemGain = 1;
+    markStageCompleted(G.path, activeStage.id);
+    G.stars[G.path][activeStage.id] = Math.max(G.stars[G.path][activeStage.id] || 0, stars);
+    G.xp += xpGain;
+    G.gems += gemGain;
+    G.streak += 1;
+    updateUnlockedByLevel();
+
     const stepCount = activeStage.steps.length;
     stepDonationCents = stepCount * G.donationPerStepCents;
     speedDonationCents = G.combo >= 2 ? SPEED_DONATION_BONUS_CENTS : 0;
-    perfectDonationCents = perfect ? PERFECT_DONATION_BONUS_CENTS : 0;
+    perfectDonationCents = PERFECT_DONATION_BONUS_CENTS;
     const pathJustCompleted = G.completed[G.path].length >= activeStages().length;
     if (pathJustCompleted && !G.completedPathBonuses[G.path]) {
       pathBonusCents = PATH_COMPLETION_BONUS_CENTS;
       G.completedPathBonuses[G.path] = true;
     }
-    donationGainCents =
+    const rawDonationCents =
       stepDonationCents +
       speedDonationCents +
       perfectDonationCents +
       pathBonusCents;
+    baseDonationCents = rawDonationCents * pathRateMultiplier;
+    const boostIsActive =
+      Boolean(G.boost?.isActive) &&
+      Number(G.boost?.activeMultiplier || 1) > 1 &&
+      Number(G.boost?.activeUntil || 0) > Date.now();
+    donationMultiplier = boostIsActive
+      ? Math.max(1, Math.floor(Number(G.boost.activeMultiplier || 1)))
+      : 1;
+    donationGainCents = Math.floor(baseDonationCents * donationMultiplier);
     if (donationGainCents > 0) {
       G.donations.fromStepsCents += donationGainCents;
       G.donations.totalCents += donationGainCents;
@@ -477,12 +556,17 @@ function finishQuiz() {
         eventKey: `stage:${G.path}:${activeStage.id}`,
         source: "stage_step",
         amountCents: donationGainCents,
+        baseAmountCents: baseDonationCents,
         pathId: G.path,
         stageId: activeStage.id,
         stepCount,
-        note: "Learning completion donation",
+        note: donationMultiplier > 1
+          ? `Learning completion donation (path x${pathRateMultiplier}, boost x${donationMultiplier})`
+          : `Learning completion donation (path x${pathRateMultiplier})`,
       };
     }
+  } else {
+    G.streak = 0;
   }
   lastResult = {
     stars,
@@ -491,7 +575,11 @@ function finishQuiz() {
     total,
     correct: quizScore,
     perfect,
+    passedStrict,
+    replayNoReward: perfect && wasCompleted,
     donationGainCents,
+    donationMultiplier,
+    pathRateMultiplier,
     stepDonationCents,
     speedDonationCents,
     perfectDonationCents,
@@ -506,32 +594,54 @@ function finishQuiz() {
     renderPaths();
     refreshLeaderboard();
   });
-  if (G.level > oldLevel)
+  if (firstPerfectCompletion && G.level > oldLevel)
     showToast("🪔", t().levelUp, (isAR() ? "ارتفع أثرك إلى المستوى " : "Your impact reached level ") + G.level);
-  setTimeout(() => checkAchievements(lastResult), 700);
-  if (stars >= 2) confetti();
+  if (!passedStrict) {
+    showToast("🔒", t().strictPerfectTitle, t().strictPerfectMessage);
+  } else if (perfect && wasCompleted) {
+    showToast("ℹ️", t().replayNoRewardTitle, t().replayNoRewardText);
+  }
+  if (firstPerfectCompletion) {
+    setTimeout(() => checkAchievements(lastResult), 700);
+    if (stars >= 2) confetti();
+  }
 }
 function renderResult(data) {
   const titles = t().resultTitles;
-  byId("result-emoji").textContent = data.stars === 3 ? "🏆" : data.stars === 2 ? "🥇" : "💪";
-  byId("result-title").textContent = titles[data.stars - 1];
-  byId("result-sub").textContent = t().correctOut(data.correct, data.total);
+  if (!data.passedStrict) {
+    byId("result-emoji").textContent = "🔒";
+    byId("result-title").textContent = t().strictPerfectTitle;
+    byId("result-sub").textContent = t().strictPerfectResult(data.correct, data.total);
+  } else if (data.replayNoReward) {
+    byId("result-emoji").textContent = "♻️";
+    byId("result-title").textContent = t().replayNoRewardTitle;
+    byId("result-sub").textContent = t().replayNoRewardText;
+  } else {
+    byId("result-emoji").textContent = data.stars === 3 ? "🏆" : data.stars === 2 ? "🥇" : "💪";
+    byId("result-title").textContent = titles[Math.max(0, data.stars - 1)] || titles[0];
+    byId("result-sub").textContent = t().correctOut(data.correct, data.total);
+  }
   const wrap = byId("result-stars");
   wrap.innerHTML = "";
+  const stars = Math.max(0, Math.min(3, Number(data.stars || 0)));
   for (let i = 0; i < 3; i++) {
     const s = document.createElement("span");
     s.textContent = "⭐";
     wrap.appendChild(s);
-    setTimeout(() => s.classList.toggle("on", i < data.stars), 280 + i * 180);
+    setTimeout(() => s.classList.toggle("on", i < stars), 280 + i * 180);
   }
   byId("loot-xp").textContent = "+" + formatMoney(data.donationGainCents || 0);
   byId("loot-gems").textContent = formatMoney(G.donations.totalCents);
   byId("loot-streak").textContent = G.donations.stepsFunded;
   byId("loot-rank").textContent = leaderboardRankText();
-  byId("next-stage-btn").disabled = activeStage.id >= activeStages().length;
+  byId("next-stage-btn").disabled = !data.passedStrict || activeStage.id >= activeStages().length;
   updateHUD();
 }
 function nextStage() {
+  if (!isStageCompleted(G.path, activeStage.id)) {
+    showToast("🔒", t().strictPerfectTitle, t().strictPerfectMessage);
+    return;
+  }
   if (activeStage.id >= activeStages().length) { renderMap(); screen("map", false); return; }
   beginStage(activeStage.id + 1);
 }

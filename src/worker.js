@@ -1,6 +1,9 @@
 const DEFAULT_STEP_DONATION_CENTS = 1;
 const DEFAULT_BUY_ME_A_COFFEE_URL = "https://buymeacoffee.com/urnzikfqg5";
 const MAX_LEADERBOARD_LIMIT = 25;
+const DEFAULT_GLOBAL_TARGET_CENTS = 100000;
+const BOOST_MULTIPLIER = 4;
+const BOOST_DURATION_MS = 60 * 60 * 1000;
 
 let schemaReadyPromise = null;
 
@@ -21,6 +24,11 @@ function json(data, status = 200) {
 function getStepDonationCents(env) {
   const raw = Number(env.DONATION_PER_STEP_CENTS);
   return Number.isFinite(raw) && raw > 0 ? Math.floor(raw) : DEFAULT_STEP_DONATION_CENTS;
+}
+
+function getGlobalTargetCents(env) {
+  const raw = Number(env.GLOBAL_STUDY_TARGET_CENTS);
+  return Number.isFinite(raw) && raw > 0 ? Math.floor(raw) : DEFAULT_GLOBAL_TARGET_CENTS;
 }
 
 function getBuyMeCoffeeUrl(env) {
@@ -88,6 +96,12 @@ function normalizeUsername(value) {
   return normalizeEnglishDigits(value).replace(/\s+/g, " ").trim();
 }
 
+function parsePositiveInt(value, fallback = 0) {
+  const n = Number(value);
+  if (!Number.isFinite(n) || n <= 0) return fallback;
+  return Math.floor(n);
+}
+
 function asPositiveInt(value) {
   const n = Number(value);
   if (!Number.isFinite(n) || n <= 0) return 0;
@@ -109,6 +123,23 @@ function clampLeaderboardLimit(value) {
   return Math.min(MAX_LEADERBOARD_LIMIT, Math.floor(n));
 }
 
+function isIgnorableSchemaError(err) {
+  const message = String(err?.message || "").toLowerCase();
+  return (
+    message.includes("duplicate column name") ||
+    message.includes("already exists")
+  );
+}
+
+async function runOptionalSchemaStatement(db, sql) {
+  try {
+    await db.prepare(sql).run();
+  } catch (err) {
+    if (isIgnorableSchemaError(err)) return;
+    throw err;
+  }
+}
+
 async function ensureSchema(db) {
   if (!db) return;
   if (!schemaReadyPromise) {
@@ -118,7 +149,8 @@ async function ensureSchema(db) {
           CREATE TABLE IF NOT EXISTS users (
             id TEXT PRIMARY KEY,
             username TEXT NOT NULL UNIQUE,
-            created_at INTEGER NOT NULL
+            created_at INTEGER NOT NULL,
+            referred_by TEXT
           )
         `,
         `
@@ -144,12 +176,40 @@ async function ensureSchema(db) {
             FOREIGN KEY(user_id) REFERENCES users(id)
           )
         `,
+        `
+          CREATE TABLE IF NOT EXISTS user_boosts (
+            user_id TEXT PRIMARY KEY,
+            potion_balance INTEGER NOT NULL DEFAULT 0,
+            active_multiplier INTEGER NOT NULL DEFAULT 1,
+            active_until INTEGER NOT NULL DEFAULT 0,
+            updated_at INTEGER NOT NULL,
+            FOREIGN KEY(user_id) REFERENCES users(id)
+          )
+        `,
+        `
+          CREATE TABLE IF NOT EXISTS referral_rewards (
+            invitee_user_id TEXT PRIMARY KEY,
+            inviter_user_id TEXT NOT NULL,
+            created_at INTEGER NOT NULL,
+            FOREIGN KEY(invitee_user_id) REFERENCES users(id),
+            FOREIGN KEY(inviter_user_id) REFERENCES users(id)
+          )
+        `,
         "CREATE INDEX IF NOT EXISTS idx_donations_user_id ON donations(user_id)",
         "CREATE INDEX IF NOT EXISTS idx_donations_created_at ON donations(created_at)",
+        "CREATE INDEX IF NOT EXISTS idx_referral_rewards_inviter ON referral_rewards(inviter_user_id)",
       ];
       for (const sql of statements) {
         await db.prepare(sql).run();
       }
+      await runOptionalSchemaStatement(
+        db,
+        "ALTER TABLE users ADD COLUMN referred_by TEXT",
+      );
+      await runOptionalSchemaStatement(
+        db,
+        "CREATE INDEX IF NOT EXISTS idx_users_referred_by ON users(referred_by)",
+      );
     })().catch((err) => {
       schemaReadyPromise = null;
       throw err;
@@ -161,32 +221,40 @@ async function ensureSchema(db) {
 async function getUserById(db, userId) {
   if (!userId) return null;
   const row = await db
-    .prepare("SELECT id, username, created_at FROM users WHERE id = ?")
+    .prepare("SELECT id, username, created_at, referred_by FROM users WHERE id = ?")
     .bind(userId)
     .first();
   return row || null;
 }
 
-async function createUniqueUser(db) {
+async function createUniqueUser(db, referredBy = null) {
   const now = Date.now();
   for (let i = 0; i < 50; i++) {
     const id = crypto.randomUUID();
     const username = generateArabicUsername();
     const res = await db
-      .prepare("INSERT OR IGNORE INTO users (id, username, created_at) VALUES (?, ?, ?)")
-      .bind(id, username, now)
+      .prepare("INSERT OR IGNORE INTO users (id, username, created_at, referred_by) VALUES (?, ?, ?, ?)")
+      .bind(id, username, now, referredBy)
       .run();
     if (res?.meta?.changes) {
-      return { id, username, created_at: now };
+      return { id, username, created_at: now, referred_by: referredBy };
     }
   }
   throw new Error("Could not create a unique Arabic username.");
 }
 
-async function getOrCreateUser(db, requestedUserId = "") {
+async function getOrCreateUser(db, requestedUserId = "", referralCode = "") {
   const existing = await getUserById(db, requestedUserId);
   if (existing) return { ...existing, _isNew: false };
-  const created = await createUniqueUser(db);
+  let referredBy = null;
+  const ref = String(referralCode || "").trim();
+  if (ref) {
+    const referrer = await getUserById(db, ref);
+    if (referrer && referrer.id !== requestedUserId) {
+      referredBy = referrer.id;
+    }
+  }
+  const created = await createUniqueUser(db, referredBy);
   return { ...created, _isNew: true };
 }
 
@@ -225,6 +293,135 @@ async function getDonationSummary(db, userId) {
     totalCents: Number(row?.total_cents || 0),
     stepsFunded: Number(row?.steps_funded || 0),
   };
+}
+
+async function getGlobalImpactSummary(db, env) {
+  const row = await db
+    .prepare(`
+      SELECT
+        COALESCE(SUM(CASE WHEN source = 'stage_step' THEN amount_cents ELSE 0 END), 0) AS total_cents,
+        COALESCE(SUM(CASE WHEN source = 'stage_step' THEN COALESCE(step_count, 0) ELSE 0 END), 0) AS steps_funded,
+        COUNT(DISTINCT CASE WHEN source = 'stage_step' THEN user_id ELSE NULL END) AS contributors
+      FROM donations
+    `)
+    .first();
+
+  const totalCents = Number(row?.total_cents || 0);
+  const targetCents = getGlobalTargetCents(env);
+  const progressPct = targetCents > 0
+    ? Math.min(100, (totalCents / targetCents) * 100)
+    : 0;
+
+  return {
+    totalCents,
+    targetCents,
+    progressPct: Number(progressPct.toFixed(2)),
+    stepsFunded: Number(row?.steps_funded || 0),
+    contributors: Number(row?.contributors || 0),
+  };
+}
+
+async function ensureBoostRow(db, userId) {
+  const now = Date.now();
+  await db
+    .prepare(`
+      INSERT OR IGNORE INTO user_boosts
+        (user_id, potion_balance, active_multiplier, active_until, updated_at)
+      VALUES (?, 0, 1, 0, ?)
+    `)
+    .bind(userId, now)
+    .run();
+}
+
+async function getUserBoostState(db, userId) {
+  await ensureBoostRow(db, userId);
+  const row = await db
+    .prepare(`
+      SELECT potion_balance, active_multiplier, active_until
+      FROM user_boosts
+      WHERE user_id = ?
+    `)
+    .bind(userId)
+    .first();
+
+  const now = Date.now();
+  let potionBalance = Number(row?.potion_balance || 0);
+  let activeMultiplier = Number(row?.active_multiplier || 1);
+  let activeUntil = Number(row?.active_until || 0);
+  let isActive = activeMultiplier > 1 && activeUntil > now;
+
+  if (!isActive && activeMultiplier > 1) {
+    await db
+      .prepare(`
+        UPDATE user_boosts
+        SET active_multiplier = 1, active_until = 0, updated_at = ?
+        WHERE user_id = ?
+      `)
+      .bind(now, userId)
+      .run();
+    activeMultiplier = 1;
+    activeUntil = 0;
+  }
+
+  return {
+    potionBalance: Math.max(0, potionBalance),
+    activeMultiplier: isActive ? activeMultiplier : 1,
+    activeUntil: isActive ? activeUntil : 0,
+    isActive,
+  };
+}
+
+async function getReferralSummary(db, userId, origin) {
+  const invited = await db
+    .prepare("SELECT COUNT(*) AS count FROM users WHERE referred_by = ?")
+    .bind(userId)
+    .first();
+  const studied = await db
+    .prepare("SELECT COUNT(*) AS count FROM referral_rewards WHERE inviter_user_id = ?")
+    .bind(userId)
+    .first();
+
+  const inviteUrl = new URL("/", origin);
+  inviteUrl.searchParams.set("ref", userId);
+
+  return {
+    inviteUrl: inviteUrl.toString(),
+    invitedCount: Number(invited?.count || 0),
+    studiedCount: Number(studied?.count || 0),
+  };
+}
+
+async function grantReferralPotionIfEligible(db, inviteeUserId) {
+  const row = await db
+    .prepare("SELECT referred_by FROM users WHERE id = ?")
+    .bind(inviteeUserId)
+    .first();
+  const inviterUserId = String(row?.referred_by || "").trim();
+  if (!inviterUserId || inviterUserId === inviteeUserId) return false;
+
+  const now = Date.now();
+  const result = await db
+    .prepare(`
+      INSERT OR IGNORE INTO referral_rewards
+        (invitee_user_id, inviter_user_id, created_at)
+      VALUES (?, ?, ?)
+    `)
+    .bind(inviteeUserId, inviterUserId, now)
+    .run();
+
+  if (!result?.meta?.changes) return false;
+
+  await ensureBoostRow(db, inviterUserId);
+  await db
+    .prepare(`
+      UPDATE user_boosts
+      SET potion_balance = COALESCE(potion_balance, 0) + 1, updated_at = ?
+      WHERE user_id = ?
+    `)
+    .bind(now, inviterUserId)
+    .run();
+
+  return true;
 }
 
 async function getUserRank(db, userId) {
@@ -332,7 +529,7 @@ function sanitizeProgress(progress) {
   return safe;
 }
 
-async function handleSession(url, env) {
+async function handleSession(request, url, env) {
   if (!env.DB) {
     return json({
       error: "D1 binding missing. Add a DB binding named 'DB' in wrangler config.",
@@ -341,10 +538,14 @@ async function handleSession(url, env) {
 
   await ensureSchema(env.DB);
   const requestedUserId = (url.searchParams.get("userId") || "").trim();
-  const user = await getOrCreateUser(env.DB, requestedUserId);
+  const referralCode = (url.searchParams.get("ref") || "").trim();
+  const user = await getOrCreateUser(env.DB, requestedUserId, referralCode);
   await ensureProgressRow(env.DB, user.id);
   const donations = await getDonationSummary(env.DB, user.id);
   const rank = await getUserRank(env.DB, user.id);
+  const boost = await getUserBoostState(env.DB, user.id);
+  const referral = await getReferralSummary(env.DB, user.id, url.origin);
+  const globalImpact = await getGlobalImpactSummary(env.DB, env);
 
   return json({
     userId: user.id,
@@ -354,6 +555,9 @@ async function handleSession(url, env) {
     buyMeCoffeeUrl: getBuyMeCoffeeUrl(env),
     donations,
     rank,
+    boost,
+    referral,
+    globalImpact,
   });
 }
 
@@ -415,6 +619,9 @@ async function handleGetProgress(url, env) {
   const progress = parseProgressJSON(row?.data_json);
   const donations = await getDonationSummary(env.DB, user.id);
   const rank = await getUserRank(env.DB, user.id);
+  const boost = await getUserBoostState(env.DB, user.id);
+  const referral = await getReferralSummary(env.DB, user.id, url.origin);
+  const globalImpact = await getGlobalImpactSummary(env.DB, env);
 
   return json({
     userId: user.id,
@@ -422,6 +629,9 @@ async function handleGetProgress(url, env) {
     progress,
     donations,
     rank,
+    boost,
+    referral,
+    globalImpact,
     updatedAt: Number(row?.updated_at || 0),
   });
 }
@@ -466,15 +676,38 @@ async function handleSaveProgress(request, env) {
 
   if (donationEvent) {
     const amountCents = Number(donationEvent.amountCents || 0);
-    if (Number.isFinite(amountCents) && amountCents > 0) {
+    const baseAmountCents = Number(
+      donationEvent.baseAmountCents != null
+        ? donationEvent.baseAmountCents
+        : amountCents,
+    );
+    if (Number.isFinite(baseAmountCents) && baseAmountCents > 0) {
       const eventKey = String(donationEvent.eventKey || `${user.id}:${now}`);
       const source = donationEvent.source === "buy_me_a_coffee" ? "buy_me_a_coffee" : "stage_step";
       const pathId = donationEvent.pathId ? String(donationEvent.pathId) : null;
       const stageId = donationEvent.stageId != null ? Number(donationEvent.stageId) : null;
       const stepCount = donationEvent.stepCount != null ? Number(donationEvent.stepCount) : 0;
-      const note = donationEvent.note ? String(donationEvent.note).slice(0, 300) : null;
+      let note = donationEvent.note ? String(donationEvent.note).slice(0, 300) : null;
 
-      await env.DB
+      let finalAmountCents = Math.floor(baseAmountCents);
+      let appliedMultiplier = 1;
+      if (source === "stage_step") {
+        const boost = await getUserBoostState(env.DB, user.id);
+        if (boost.isActive && boost.activeMultiplier > 1) {
+          appliedMultiplier = boost.activeMultiplier;
+          finalAmountCents = Math.floor(baseAmountCents * appliedMultiplier);
+        }
+      } else if (Number.isFinite(amountCents) && amountCents > 0) {
+        finalAmountCents = Math.floor(amountCents);
+      }
+
+      if (appliedMultiplier > 1) {
+        note = note
+          ? `${note} (x${appliedMultiplier} boost)`
+          : `x${appliedMultiplier} boost applied`;
+      }
+
+      const donationInsert = await env.DB
         .prepare(`
           INSERT OR IGNORE INTO donations
             (event_key, user_id, source, amount_cents, path_id, stage_id, step_count, note, created_at)
@@ -484,7 +717,7 @@ async function handleSaveProgress(request, env) {
           eventKey,
           user.id,
           source,
-          Math.floor(amountCents),
+          finalAmountCents,
           pathId,
           Number.isFinite(stageId) ? Math.floor(stageId) : null,
           Number.isFinite(stepCount) ? Math.max(0, Math.floor(stepCount)) : 0,
@@ -492,6 +725,14 @@ async function handleSaveProgress(request, env) {
           now,
         )
         .run();
+
+      if (
+        source === "stage_step" &&
+        finalAmountCents > 0 &&
+        donationInsert?.meta?.changes
+      ) {
+        await grantReferralPotionIfEligible(env.DB, user.id);
+      }
     }
   }
 
@@ -550,6 +791,9 @@ async function handleSaveProgress(request, env) {
   }
 
   const rank = await getUserRank(env.DB, user.id);
+  const boost = await getUserBoostState(env.DB, user.id);
+  const referral = await getReferralSummary(env.DB, user.id, new URL(request.url).origin);
+  const globalImpact = await getGlobalImpactSummary(env.DB, env);
 
   return json({
     ok: true,
@@ -557,6 +801,9 @@ async function handleSaveProgress(request, env) {
     username: user.username,
     donations,
     rank,
+    boost,
+    referral,
+    globalImpact,
     updatedAt: now,
   });
 }
@@ -600,6 +847,9 @@ async function handleManualDonation(request, env) {
 
   const donations = await getDonationSummary(env.DB, user.id);
   const rank = await getUserRank(env.DB, user.id);
+  const boost = await getUserBoostState(env.DB, user.id);
+  const referral = await getReferralSummary(env.DB, user.id, new URL(request.url).origin);
+  const globalImpact = await getGlobalImpactSummary(env.DB, env);
 
   return json({
     ok: true,
@@ -607,8 +857,73 @@ async function handleManualDonation(request, env) {
     username: user.username,
     donations,
     rank,
+    boost,
+    referral,
+    globalImpact,
     buyMeCoffeeUrl: getBuyMeCoffeeUrl(env),
   });
+}
+
+async function handleGlobalImpact(env) {
+  if (!env.DB) {
+    return json({
+      error: "D1 binding missing. Add a DB binding named 'DB' in wrangler config.",
+    }, 503);
+  }
+
+  await ensureSchema(env.DB);
+  const globalImpact = await getGlobalImpactSummary(env.DB, env);
+  return json(globalImpact);
+}
+
+async function handleActivateBoost(request, env) {
+  if (!env.DB) {
+    return json({
+      error: "D1 binding missing. Add a DB binding named 'DB' in wrangler config.",
+    }, 503);
+  }
+
+  const body = await readJsonBody(request);
+  if (!body || typeof body !== "object") {
+    return json({ error: "Invalid JSON body." }, 400);
+  }
+
+  const userId = String(body.userId || "").trim();
+  if (!userId) return json({ error: "Missing userId." }, 400);
+
+  await ensureSchema(env.DB);
+  const user = await getUserById(env.DB, userId);
+  if (!user) return json({ error: "User not found." }, 404);
+
+  const current = await getUserBoostState(env.DB, user.id);
+  if (current.potionBalance <= 0) {
+    return json({ error: "No potion available." }, 400);
+  }
+
+  const now = Date.now();
+  const activeUntil = now + BOOST_DURATION_MS;
+  const res = await env.DB
+    .prepare(`
+      UPDATE user_boosts
+      SET
+        potion_balance = CASE
+          WHEN potion_balance > 0 THEN potion_balance - 1
+          ELSE 0
+        END,
+        active_multiplier = ?,
+        active_until = ?,
+        updated_at = ?
+      WHERE user_id = ? AND potion_balance > 0
+    `)
+    .bind(BOOST_MULTIPLIER, activeUntil, now, user.id)
+    .run();
+
+  if (!res?.meta?.changes) {
+    return json({ error: "No potion available." }, 400);
+  }
+
+  const boost = await getUserBoostState(env.DB, user.id);
+  return json({ ok: true, boost });
 }
 
 async function handleLeaderboard(url, env) {
@@ -642,7 +957,11 @@ async function handleApi(request, env, url) {
   }
 
   if (url.pathname === "/api/session" && request.method === "GET") {
-    return handleSession(url, env);
+    return handleSession(request, url, env);
+  }
+
+  if (url.pathname === "/api/global-impact" && request.method === "GET") {
+    return handleGlobalImpact(env);
   }
 
   if (url.pathname === "/api/progress" && request.method === "GET") {
@@ -655,6 +974,10 @@ async function handleApi(request, env, url) {
 
   if (url.pathname === "/api/donations" && request.method === "POST") {
     return handleManualDonation(request, env);
+  }
+
+  if (url.pathname === "/api/boost/activate" && request.method === "POST") {
+    return handleActivateBoost(request, env);
   }
 
   if (url.pathname === "/api/leaderboard" && request.method === "GET") {

@@ -3,12 +3,81 @@ const SPEED_DONATION_BONUS_CENTS = 5;
 const PERFECT_DONATION_BONUS_CENTS = 10;
 const PATH_COMPLETION_BONUS_CENTS = 15;
 const DEFAULT_BUY_ME_A_COFFEE_URL = "https://buymeacoffee.com/urnzikfqg5";
+const DEFAULT_GLOBAL_TARGET_CENTS = 100000;
+const MONEY_DIVISOR = 1000;
+const LEVEL_DONATION_MULTIPLIERS = {
+  beginner: 1,
+  intermediate: 2,
+  advanced: 3,
+};
+
+function getPathOrder() {
+  const loadedPathIds = Object.keys(PATHS || {});
+  const preferred = Array.isArray(PATH_ORDER) ? PATH_ORDER : [];
+  const ordered = preferred.filter((id) => loadedPathIds.includes(id));
+  const rest = loadedPathIds.filter((id) => !ordered.includes(id));
+  return [...ordered, ...rest];
+}
+
+function inferDifficultyFromIndex(index) {
+  if (index === 1) return "intermediate";
+  if (index >= 2) return "advanced";
+  return "beginner";
+}
+
+function getPathDifficulty(pathId) {
+  const path = PATHS[pathId] || DISABLED_PATHS[pathId] || {};
+  const declared = String(path.difficulty || "").toLowerCase();
+  if (LEVELS.includes(declared)) return declared;
+  const order = getPathOrder();
+  const idx = order.indexOf(pathId);
+  return inferDifficultyFromIndex(idx >= 0 ? idx : 0);
+}
+
+function getDonationRateMultiplier(level) {
+  return LEVEL_DONATION_MULTIPLIERS[level] || 1;
+}
+
+function getPathDonationMultiplier(pathId = G.path) {
+  return getDonationRateMultiplier(getPathDifficulty(pathId));
+}
+
+function getEffectiveStepDonationCents(pathId = G.path) {
+  return Math.max(1, Math.floor(G.donationPerStepCents * getPathDonationMultiplier(pathId)));
+}
 
 function defaultDonations() {
   return {
     fromStepsCents: 0,
     manualCents: 0,
     totalCents: 0,
+    stepsFunded: 0,
+  };
+}
+
+function defaultBoost() {
+  return {
+    potionBalance: 0,
+    activeMultiplier: 1,
+    activeUntil: 0,
+    isActive: false,
+  };
+}
+
+function defaultReferral() {
+  return {
+    inviteUrl: "",
+    invitedCount: 0,
+    studiedCount: 0,
+  };
+}
+
+function defaultGlobalImpact() {
+  return {
+    totalCents: 0,
+    targetCents: DEFAULT_GLOBAL_TARGET_CENTS,
+    progressPct: 0,
+    contributors: 0,
     stepsFunded: 0,
   };
 }
@@ -33,6 +102,9 @@ const G = {
   donationPerStepCents: DEFAULT_DONATION_PER_STEP_CENTS,
   buyMeCoffeeUrl: DEFAULT_BUY_ME_A_COFFEE_URL,
   donations: defaultDonations(),
+  boost: defaultBoost(),
+  referral: defaultReferral(),
+  globalImpact: defaultGlobalImpact(),
   leaderboard: {
     rank: null,
     top: [],
@@ -85,6 +157,27 @@ function setText(id, value) {
   if (el) el.textContent = value;
 }
 
+function shareIconSVG(platform) {
+  if (platform === "facebook") {
+    return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.5 1.6-1.5h1.7V3.9c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.5-4 4.2V10H8v3h2.3v8h3.2z"></path></svg>';
+  }
+  if (platform === "x") {
+    return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.146 2H21l-6.73 7.69L22 22h-6.172l-4.833-6.343L5.44 22H2.584l7.2-8.228L2 2h6.328l4.37 5.77L18.146 2zm-1.082 18h1.58L7.47 3.895H5.776L17.064 20z"></path></svg>';
+  }
+  if (platform === "linkedin") {
+    return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.94 8.5H3.56V20h3.38V8.5zm.22-3.56C7.16 3.86 6.29 3 5.25 3S3.34 3.86 3.34 4.94c0 1.07.86 1.94 1.9 1.94h.02c1.06 0 1.9-.87 1.9-1.94zM20.66 13.28c0-3.16-1.69-4.63-3.95-4.63-1.82 0-2.63 1-3.08 1.71V8.5h-3.38c.04 1.22 0 11.5 0 11.5h3.38v-6.42c0-.34.02-.67.12-.91.27-.67.88-1.36 1.9-1.36 1.34 0 1.88 1.02 1.88 2.51V20H21s.04-5.7 0-6.72z"></path></svg>';
+  }
+  return "";
+}
+
+function setShareButton(id, label, platform) {
+  const btn = byId(id);
+  if (!btn) return;
+  btn.innerHTML = `<span class="share-logo share-logo-${platform}">${shareIconSVG(platform)}</span>`;
+  btn.setAttribute("aria-label", label);
+  btn.title = label;
+}
+
 function escapeHTML(input) {
   return String(input || "")
     .replaceAll("&", "&amp;")
@@ -106,7 +199,16 @@ function normalizeUsernameInput(value) {
 
 function formatMoney(cents) {
   const n = Number(cents || 0);
-  return `$${(Math.max(0, n) / 100).toFixed(2)}`;
+  return `$${(Math.max(0, n) / MONEY_DIVISOR).toFixed(3)}`;
+}
+
+function formatDurationLeft(ms) {
+  const total = Math.max(0, Math.floor(ms / 1000));
+  const hours = Math.floor(total / 3600);
+  const minutes = Math.floor((total % 3600) / 60);
+  const seconds = total % 60;
+  if (hours > 0) return `${hours}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  return `${minutes}:${String(seconds).padStart(2, "0")}`;
 }
 
 function leaderboardRankText() {
@@ -139,6 +241,21 @@ function normalizeDonationState() {
   if (!G.buyMeCoffeeUrl || typeof G.buyMeCoffeeUrl !== "string") {
     G.buyMeCoffeeUrl = DEFAULT_BUY_ME_A_COFFEE_URL;
   }
+
+  if (!G.boost || typeof G.boost !== "object") {
+    G.boost = defaultBoost();
+  }
+  applyServerBoost(G.boost);
+
+  if (!G.referral || typeof G.referral !== "object") {
+    G.referral = defaultReferral();
+  }
+  applyServerReferral(G.referral);
+
+  if (!G.globalImpact || typeof G.globalImpact !== "object") {
+    G.globalImpact = defaultGlobalImpact();
+  }
+  applyServerGlobalImpact(G.globalImpact);
 
   if (!G.leaderboard || typeof G.leaderboard !== "object") {
     G.leaderboard = { rank: null, top: [] };
@@ -182,11 +299,19 @@ function ensureState() {
     if (!G.stars[pid]) G.stars[pid] = {};
     normalizeCompleted(pid);
     const len = PATHS[pid].stages.length;
-    const unlocked = Number(G.unlocked[pid]);
-    G.unlocked[pid] = Number.isFinite(unlocked)
-      ? Math.min(len + 1, Math.max(1, Math.floor(unlocked)))
-      : 1;
-    if (G.completed[pid].length >= len) G.unlocked[pid] = len + 1;
+    const completedSet = new Set((G.completed[pid] || []).map((v) => Number(v)));
+    const strictCompleted = [];
+    for (let stageId = 1; stageId <= len; stageId++) {
+      if (!completedSet.has(stageId)) break;
+      strictCompleted.push(stageId);
+    }
+    G.completed[pid] = strictCompleted;
+    Object.keys(G.stars[pid] || {}).forEach((stageId) => {
+      if (!strictCompleted.includes(Number(stageId))) {
+        delete G.stars[pid][stageId];
+      }
+    });
+    G.unlocked[pid] = Math.min(len + 1, strictCompleted.length + 1);
   });
 }
 
@@ -211,6 +336,9 @@ function getPersistedState() {
     donationPerStepCents: G.donationPerStepCents,
     buyMeCoffeeUrl: G.buyMeCoffeeUrl,
     donations: G.donations,
+    boost: G.boost,
+    referral: G.referral,
+    globalImpact: G.globalImpact,
     leaderboard: { rank: G.leaderboard.rank },
     completedPathBonuses: G.completedPathBonuses,
     updatedAt: Date.now(),
@@ -262,6 +390,60 @@ function applyServerDonations(donations) {
     totalCents: Number(donations.totalCents || 0),
     stepsFunded: Number(donations.stepsFunded || 0),
   };
+}
+
+function applyServerBoost(boost) {
+  const source = boost && typeof boost === "object" ? boost : {};
+  const now = Date.now();
+  const activeUntil = Number(source.activeUntil || 0);
+  const activeMultiplier = Number(source.activeMultiplier || 1);
+  const isActive = Boolean(source.isActive) && activeUntil > now && activeMultiplier > 1;
+  G.boost = {
+    potionBalance: Math.max(0, Number(source.potionBalance || 0)),
+    activeMultiplier: isActive ? Math.max(1, Math.floor(activeMultiplier)) : 1,
+    activeUntil: isActive ? activeUntil : 0,
+    isActive,
+  };
+}
+
+function applyServerReferral(referral) {
+  const source = referral && typeof referral === "object" ? referral : {};
+  G.referral = {
+    inviteUrl: String(source.inviteUrl || "").trim(),
+    invitedCount: Math.max(0, Number(source.invitedCount || 0)),
+    studiedCount: Math.max(0, Number(source.studiedCount || 0)),
+  };
+}
+
+function applyServerGlobalImpact(globalImpact) {
+  const source = globalImpact && typeof globalImpact === "object"
+    ? globalImpact
+    : {};
+  G.globalImpact = {
+    totalCents: Math.max(0, Number(source.totalCents || 0)),
+    targetCents: Math.max(1, Number(source.targetCents || DEFAULT_GLOBAL_TARGET_CENTS)),
+    progressPct: Math.max(0, Number(source.progressPct || 0)),
+    contributors: Math.max(0, Number(source.contributors || 0)),
+    stepsFunded: Math.max(0, Number(source.stepsFunded || 0)),
+  };
+}
+
+function getReferralCodeFromURL() {
+  try {
+    const ref = new URLSearchParams(window.location.search).get("ref") || "";
+    return String(ref).trim();
+  } catch {
+    return "";
+  }
+}
+
+function getInviteUrl() {
+  const fromState = String(G.referral?.inviteUrl || "").trim();
+  if (fromState) return fromState;
+  if (!G.userId) return window.location.href;
+  const invite = new URL("/", window.location.origin);
+  invite.searchParams.set("ref", G.userId);
+  return invite.toString();
 }
 
 async function updateUsername(username) {
@@ -426,13 +608,20 @@ async function ensureIdentityForJourneyStart() {
 
 async function bootstrapCloudState() {
   try {
-    const session = await apiJSON(`/api/session${G.userId ? `?userId=${encodeURIComponent(G.userId)}` : ""}`);
+    const params = new URLSearchParams();
+    if (G.userId) params.set("userId", G.userId);
+    const refCode = getReferralCodeFromURL();
+    if (refCode && refCode !== G.userId) params.set("ref", refCode);
+    const session = await apiJSON(`/api/session${params.toString() ? `?${params.toString()}` : ""}`);
 
     G.userId = session.userId || G.userId;
     G.username = session.username || G.username;
     isNewUserSession = Boolean(session.isNewUser);
     G.donationPerStepCents = Number(session.donationPerStepCents || G.donationPerStepCents || DEFAULT_DONATION_PER_STEP_CENTS);
     G.buyMeCoffeeUrl = session.buyMeCoffeeUrl || G.buyMeCoffeeUrl || DEFAULT_BUY_ME_A_COFFEE_URL;
+    if (session.boost) applyServerBoost(session.boost);
+    if (session.referral) applyServerReferral(session.referral);
+    if (session.globalImpact) applyServerGlobalImpact(session.globalImpact);
     if (!isNewUserSession) markIdentityReady();
     if (session.donations) applyServerDonations(session.donations);
     if (Number.isFinite(session.rank) && session.rank > 0) {
@@ -463,6 +652,9 @@ async function bootstrapCloudState() {
         G.username = session.username || remote.username || G.username;
         G.buyMeCoffeeUrl = session.buyMeCoffeeUrl || G.buyMeCoffeeUrl;
         G.donationPerStepCents = Number(session.donationPerStepCents || G.donationPerStepCents || DEFAULT_DONATION_PER_STEP_CENTS);
+        if (remoteProgress.boost) applyServerBoost(remoteProgress.boost);
+        if (remoteProgress.referral) applyServerReferral(remoteProgress.referral);
+        if (remoteProgress.globalImpact) applyServerGlobalImpact(remoteProgress.globalImpact);
         normalizeDonationState();
         ensureState();
       } else {
@@ -474,8 +666,12 @@ async function bootstrapCloudState() {
 
     if (remote?.donations) applyServerDonations(remote.donations);
     if (Number.isFinite(remote?.rank) && remote.rank > 0) G.leaderboard.rank = Number(remote.rank);
+    if (remote?.boost) applyServerBoost(remote.boost);
+    if (remote?.referral) applyServerReferral(remote.referral);
+    if (remote?.globalImpact) applyServerGlobalImpact(remote.globalImpact);
 
     await refreshLeaderboard();
+    await refreshGlobalImpact();
     updateInitiativePanel();
   } catch (err) {
     console.warn("Cloud sync unavailable:", err);
@@ -498,6 +694,9 @@ async function syncProgress(options = {}) {
     if (res.username) G.username = res.username;
     if (res.donations) applyServerDonations(res.donations);
     if (Number.isFinite(res.rank) && res.rank > 0) G.leaderboard.rank = Number(res.rank);
+    if (res.boost) applyServerBoost(res.boost);
+    if (res.referral) applyServerReferral(res.referral);
+    if (res.globalImpact) applyServerGlobalImpact(res.globalImpact);
     save();
     return res;
   } catch (err) {
@@ -520,6 +719,79 @@ async function refreshLeaderboard() {
   } catch (err) {
     console.warn("Failed to refresh leaderboard:", err);
   }
+}
+
+async function refreshGlobalImpact() {
+  try {
+    const data = await apiJSON("/api/global-impact");
+    applyServerGlobalImpact(data);
+    updateInitiativePanel();
+    save();
+  } catch (err) {
+    console.warn("Failed to refresh global impact:", err);
+  }
+}
+
+async function activateBoostPotion() {
+  if (!G.userId) return false;
+  if ((G.boost?.potionBalance || 0) <= 0) {
+    showToast("🧪", t().activatePotionNone, t().activatePotionNone);
+    return false;
+  }
+  const btn = byId("activate-potion-btn");
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = t().activatePotionBusy;
+  }
+  try {
+    const res = await apiJSON("/api/boost/activate", {
+      method: "POST",
+      body: { userId: G.userId },
+    });
+    if (res?.boost) applyServerBoost(res.boost);
+    updateInitiativePanel();
+    updateHUD();
+    save();
+    showToast("⚡", t().activatePotionDone, t().activatePotionDone);
+    return true;
+  } catch (err) {
+    console.warn("Failed to activate potion:", err);
+    showToast("⚠️", t().activatePotionError, t().activatePotionError);
+    return false;
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = t().activatePotion;
+    }
+  }
+}
+
+async function copyInviteLink() {
+  const link = getInviteUrl();
+  try {
+    await navigator.clipboard.writeText(link);
+    showToast("🔗", t().inviteCopied, link);
+  } catch (err) {
+    console.warn("Failed to copy invite link:", err);
+    showToast("⚠️", t().inviteCopyFailed, t().inviteCopyFailed);
+  }
+}
+
+function shareInvite(platform) {
+  const link = getInviteUrl();
+  const message = t().shareMessage;
+  const encodedLink = encodeURIComponent(link);
+  const encodedMessage = encodeURIComponent(message);
+  let shareUrl = "";
+  if (platform === "facebook") {
+    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedLink}&quote=${encodedMessage}`;
+  } else if (platform === "x") {
+    shareUrl = `https://twitter.com/intent/tweet?text=${encodedMessage}&url=${encodedLink}`;
+  } else if (platform === "linkedin") {
+    shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedLink}`;
+  }
+  if (!shareUrl) return;
+  window.open(shareUrl, "_blank", "noopener,noreferrer,width=760,height=640");
 }
 
 function renderLeaderboard() {
@@ -550,10 +822,51 @@ function renderLeaderboard() {
 }
 
 function updateInitiativePanel() {
-  setText("initiative-step-value", formatMoney(G.donationPerStepCents));
+  const stepMultiplier = getPathDonationMultiplier(G.path);
+  const effectiveStep = getEffectiveStepDonationCents(G.path);
+  setText(
+    "initiative-step-value",
+    stepMultiplier > 1
+      ? `${formatMoney(effectiveStep)} (x${stepMultiplier})`
+      : formatMoney(effectiveStep),
+  );
   setText("initiative-total-value", formatMoney(G.donations.totalCents));
   setText("initiative-rank-value", leaderboardRankText());
   setText("initiative-steps-value", G.donations.stepsFunded);
+
+  const target = Number(G.globalImpact.targetCents || DEFAULT_GLOBAL_TARGET_CENTS);
+  const total = Number(G.globalImpact.totalCents || 0);
+  const pct = target > 0 ? Math.min(100, (total / target) * 100) : 0;
+  setText("global-target-value", `${formatMoney(total)} / ${formatMoney(target)}`);
+  setText(
+    "global-target-meta",
+    t().globalTargetMeta(
+      pct.toFixed(1),
+      Number(G.globalImpact.contributors || 0),
+      Number(G.globalImpact.stepsFunded || 0),
+    ),
+  );
+  const targetFill = byId("global-target-fill");
+  if (targetFill) targetFill.style.width = `${pct}%`;
+
+  const inviteInput = byId("invite-link-input");
+  if (inviteInput) inviteInput.value = getInviteUrl();
+
+  const now = Date.now();
+  const boostActive = Boolean(G.boost?.isActive) && Number(G.boost?.activeUntil || 0) > now;
+  const remaining = boostActive ? formatDurationLeft(Number(G.boost.activeUntil) - now) : "";
+  const balance = Number(G.boost?.potionBalance || 0);
+  setText(
+    "potion-status",
+    boostActive
+      ? t().potionStatusActive(balance, remaining)
+      : t().potionStatusReady(balance),
+  );
+  const activateBtn = byId("activate-potion-btn");
+  if (activateBtn) {
+    activateBtn.disabled = balance <= 0;
+    activateBtn.textContent = t().activatePotion;
+  }
 }
 
 function screen(id, push = true) {
@@ -584,7 +897,7 @@ function setLang(lang) {
   document.documentElement.lang = lang;
   /* Keep root direction LTR so scrollbars stay on the right side. */
   document.documentElement.dir = "ltr";
-  document.body.dir = lang === "ar" ? "rtl" : "ltr";
+  document.body.dir = "ltr";
   document.documentElement.classList.toggle("en", lang === "en");
   byId("lang-ar").classList.toggle("active", lang === "ar");
   byId("lang-en").classList.toggle("active", lang === "en");
@@ -619,6 +932,14 @@ function refreshText() {
   setText("initiative-total-label", t().initiativeTotalLabel);
   setText("initiative-rank-label", t().initiativeRankLabel);
   setText("initiative-steps-label", t().initiativeStepsLabel);
+  setText("global-target-label", t().globalTargetLabel);
+  setText("invite-title", t().inviteTitle);
+  setText("invite-copy", t().inviteCopy);
+  setText("invite-copy-btn", t().inviteCopyBtn);
+  setShareButton("share-fb-btn", t().shareFacebook, "facebook");
+  setShareButton("share-x-btn", t().shareX, "x");
+  setShareButton("share-li-btn", t().shareLinkedIn, "linkedin");
+  setText("activate-potion-btn", t().activatePotion);
   setText("start-btn", t().start);
   setText("identity-modal-title", t().identityModalTitle);
   setText("identity-modal-copy", t().identityModalCopy);
@@ -660,7 +981,7 @@ function refreshText() {
   setText("map-btn", t().map);
   setText("retry-btn", t().retry);
   setText("next-stage-btn", t().nextStage);
-  setText("back-btn", isAR() ? "← رجوع" : "← Back");
+  setText("back-btn", isAR() ? "رجوع" : "Back");
   setText("mini-goal-label", t().goal);
   setText("mini-bonus-label", t().bonus);
   setText("mini-streak-label", t().streakLabel);
@@ -676,10 +997,10 @@ function updateHUD() {
 
   setText("level-value", formatMoney(G.donations.totalCents));
   const fill = byId("xp-fill");
-  if (fill) fill.style.width = `${Math.round(G.donations.totalCents % 100)}%`;
+  if (fill) fill.style.width = `${Math.round((G.donations.totalCents % MONEY_DIVISOR) / 10)}%`;
   setText(
     "xp-text",
-    t().impactMeterHint(formatMoney(G.donationPerStepCents), G.donations.stepsFunded),
+    t().impactMeterHint(formatMoney(getEffectiveStepDonationCents(G.path)), G.donations.stepsFunded),
   );
 
   setText("stat-stars", totalCompletedStages(G));
@@ -702,6 +1023,9 @@ function updateHUD() {
   setText("booster-combo", (isAR() ? "سلسلة: " : "Combo: ") + G.combo);
   setText("booster-perfect", t().perfectReady);
   setText("booster-speed", t().quick);
+  setText("booster-potion", t().boosterPotion);
+  const potionBooster = byId("booster-potion");
+  if (potionBooster) potionBooster.classList.toggle("active", Boolean(G.boost?.isActive));
   setText(
     "mini-goal-value",
     activeStage
