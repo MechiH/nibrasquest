@@ -4,6 +4,10 @@ const MAX_LEADERBOARD_LIMIT = 25;
 const DEFAULT_GLOBAL_TARGET_CENTS = 100000;
 const BOOST_MULTIPLIER = 4;
 const BOOST_DURATION_MS = 60 * 60 * 1000;
+const DEFAULT_OTP_EXPIRY_SECONDS = 300;
+const DEFAULT_OTP_MAX_ATTEMPTS = 5;
+const DEFAULT_OTP_RESEND_COOLDOWN_SECONDS = 30;
+const DEFAULT_OTP_EMAIL_SUBJECT = "Your NIBRAS verification code";
 
 let schemaReadyPromise = null;
 
@@ -34,6 +38,28 @@ function getGlobalTargetCents(env) {
 function getBuyMeCoffeeUrl(env) {
   const raw = (env.BUY_ME_A_COFFEE_URL || "").trim();
   return raw || DEFAULT_BUY_ME_A_COFFEE_URL;
+}
+
+function getOtpExpirySeconds(env) {
+  const raw = Number(env.OTP_EXPIRES_SECONDS);
+  if (!Number.isFinite(raw) || raw <= 0) return DEFAULT_OTP_EXPIRY_SECONDS;
+  return Math.min(1800, Math.max(60, Math.floor(raw)));
+}
+
+function getOtpMaxAttempts(env) {
+  const raw = Number(env.OTP_MAX_ATTEMPTS);
+  if (!Number.isFinite(raw) || raw <= 0) return DEFAULT_OTP_MAX_ATTEMPTS;
+  return Math.min(10, Math.max(3, Math.floor(raw)));
+}
+
+function getOtpResendCooldownSeconds(env) {
+  const raw = Number(env.OTP_RESEND_COOLDOWN_SECONDS);
+  if (!Number.isFinite(raw) || raw < 0) return DEFAULT_OTP_RESEND_COOLDOWN_SECONDS;
+  return Math.min(300, Math.floor(raw));
+}
+
+function allowDevOtpFallback(env) {
+  return String(env.ALLOW_DEV_OTP || "").trim() === "1";
 }
 
 async function readJsonBody(request) {
@@ -96,6 +122,23 @@ function normalizeUsername(value) {
   return normalizeEnglishDigits(value).replace(/\s+/g, " ").trim();
 }
 
+function normalizeEmail(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
+function isValidEmail(value) {
+  if (!value || value.length > 254) return false;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function normalizeOtpInput(value) {
+  return normalizeEnglishDigits(value).replace(/\D+/g, "").slice(0, 6);
+}
+
+function generateOtpCode() {
+  return String(Math.floor(100000 + Math.random() * 900000));
+}
+
 function parsePositiveInt(value, fallback = 0) {
   const n = Number(value);
   if (!Number.isFinite(n) || n <= 0) return fallback;
@@ -140,6 +183,57 @@ async function runOptionalSchemaStatement(db, sql) {
   }
 }
 
+async function sha256Hex(value) {
+  const encoded = new TextEncoder().encode(String(value || ""));
+  const digest = await crypto.subtle.digest("SHA-256", encoded);
+  const bytes = new Uint8Array(digest);
+  let hex = "";
+  for (let i = 0; i < bytes.length; i++) {
+    hex += bytes[i].toString(16).padStart(2, "0");
+  }
+  return hex;
+}
+
+async function hashOtp(env, email, otpCode) {
+  const pepper = String(env.OTP_PEPPER || "").trim() || "nibras-otp";
+  return sha256Hex(`${pepper}:${normalizeEmail(email)}:${normalizeOtpInput(otpCode)}`);
+}
+
+async function sendOtpEmail(env, email, otpCode, expirySeconds) {
+  const apiKey = String(env.RESEND_API_KEY || "").trim();
+  const from = String(env.OTP_FROM_EMAIL || "").trim();
+  if (!apiKey || !from) {
+    return { delivered: false, reason: "provider_not_configured" };
+  }
+
+  const subject = String(env.OTP_EMAIL_SUBJECT || "").trim() || DEFAULT_OTP_EMAIL_SUBJECT;
+  const minutes = Math.max(1, Math.round(expirySeconds / 60));
+  const text = `Your NIBRAS verification code is ${otpCode}. It expires in ${minutes} minute(s).`;
+  const html = `<p>Your <strong>NIBRAS</strong> verification code is:</p><p style="font-size:24px;font-weight:700;letter-spacing:4px">${otpCode}</p><p>This code expires in ${minutes} minute(s).</p>`;
+
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      from,
+      to: [email],
+      subject,
+      text,
+      html,
+    }),
+  });
+
+  if (!res.ok) {
+    const details = await res.text().catch(() => "");
+    throw new Error(`Failed to send OTP email (${res.status})${details ? `: ${details}` : ""}`);
+  }
+
+  return { delivered: true, reason: "resend" };
+}
+
 async function ensureSchema(db) {
   if (!db) return;
   if (!schemaReadyPromise) {
@@ -150,7 +244,8 @@ async function ensureSchema(db) {
             id TEXT PRIMARY KEY,
             username TEXT NOT NULL UNIQUE,
             created_at INTEGER NOT NULL,
-            referred_by TEXT
+            referred_by TEXT,
+            email TEXT UNIQUE
           )
         `,
         `
@@ -195,9 +290,22 @@ async function ensureSchema(db) {
             FOREIGN KEY(inviter_user_id) REFERENCES users(id)
           )
         `,
+        `
+          CREATE TABLE IF NOT EXISTS email_otps (
+            email TEXT PRIMARY KEY,
+            user_id TEXT NOT NULL,
+            otp_hash TEXT NOT NULL,
+            expires_at INTEGER NOT NULL,
+            attempts_left INTEGER NOT NULL DEFAULT 5,
+            is_new_user INTEGER NOT NULL DEFAULT 0,
+            created_at INTEGER NOT NULL,
+            FOREIGN KEY(user_id) REFERENCES users(id)
+          )
+        `,
         "CREATE INDEX IF NOT EXISTS idx_donations_user_id ON donations(user_id)",
         "CREATE INDEX IF NOT EXISTS idx_donations_created_at ON donations(created_at)",
         "CREATE INDEX IF NOT EXISTS idx_referral_rewards_inviter ON referral_rewards(inviter_user_id)",
+        "CREATE INDEX IF NOT EXISTS idx_email_otps_expires_at ON email_otps(expires_at)",
       ];
       for (const sql of statements) {
         await db.prepare(sql).run();
@@ -208,7 +316,15 @@ async function ensureSchema(db) {
       );
       await runOptionalSchemaStatement(
         db,
+        "ALTER TABLE users ADD COLUMN email TEXT",
+      );
+      await runOptionalSchemaStatement(
+        db,
         "CREATE INDEX IF NOT EXISTS idx_users_referred_by ON users(referred_by)",
+      );
+      await runOptionalSchemaStatement(
+        db,
+        "CREATE UNIQUE INDEX IF NOT EXISTS idx_users_email_unique ON users(email)",
       );
     })().catch((err) => {
       schemaReadyPromise = null;
@@ -221,41 +337,77 @@ async function ensureSchema(db) {
 async function getUserById(db, userId) {
   if (!userId) return null;
   const row = await db
-    .prepare("SELECT id, username, created_at, referred_by FROM users WHERE id = ?")
+    .prepare("SELECT id, username, email, created_at, referred_by FROM users WHERE id = ?")
     .bind(userId)
     .first();
   return row || null;
 }
 
-async function createUniqueUser(db, referredBy = null) {
+async function getUserByEmail(db, email) {
+  const normalized = normalizeEmail(email);
+  if (!normalized) return null;
+  const row = await db
+    .prepare("SELECT id, username, email, created_at, referred_by FROM users WHERE email = ?")
+    .bind(normalized)
+    .first();
+  return row || null;
+}
+
+async function createUniqueUser(db, referredBy = null, email = null) {
   const now = Date.now();
+  const normalizedEmail = normalizeEmail(email);
+  const emailValue = normalizedEmail || null;
   for (let i = 0; i < 50; i++) {
     const id = crypto.randomUUID();
     const username = generateArabicUsername();
     const res = await db
-      .prepare("INSERT OR IGNORE INTO users (id, username, created_at, referred_by) VALUES (?, ?, ?, ?)")
-      .bind(id, username, now, referredBy)
+      .prepare("INSERT OR IGNORE INTO users (id, username, created_at, referred_by, email) VALUES (?, ?, ?, ?, ?)")
+      .bind(id, username, now, referredBy, emailValue)
       .run();
     if (res?.meta?.changes) {
-      return { id, username, created_at: now, referred_by: referredBy };
+      return { id, username, email: emailValue, created_at: now, referred_by: referredBy };
     }
   }
   throw new Error("Could not create a unique Arabic username.");
 }
 
-async function getOrCreateUser(db, requestedUserId = "", referralCode = "") {
-  const existing = await getUserById(db, requestedUserId);
+async function getOrCreateUserByEmail(db, email, referralCode = "") {
+  const normalizedEmail = normalizeEmail(email);
+  const existing = await getUserByEmail(db, normalizedEmail);
   if (existing) return { ...existing, _isNew: false };
+
   let referredBy = null;
   const ref = String(referralCode || "").trim();
   if (ref) {
     const referrer = await getUserById(db, ref);
-    if (referrer && referrer.id !== requestedUserId) {
-      referredBy = referrer.id;
-    }
+    if (referrer) referredBy = referrer.id;
   }
-  const created = await createUniqueUser(db, referredBy);
+
+  const created = await createUniqueUser(db, referredBy, normalizedEmail);
   return { ...created, _isNew: true };
+}
+
+async function buildSessionPayload(db, env, origin, user, isNewUser = false) {
+  await ensureProgressRow(db, user.id);
+  const donations = await getDonationSummary(db, user.id);
+  const rank = await getUserRank(db, user.id);
+  const boost = await getUserBoostState(db, user.id);
+  const referral = await getReferralSummary(db, user.id, origin);
+  const globalImpact = await getGlobalImpactSummary(db, env);
+
+  return {
+    userId: user.id,
+    username: user.username,
+    email: user.email || "",
+    isNewUser: Boolean(isNewUser),
+    donationPerStepCents: getStepDonationCents(env),
+    buyMeCoffeeUrl: getBuyMeCoffeeUrl(env),
+    donations,
+    rank,
+    boost,
+    referral,
+    globalImpact,
+  };
 }
 
 async function ensureProgressRow(db, userId) {
@@ -538,27 +690,209 @@ async function handleSession(request, url, env) {
 
   await ensureSchema(env.DB);
   const requestedUserId = (url.searchParams.get("userId") || "").trim();
-  const referralCode = (url.searchParams.get("ref") || "").trim();
-  const user = await getOrCreateUser(env.DB, requestedUserId, referralCode);
-  await ensureProgressRow(env.DB, user.id);
-  const donations = await getDonationSummary(env.DB, user.id);
-  const rank = await getUserRank(env.DB, user.id);
-  const boost = await getUserBoostState(env.DB, user.id);
-  const referral = await getReferralSummary(env.DB, user.id, url.origin);
-  const globalImpact = await getGlobalImpactSummary(env.DB, env);
+  if (!requestedUserId) return json({ error: "Missing userId." }, 400);
+  const user = await getUserById(env.DB, requestedUserId);
+  if (!user) return json({ error: "User not found." }, 404);
+  const payload = await buildSessionPayload(env.DB, env, url.origin, user, false);
+  return json(payload);
+}
 
-  return json({
-    userId: user.id,
-    username: user.username,
-    isNewUser: Boolean(user._isNew),
-    donationPerStepCents: getStepDonationCents(env),
-    buyMeCoffeeUrl: getBuyMeCoffeeUrl(env),
-    donations,
-    rank,
-    boost,
-    referral,
-    globalImpact,
-  });
+async function handleRequestOtp(request, env) {
+  if (!env.DB) {
+    return json({
+      error: "D1 binding missing. Add a DB binding named 'DB' in wrangler config.",
+    }, 503);
+  }
+
+  const body = await readJsonBody(request);
+  if (!body || typeof body !== "object") {
+    return json({ error: "Invalid JSON body." }, 400);
+  }
+
+  const email = normalizeEmail(body.email || "");
+  if (!isValidEmail(email)) {
+    return json({ error: "A valid email is required." }, 400);
+  }
+
+  const referralCode = String(body.ref || "").trim();
+  await ensureSchema(env.DB);
+
+  const cooldownMs = getOtpResendCooldownSeconds(env) * 1000;
+  const now = Date.now();
+  const existingOtp = await env.DB
+    .prepare("SELECT created_at FROM email_otps WHERE email = ?")
+    .bind(email)
+    .first();
+
+  if (existingOtp && cooldownMs > 0) {
+    const createdAt = Number(existingOtp.created_at || 0);
+    const waitMs = Math.max(0, createdAt + cooldownMs - now);
+    if (waitMs > 0) {
+      return json(
+        {
+          error: "Please wait before requesting another code.",
+          retryAfterSeconds: Math.ceil(waitMs / 1000),
+        },
+        429,
+      );
+    }
+  }
+
+  const user = await getOrCreateUserByEmail(env.DB, email, referralCode);
+  const otpCode = generateOtpCode();
+  const otpHash = await hashOtp(env, email, otpCode);
+  const expirySeconds = getOtpExpirySeconds(env);
+  const maxAttempts = getOtpMaxAttempts(env);
+  const expiresAt = now + expirySeconds * 1000;
+
+  await env.DB
+    .prepare(`
+      INSERT INTO email_otps
+        (email, user_id, otp_hash, expires_at, attempts_left, is_new_user, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+      ON CONFLICT(email) DO UPDATE SET
+        user_id = excluded.user_id,
+        otp_hash = excluded.otp_hash,
+        expires_at = excluded.expires_at,
+        attempts_left = excluded.attempts_left,
+        is_new_user = excluded.is_new_user,
+        created_at = excluded.created_at
+    `)
+    .bind(
+      email,
+      user.id,
+      otpHash,
+      expiresAt,
+      maxAttempts,
+      user._isNew ? 1 : 0,
+      now,
+    )
+    .run();
+
+  let sentByProvider = false;
+  let providerError = "";
+  try {
+    const delivery = await sendOtpEmail(env, email, otpCode, expirySeconds);
+    sentByProvider = Boolean(delivery?.delivered);
+  } catch (err) {
+    providerError = err instanceof Error ? err.message : String(err || "");
+  }
+
+  const canUseDevFallback = allowDevOtpFallback(env);
+  if (!sentByProvider && !canUseDevFallback) {
+    const reason = providerError || "Could not deliver OTP email.";
+    return json({ error: reason }, 502);
+  }
+
+  const response = {
+    ok: true,
+    sent: true,
+    expiresInSeconds: expirySeconds,
+  };
+
+  if (!sentByProvider && canUseDevFallback) {
+    response.devOtp = otpCode;
+  }
+
+  return json(response);
+}
+
+async function handleVerifyOtp(request, url, env) {
+  if (!env.DB) {
+    return json({
+      error: "D1 binding missing. Add a DB binding named 'DB' in wrangler config.",
+    }, 503);
+  }
+
+  const body = await readJsonBody(request);
+  if (!body || typeof body !== "object") {
+    return json({ error: "Invalid JSON body." }, 400);
+  }
+
+  const email = normalizeEmail(body.email || "");
+  const otp = normalizeOtpInput(body.otp || "");
+  if (!isValidEmail(email)) {
+    return json({ error: "A valid email is required." }, 400);
+  }
+  if (otp.length !== 6) {
+    return json({ error: "OTP code must be 6 digits." }, 400);
+  }
+
+  await ensureSchema(env.DB);
+
+  const row = await env.DB
+    .prepare(`
+      SELECT email, user_id, otp_hash, expires_at, attempts_left, is_new_user
+      FROM email_otps
+      WHERE email = ?
+    `)
+    .bind(email)
+    .first();
+
+  if (!row) {
+    return json({ error: "OTP not found or expired. Request a new code." }, 400);
+  }
+
+  const now = Date.now();
+  const expiresAt = Number(row.expires_at || 0);
+  if (expiresAt <= now) {
+    await env.DB
+      .prepare("DELETE FROM email_otps WHERE email = ?")
+      .bind(email)
+      .run();
+    return json({ error: "OTP expired. Request a new code." }, 400);
+  }
+
+  const expectedHash = String(row.otp_hash || "");
+  const providedHash = await hashOtp(env, email, otp);
+  if (!expectedHash || providedHash !== expectedHash) {
+    const attemptsLeft = Math.max(0, Number(row.attempts_left || 0) - 1);
+    if (attemptsLeft <= 0) {
+      await env.DB
+        .prepare("DELETE FROM email_otps WHERE email = ?")
+        .bind(email)
+        .run();
+    } else {
+      await env.DB
+        .prepare("UPDATE email_otps SET attempts_left = ? WHERE email = ?")
+        .bind(attemptsLeft, email)
+        .run();
+    }
+    return json({ error: "Invalid OTP code.", attemptsLeft }, 401);
+  }
+
+  await env.DB
+    .prepare("DELETE FROM email_otps WHERE email = ?")
+    .bind(email)
+    .run();
+
+  const userId = String(row.user_id || "").trim();
+  if (!userId) return json({ error: "Invalid OTP record." }, 400);
+
+  try {
+    await env.DB
+      .prepare("UPDATE users SET email = ? WHERE id = ?")
+      .bind(email, userId)
+      .run();
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err || "");
+    if (msg.toLowerCase().includes("unique")) {
+      return json({ error: "This email is linked to another account." }, 409);
+    }
+    throw err;
+  }
+
+  const user = await getUserById(env.DB, userId);
+  if (!user) return json({ error: "User not found." }, 404);
+
+  const payload = await buildSessionPayload(
+    env.DB,
+    env,
+    url.origin,
+    user,
+    Number(row.is_new_user || 0) === 1,
+  );
+  return json(payload);
 }
 
 async function handleUsername(request, env) {
@@ -626,6 +960,7 @@ async function handleGetProgress(url, env) {
   return json({
     userId: user.id,
     username: user.username,
+    email: user.email || "",
     progress,
     donations,
     rank,
@@ -650,7 +985,10 @@ async function handleSaveProgress(request, env) {
 
   await ensureSchema(env.DB);
 
-  const user = await getOrCreateUser(env.DB, String(body.userId || "").trim());
+  const userId = String(body.userId || "").trim();
+  if (!userId) return json({ error: "Missing userId." }, 400);
+  const user = await getUserById(env.DB, userId);
+  if (!user) return json({ error: "User not found." }, 404);
   const progress = sanitizeProgress(body.progress || {});
   progress.userId = user.id;
   progress.username = user.username;
@@ -799,6 +1137,7 @@ async function handleSaveProgress(request, env) {
     ok: true,
     userId: user.id,
     username: user.username,
+    email: user.email || "",
     donations,
     rank,
     boost,
@@ -822,7 +1161,10 @@ async function handleManualDonation(request, env) {
 
   await ensureSchema(env.DB);
 
-  const user = await getOrCreateUser(env.DB, String(body.userId || "").trim());
+  const userId = String(body.userId || "").trim();
+  if (!userId) return json({ error: "Missing userId." }, 400);
+  const user = await getUserById(env.DB, userId);
+  if (!user) return json({ error: "User not found." }, 404);
   const rawAmount = Number(body.amountCents);
   if (!Number.isFinite(rawAmount) || rawAmount <= 0) {
     return json({ error: "amountCents must be a positive number." }, 400);
@@ -855,6 +1197,7 @@ async function handleManualDonation(request, env) {
     ok: true,
     userId: user.id,
     username: user.username,
+    email: user.email || "",
     donations,
     rank,
     boost,
@@ -958,6 +1301,14 @@ async function handleApi(request, env, url) {
 
   if (url.pathname === "/api/session" && request.method === "GET") {
     return handleSession(request, url, env);
+  }
+
+  if (url.pathname === "/api/auth/request-otp" && request.method === "POST") {
+    return handleRequestOtp(request, env);
+  }
+
+  if (url.pathname === "/api/auth/verify-otp" && request.method === "POST") {
+    return handleVerifyOtp(request, url, env);
   }
 
   if (url.pathname === "/api/global-impact" && request.method === "GET") {

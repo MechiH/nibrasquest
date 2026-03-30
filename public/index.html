@@ -336,19 +336,35 @@
             <div class="t2" id="achievement-t2">First Step</div>
         </div>
     </div>
+    <div class="auth-modal" id="auth-modal" aria-hidden="true">
+        <div class="auth-card glass" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+            <div class="auth-title" id="auth-title">الدخول بالبريد الإلكتروني</div>
+            <div class="auth-copy" id="auth-copy">أدخل بريدك الإلكتروني. سنرسل رمز تحقق (OTP) لاسترجاع تقدمك بأمان من أي جهاز.</div>
+            <label class="auth-label" for="auth-email-input" id="auth-email-label">البريد الإلكتروني</label>
+            <input id="auth-email-input" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" />
+            <div class="auth-inline">
+                <button class="ghost" id="auth-send-otp-btn" type="button">إرسال رمز التحقق</button>
+            </div>
+            <label class="auth-label" for="auth-otp-input" id="auth-otp-label">رمز التحقق (6 أرقام)</label>
+            <input id="auth-otp-input" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456" />
+            <div class="auth-dev-otp" id="auth-dev-otp"></div>
+            <div class="auth-error" id="auth-error"></div>
+            <div class="auth-actions">
+                <button class="cta" id="auth-verify-btn" type="button" disabled>تحقق وابدأ</button>
+                <button class="ghost" id="auth-cancel-btn" type="button">إلغاء</button>
+            </div>
+        </div>
+    </div>
     <div class="identity-modal" id="identity-modal" aria-hidden="true">
         <div class="identity-card glass" role="dialog" aria-modal="true" aria-labelledby="identity-modal-title">
             <div class="identity-title" id="identity-modal-title">قبل بدء الرحلة</div>
-            <div class="identity-copy" id="identity-modal-copy">يمكنك المتابعة بالاسم المولد أو كتابة اسمك.</div>
+            <div class="identity-copy" id="identity-modal-copy">تم توليد اسمك تلقائيًا. هذا الاسم يُستخدم لحفظ التقدم والمساهمة.</div>
             <div class="identity-generated">
                 <span id="identity-generated-label">الاسم المولد</span>
                 <strong id="identity-generated-value">—</strong>
             </div>
-            <label class="identity-input-label" id="identity-input-label" for="identity-name-input">اكتب اسمك (اختياري)</label>
-            <input id="identity-name-input" type="text" maxlength="40" placeholder="نور_العلم_123" />
             <div class="identity-error" id="identity-error"></div>
             <div class="identity-actions">
-                <button class="ghost" id="identity-use-generated-btn" type="button">استخدم الاسم المولد</button>
                 <button class="cta" id="identity-continue-btn" type="button">متابعة الرحلة</button>
             </div>
             <button class="ghost identity-cancel-btn" id="identity-cancel-btn" type="button">إلغاء</button>

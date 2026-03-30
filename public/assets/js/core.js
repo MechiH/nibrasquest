@@ -99,6 +99,7 @@ const G = {
   levelStart: "beginner",
   userId: "",
   username: "",
+  email: "",
   donationPerStepCents: DEFAULT_DONATION_PER_STEP_CENTS,
   buyMeCoffeeUrl: DEFAULT_BUY_ME_A_COFFEE_URL,
   donations: defaultDonations(),
@@ -262,6 +263,19 @@ function normalizeUsernameInput(value) {
   return normalizeEnglishDigits(value).replace(/\s+/g, " ").trim();
 }
 
+function normalizeEmailInput(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
+function normalizeOtpInput(value) {
+  return normalizeEnglishDigits(value).replace(/\D+/g, "").slice(0, 6);
+}
+
+function isValidEmail(value) {
+  if (!value || value.length > 254) return false;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
 function formatMoney(cents) {
   const n = Number(cents || 0);
   return `$${(Math.max(0, n) / MONEY_DIVISOR).toFixed(3)}`;
@@ -398,6 +412,7 @@ function getPersistedState() {
     levelStart: G.levelStart,
     userId: G.userId,
     username: G.username,
+    email: G.email,
     donationPerStepCents: G.donationPerStepCents,
     buyMeCoffeeUrl: G.buyMeCoffeeUrl,
     donations: G.donations,
@@ -511,27 +526,195 @@ function getInviteUrl() {
   return invite.toString();
 }
 
-async function updateUsername(username) {
-  if (!G.userId) throw new Error("Missing userId.");
-  const cleaned = normalizeUsernameInput(username);
-  if (cleaned.length < 3 || cleaned.length > 40) {
-    throw new Error("Username must be between 3 and 40 characters.");
-  }
-  const res = await apiJSON("/api/username", {
+function isEmailOtpAuthenticated() {
+  return Boolean(G.userId) && isValidEmail(normalizeEmailInput(G.email));
+}
+
+function setAuthModalOpen(open) {
+  const modal = byId("auth-modal");
+  if (!modal) return;
+  modal.classList.toggle("on", open);
+  modal.setAttribute("aria-hidden", open ? "false" : "true");
+}
+
+function setAuthModalBusy(busy) {
+  [
+    "auth-email-input",
+    "auth-otp-input",
+    "auth-send-otp-btn",
+    "auth-verify-btn",
+    "auth-cancel-btn",
+  ].forEach((id) => {
+    const el = byId(id);
+    if (!el) return;
+    el.disabled = busy;
+  });
+}
+
+function setAuthModalError(message = "") {
+  const el = byId("auth-error");
+  if (!el) return;
+  el.textContent = message;
+  el.classList.toggle("on", Boolean(message));
+}
+
+function setAuthModalNotice(message = "") {
+  setText("auth-dev-otp", message);
+}
+
+function applySessionPayload(session) {
+  if (!session || typeof session !== "object") return;
+  G.userId = session.userId || G.userId;
+  G.username = session.username || G.username;
+  G.email = normalizeEmailInput(session.email || G.email);
+  isNewUserSession = Boolean(session.isNewUser);
+  G.donationPerStepCents = Number(session.donationPerStepCents || G.donationPerStepCents || DEFAULT_DONATION_PER_STEP_CENTS);
+  G.buyMeCoffeeUrl = session.buyMeCoffeeUrl || G.buyMeCoffeeUrl || DEFAULT_BUY_ME_A_COFFEE_URL;
+  if (session.boost) applyServerBoost(session.boost);
+  if (session.referral) applyServerReferral(session.referral);
+  if (session.globalImpact) applyServerGlobalImpact(session.globalImpact);
+  if (session.donations) applyServerDonations(session.donations);
+  if (Number.isFinite(session.rank) && session.rank > 0) G.leaderboard.rank = Number(session.rank);
+  if (!isNewUserSession) markIdentityReady();
+}
+
+async function requestEmailOtp(email) {
+  return apiJSON("/api/auth/request-otp", {
     method: "POST",
     body: {
-      userId: G.userId,
-      username: cleaned,
+      email,
+      ref: getReferralCodeFromURL(),
     },
   });
-  G.username = res.username || cleaned;
-  markIdentityReady();
-  isNewUserSession = false;
-  updateInitiativePanel();
-  updateHUD();
-  save();
-  await syncProgress();
-  return G.username;
+}
+
+async function verifyEmailOtp(email, otp) {
+  return apiJSON("/api/auth/verify-otp", {
+    method: "POST",
+    body: {
+      email,
+      otp,
+    },
+  });
+}
+
+function openAuthModal() {
+  const modal = byId("auth-modal");
+  if (!modal) return Promise.resolve(false);
+
+  const emailInput = byId("auth-email-input");
+  const otpInput = byId("auth-otp-input");
+  const sendBtn = byId("auth-send-otp-btn");
+  const verifyBtn = byId("auth-verify-btn");
+  const cancelBtn = byId("auth-cancel-btn");
+  let otpRequestedFor = "";
+
+  if (emailInput) emailInput.value = normalizeEmailInput(G.email);
+  if (otpInput) otpInput.value = "";
+  setAuthModalError("");
+  setAuthModalNotice("");
+  setAuthModalBusy(false);
+  if (verifyBtn) verifyBtn.disabled = true;
+  setAuthModalOpen(true);
+
+  return new Promise((resolve) => {
+    let finished = false;
+
+    const finish = (result) => {
+      if (finished) return;
+      finished = true;
+      modal.onclick = null;
+      if (sendBtn) sendBtn.onclick = null;
+      if (verifyBtn) verifyBtn.onclick = null;
+      if (cancelBtn) cancelBtn.onclick = null;
+      if (otpInput) otpInput.oninput = null;
+      setAuthModalOpen(false);
+      setAuthModalError("");
+      setAuthModalNotice("");
+      resolve(result);
+    };
+
+    const onCancel = () => finish(false);
+
+    const onSendOtp = async () => {
+      const email = normalizeEmailInput(emailInput ? emailInput.value : "");
+      if (!isValidEmail(email)) {
+        setAuthModalError(t().authInvalidEmail);
+        return;
+      }
+      setAuthModalError("");
+      setAuthModalBusy(true);
+      try {
+        const res = await requestEmailOtp(email);
+        otpRequestedFor = email;
+        G.email = email;
+        save();
+        setAuthModalNotice(
+          res.devOtp
+            ? t().authDevOtpNotice(res.devOtp)
+            : t().authOtpSentNotice(res.expiresInSeconds || 300),
+        );
+        if (otpInput) {
+          otpInput.focus();
+          otpInput.select();
+        }
+      } catch (err) {
+        setAuthModalError(err?.message || t().authOtpSendError);
+      } finally {
+        setAuthModalBusy(false);
+        if (verifyBtn) verifyBtn.disabled = !otpRequestedFor;
+      }
+    };
+
+    const onVerifyOtp = async () => {
+      const email = normalizeEmailInput(emailInput ? emailInput.value : "");
+      const otp = normalizeOtpInput(otpInput ? otpInput.value : "");
+      if (!isValidEmail(email)) {
+        setAuthModalError(t().authInvalidEmail);
+        return;
+      }
+      if (!otpRequestedFor || email !== otpRequestedFor) {
+        setAuthModalError(t().authRequestOtpFirst);
+        return;
+      }
+      if (otp.length !== 6) {
+        setAuthModalError(t().authInvalidOtp);
+        return;
+      }
+
+      setAuthModalError("");
+      setAuthModalBusy(true);
+      try {
+        const session = await verifyEmailOtp(email, otp);
+        applySessionPayload(session);
+        await bootstrapCloudState(session);
+        finish(true);
+      } catch (err) {
+        setAuthModalError(err?.message || t().authOtpVerifyError);
+      } finally {
+        setAuthModalBusy(false);
+        if (verifyBtn) verifyBtn.disabled = !otpRequestedFor;
+      }
+    };
+
+    modal.onclick = (event) => {
+      if (event.target === modal) onCancel();
+    };
+    if (sendBtn) sendBtn.onclick = onSendOtp;
+    if (verifyBtn) verifyBtn.onclick = onVerifyOtp;
+    if (cancelBtn) cancelBtn.onclick = onCancel;
+    if (otpInput) {
+      otpInput.oninput = () => {
+        otpInput.value = normalizeOtpInput(otpInput.value);
+      };
+    }
+    if (emailInput) setTimeout(() => emailInput.focus(), 0);
+  });
+}
+
+async function ensureEmailOtpAuth() {
+  if (isEmailOtpAuthenticated()) return true;
+  return openAuthModal();
 }
 
 function identityReadyKey() {
@@ -555,7 +738,7 @@ function setIdentityModalOpen(open) {
 }
 
 function setIdentityModalBusy(busy) {
-  ["identity-use-generated-btn", "identity-continue-btn", "identity-cancel-btn", "identity-name-input"]
+  ["identity-continue-btn", "identity-cancel-btn"]
     .forEach((id) => {
       const el = byId(id);
       if (!el) return;
@@ -575,16 +758,10 @@ function openIdentityModal() {
   if (!modal) return Promise.resolve(true);
 
   const generated = normalizeUsernameInput(G.username) || t().usernamePromptPlaceholder;
-  const input = byId("identity-name-input");
-  const useGeneratedBtn = byId("identity-use-generated-btn");
   const continueBtn = byId("identity-continue-btn");
   const cancelBtn = byId("identity-cancel-btn");
 
   setText("identity-generated-value", generated);
-  if (input) {
-    input.value = "";
-    input.placeholder = t().identityInputPlaceholder || generated;
-  }
   setIdentityModalError("");
   setIdentityModalBusy(false);
   setIdentityModalOpen(true);
@@ -596,10 +773,8 @@ function openIdentityModal() {
       if (finished) return;
       finished = true;
       modal.onclick = null;
-      if (useGeneratedBtn) useGeneratedBtn.onclick = null;
       if (continueBtn) continueBtn.onclick = null;
       if (cancelBtn) cancelBtn.onclick = null;
-      if (input) input.onkeydown = null;
       setIdentityModalOpen(false);
       setIdentityModalError("");
       resolve(result);
@@ -607,37 +782,15 @@ function openIdentityModal() {
 
     const onCancel = () => finish(false);
 
-    const onUseGenerated = () => {
-      markIdentityReady();
-      isNewUserSession = false;
-      finish(true);
-    };
-
     const onContinue = async () => {
-      const raw = input ? input.value : "";
-      const nextName = normalizeUsernameInput(raw || generated);
-      if (nextName.length < 3 || nextName.length > 40) {
-        setIdentityModalError(t().usernameInvalidText);
-        return;
-      }
-
       setIdentityModalBusy(true);
       setIdentityModalError("");
       try {
-        if (nextName !== normalizeUsernameInput(G.username)) {
-          await updateUsername(nextName);
-        } else {
-          markIdentityReady();
-          isNewUserSession = false;
-        }
+        markIdentityReady();
+        isNewUserSession = false;
         finish(true);
-      } catch (err) {
-        const message = String(err?.message || "").toLowerCase();
-        if (message.includes("already taken")) {
-          setIdentityModalError(t().usernameTakenText);
-        } else {
-          setIdentityModalError(t().identityErrorGeneric);
-        }
+      } catch {
+        setIdentityModalError(t().identityErrorGeneric);
       } finally {
         setIdentityModalBusy(false);
       }
@@ -646,18 +799,8 @@ function openIdentityModal() {
     modal.onclick = (event) => {
       if (event.target === modal) onCancel();
     };
-    if (useGeneratedBtn) useGeneratedBtn.onclick = onUseGenerated;
     if (continueBtn) continueBtn.onclick = onContinue;
     if (cancelBtn) cancelBtn.onclick = onCancel;
-    if (input) {
-      input.onkeydown = (event) => {
-        if (event.key === "Enter") {
-          event.preventDefault();
-          onContinue();
-        }
-      };
-      setTimeout(() => input.focus(), 0);
-    }
   });
 }
 
@@ -671,27 +814,11 @@ async function ensureIdentityForJourneyStart() {
   return openIdentityModal();
 }
 
-async function bootstrapCloudState() {
+async function bootstrapCloudState(sessionSeed = null) {
   try {
-    const params = new URLSearchParams();
-    if (G.userId) params.set("userId", G.userId);
-    const refCode = getReferralCodeFromURL();
-    if (refCode && refCode !== G.userId) params.set("ref", refCode);
-    const session = await apiJSON(`/api/session${params.toString() ? `?${params.toString()}` : ""}`);
-
-    G.userId = session.userId || G.userId;
-    G.username = session.username || G.username;
-    isNewUserSession = Boolean(session.isNewUser);
-    G.donationPerStepCents = Number(session.donationPerStepCents || G.donationPerStepCents || DEFAULT_DONATION_PER_STEP_CENTS);
-    G.buyMeCoffeeUrl = session.buyMeCoffeeUrl || G.buyMeCoffeeUrl || DEFAULT_BUY_ME_A_COFFEE_URL;
-    if (session.boost) applyServerBoost(session.boost);
-    if (session.referral) applyServerReferral(session.referral);
-    if (session.globalImpact) applyServerGlobalImpact(session.globalImpact);
-    if (!isNewUserSession) markIdentityReady();
-    if (session.donations) applyServerDonations(session.donations);
-    if (Number.isFinite(session.rank) && session.rank > 0) {
-      G.leaderboard.rank = Number(session.rank);
-    }
+    if (!sessionSeed && !G.userId) return;
+    const session = sessionSeed || await apiJSON(`/api/session?userId=${encodeURIComponent(G.userId)}`);
+    applySessionPayload(session);
 
     if (!G.userId) return;
 
@@ -715,6 +842,7 @@ async function bootstrapCloudState() {
         Object.assign(G, remoteProgress);
         G.userId = session.userId || G.userId;
         G.username = session.username || remote.username || G.username;
+        G.email = normalizeEmailInput(session.email || G.email);
         G.buyMeCoffeeUrl = session.buyMeCoffeeUrl || G.buyMeCoffeeUrl;
         G.donationPerStepCents = Number(session.donationPerStepCents || G.donationPerStepCents || DEFAULT_DONATION_PER_STEP_CENTS);
         if (remoteProgress.boost) applyServerBoost(remoteProgress.boost);
@@ -757,6 +885,7 @@ async function syncProgress(options = {}) {
       },
     });
     if (res.username) G.username = res.username;
+    if (res.email) G.email = normalizeEmailInput(res.email);
     if (res.donations) applyServerDonations(res.donations);
     if (Number.isFinite(res.rank) && res.rank > 0) G.leaderboard.rank = Number(res.rank);
     if (res.boost) applyServerBoost(res.boost);
@@ -1006,15 +1135,22 @@ function refreshText() {
   setShareButton("share-li-btn", t().shareLinkedIn, "linkedin");
   setLabelWithIcon("activate-potion-btn", "flask", t().activatePotion);
   setLabelWithIcon("start-btn", "play", t().start);
+  setText("auth-title", t().authTitle);
+  setText("auth-copy", t().authCopy);
+  setText("auth-email-label", t().authEmailLabel);
+  setText("auth-send-otp-btn", t().authSendOtp);
+  setText("auth-otp-label", t().authOtpLabel);
+  setText("auth-verify-btn", t().authVerify);
+  setText("auth-cancel-btn", t().authCancel);
+  const authEmailInput = byId("auth-email-input");
+  if (authEmailInput) authEmailInput.setAttribute("placeholder", t().authEmailPlaceholder);
+  const authOtpInput = byId("auth-otp-input");
+  if (authOtpInput) authOtpInput.setAttribute("placeholder", t().authOtpPlaceholder);
   setText("identity-modal-title", t().identityModalTitle);
   setText("identity-modal-copy", t().identityModalCopy);
   setText("identity-generated-label", t().identityGeneratedLabel);
-  setText("identity-input-label", t().identityInputLabel);
-  setText("identity-use-generated-btn", t().identityUseGenerated);
   setText("identity-continue-btn", t().identityContinue);
   setText("identity-cancel-btn", t().identityCancel);
-  const identityInput = byId("identity-name-input");
-  if (identityInput) identityInput.setAttribute("placeholder", t().identityInputPlaceholder);
   setText("chip-1", t().chip1);
   setText("chip-2", t().chip2);
   setText("chip-3", t().chip3);

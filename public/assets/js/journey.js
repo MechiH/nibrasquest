@@ -3,6 +3,8 @@ function showPaths() {
   screen("paths");
 }
 async function startJourney() {
+  const authed = await ensureEmailOtpAuth();
+  if (!authed) return;
   const ready = await ensureIdentityForJourneyStart();
   if (!ready) return;
   showPaths();

@@ -22,10 +22,17 @@
   "vars": {
     "BUY_ME_A_COFFEE_URL": "https://buymeacoffee.com/urnzikfqg5",
     "DONATION_PER_STEP_CENTS": "1",
-    "GLOBAL_STUDY_TARGET_CENTS": "100000"
+    "GLOBAL_STUDY_TARGET_CENTS": "100000",
+    "OTP_EXPIRES_SECONDS": "300",
+    "OTP_MAX_ATTEMPTS": "5",
+    "OTP_RESEND_COOLDOWN_SECONDS": "30",
+    "ALLOW_DEV_OTP": "1",
+    "OTP_FROM_EMAIL": "NIBRAS <no-reply@nibrasquest.com>"
   },
   "env": {
     "production": {
+      // Dedicated production worker app/service name.
+      "name": "nibras-prod",
       // Set a different account_id here if prod is in another account.
       "account_id": "9e1a1d6a4d0b0c2e0f069d11e730ca2a",
       "routes": [
@@ -44,7 +51,12 @@
       "vars": {
         "BUY_ME_A_COFFEE_URL": "https://buymeacoffee.com/urnzikfqg5",
         "DONATION_PER_STEP_CENTS": "1",
-        "GLOBAL_STUDY_TARGET_CENTS": "100000"
+        "GLOBAL_STUDY_TARGET_CENTS": "100000",
+        "OTP_EXPIRES_SECONDS": "300",
+        "OTP_MAX_ATTEMPTS": "5",
+        "OTP_RESEND_COOLDOWN_SECONDS": "30",
+        "ALLOW_DEV_OTP": "0",
+        "OTP_FROM_EMAIL": "NIBRAS <no-reply@nibrasquest.com>"
       }
     }
   },
