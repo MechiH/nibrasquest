@@ -37,7 +37,23 @@ function renderMap() {
   const svg = byId("mapSvg");
   svg.innerHTML = "";
   const sts = activeStages();
-  const mapYOffset = -48;
+  const desiredMapYOffset = -48;
+  const topSafePadding = 10;
+  let mapYOffset = desiredMapYOffset;
+  if (sts.length) {
+    let minBaseY = Infinity;
+    sts.forEach((st) => {
+      /* Include active pulse radius and top badge space when calculating safe top padding. */
+      minBaseY = Math.min(minBaseY, st.y - 62);
+    });
+    for (let i = 0; i < sts.length - 1; i++) {
+      const a = sts[i];
+      const b = sts[i + 1];
+      const lift = 86 + Math.abs(a.y - b.y) * 0.2;
+      minBaseY = Math.min(minBaseY, a.y - lift - 6);
+    }
+    mapYOffset = Math.max(desiredMapYOffset, topSafePadding - minBaseY);
+  }
   updateMapSignals(sts);
   const NS = "http://www.w3.org/2000/svg",
     el = (t) => document.createElementNS(NS, t),
