@@ -473,23 +473,69 @@ function drawBG() {
   requestAnimationFrame(drawBG);
 }
 let audioCtx;
+let audioResumePromise = null;
+let audioGesturePrimed = false;
 function getAudioCtx() {
-  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  if (audioCtx.state === "suspended") audioCtx.resume();
+  if (!audioCtx) {
+    const AudioAPI = window.AudioContext || window.webkitAudioContext;
+    if (!AudioAPI) return null;
+    audioCtx = new AudioAPI();
+  }
   return audioCtx;
+}
+function ensureAudioReady() {
+  const ctx = getAudioCtx();
+  if (!ctx) return Promise.resolve(null);
+  if (ctx.state === "running") return Promise.resolve(ctx);
+  if (!audioResumePromise) {
+    audioResumePromise = ctx.resume()
+      .then(() => ctx)
+      .catch(() => ctx)
+      .finally(() => {
+        audioResumePromise = null;
+      });
+  }
+  return audioResumePromise;
+}
+function primeAudioOnGesture() {
+  if (audioGesturePrimed) return;
+  audioGesturePrimed = true;
+  const unlock = () => {
+    ensureAudioReady();
+    removeEventListener("pointerdown", unlock, true);
+    removeEventListener("touchstart", unlock, true);
+    removeEventListener("keydown", unlock, true);
+  };
+  addEventListener("pointerdown", unlock, true);
+  addEventListener("touchstart", unlock, true);
+  addEventListener("keydown", unlock, true);
+}
+function playTone(ctx, freq, duration, type) {
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  const now = ctx.currentTime;
+  o.type = type;
+  o.frequency.setValueAtTime(Math.max(40, freq), now);
+  g.gain.setValueAtTime(0.001, now);
+  g.gain.exponentialRampToValueAtTime(0.042, now + 0.012);
+  g.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+  o.connect(g);
+  g.connect(ctx.destination);
+  o.start(now);
+  o.stop(now + duration + 0.012);
 }
 function beep(freq = 0.0, duration = 0.05, type = "sine") {
   if (!G.sound) return;
   try {
     const ctx = getAudioCtx();
-    const o = ctx.createOscillator(), g = ctx.createGain();
-    o.type = type;
-    o.frequency.value = freq;
-    g.gain.value = 0.03;
-    o.connect(g);
-    g.connect(ctx.destination);
-    o.start();
-    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
-    o.stop(ctx.currentTime + duration);
+    if (!ctx) return;
+    if (ctx.state !== "running") {
+      ensureAudioReady().then((readyCtx) => {
+        if (!readyCtx || readyCtx.state !== "running" || !G.sound) return;
+        playTone(readyCtx, freq, duration, type);
+      });
+      return;
+    }
+    playTone(ctx, freq, duration, type);
   } catch (e) {}
 }

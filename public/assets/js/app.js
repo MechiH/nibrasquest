@@ -3,6 +3,7 @@ async function initApp() {
   await loadPathData();
   G.path = "prophet";
   ensureState();
+  primeAudioOnGesture();
   initBG();
   drawBG();
   bind();
@@ -26,7 +27,7 @@ function bind() {
   byId("popup").onclick = closePopup;
   byId("sound-toggle").onclick = () => {
     G.sound = !G.sound;
-    getAudioCtx(); /* unlock AudioContext on first user gesture */
+    if (G.sound) ensureAudioReady();
     updateHUD();
     save();
   };
