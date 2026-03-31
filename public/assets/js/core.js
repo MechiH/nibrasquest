@@ -559,7 +559,7 @@ function setAuthModalError(message = "") {
 }
 
 function setAuthModalNotice(message = "") {
-  setText("auth-dev-otp", message);
+  setText("auth-notice", message);
 }
 
 function applySessionPayload(session) {
@@ -649,11 +649,7 @@ function openAuthModal() {
         otpRequestedFor = email;
         G.email = email;
         save();
-        setAuthModalNotice(
-          res.devOtp
-            ? t().authDevOtpNotice(res.devOtp)
-            : t().authOtpSentNotice(res.expiresInSeconds || 300),
-        );
+        setAuthModalNotice(t().authOtpSentNotice(res.expiresInSeconds || 300));
         if (otpInput) {
           otpInput.focus();
           otpInput.select();

@@ -58,10 +58,6 @@ function getOtpResendCooldownSeconds(env) {
   return Math.min(300, Math.floor(raw));
 }
 
-function allowDevOtpFallback(env) {
-  return String(env.ALLOW_DEV_OTP || "").trim() === "1";
-}
-
 async function readJsonBody(request) {
   try {
     return await request.json();
@@ -769,32 +765,23 @@ async function handleRequestOtp(request, env) {
     )
     .run();
 
-  let sentByProvider = false;
   let providerError = "";
   try {
-    const delivery = await sendOtpEmail(env, email, otpCode, expirySeconds);
-    sentByProvider = Boolean(delivery?.delivered);
+    await sendOtpEmail(env, email, otpCode, expirySeconds);
   } catch (err) {
     providerError = err instanceof Error ? err.message : String(err || "");
   }
 
-  const canUseDevFallback = allowDevOtpFallback(env);
-  if (!sentByProvider && !canUseDevFallback) {
+  if (providerError) {
     const reason = providerError || "Could not deliver OTP email.";
     return json({ error: reason }, 502);
   }
 
-  const response = {
+  return json({
     ok: true,
     sent: true,
     expiresInSeconds: expirySeconds,
-  };
-
-  if (!sentByProvider && canUseDevFallback) {
-    response.devOtp = otpCode;
-  }
-
-  return json(response);
+  });
 }
 
 async function handleVerifyOtp(request, url, env) {
