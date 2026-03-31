@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "nibras",
+  "name": "nibrasquest",
   // Default account (dev). Change if needed.
   "account_id": "9e1a1d6a4d0b0c2e0f069d11e730ca2a",
   "main": "src/worker.js",
